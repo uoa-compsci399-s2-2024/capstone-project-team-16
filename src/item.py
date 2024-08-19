@@ -1,4 +1,3 @@
-# Item Class
 class Item:
     """
     This class represents an item. All items will inheret from this class, adding its own usage methods and attributes as required
@@ -8,22 +7,45 @@ class Item:
         #price is for the total quantity
         self._price = price
         self._quantity = quantity
+        self._weight = weight
+        self._type = type
+        self._ID = ID
     
     #getters and setters
     @property
-    def name(self):
+    def name(self) -> str:
         return self._name
     @name.setter
     def name(self, name: str):
         self._name = name
     @property
-    def price(self):
+    def price(self) -> float:
         return self._price
     @price.setter
     def price(self, price: float):
         self._price = price
+
     @property
-    def quantity(self):
+    def weight(self) -> float:
+        return self._weight
+    @weight.setter
+    def weight(self, weight: float):
+        self._weight = weight
+    
+    @property
+    def type(self) -> str:
+        return self._type
+    @type.setter
+    def type(self, type: str):
+        self._type = type
+    
+    @property
+    def ID(self) -> int:
+        return self._ID
+    #we shouldn't be changing item IDs so no setter for this property
+
+    @property
+    def quantity(self) -> int:
         return self._quantity
     #by default, add and remove methods remove or add 1 to the item stack.
     def add(self, quantity: int =1):
