@@ -11,6 +11,24 @@ class Item:
         self._type = type
         self._ID = ID
     
+    #base functions
+    def __str__(self) -> str:
+        return f"{self.name} x{self.quantity}"
+    def __repr__(self) -> str:
+        return f"{self.name} x{self.quantity}"
+    def __eq__(self, other) -> bool:
+        return self.ID == other.ID
+    def __hash__(self) -> int:
+        return hash(self.ID)
+    def __lt__(self, other) -> bool:
+        return self.name < other.name
+    def __le__(self, other) -> bool:
+        return self.name <= other.name
+    def __gt__(self, other) -> bool:
+        return self.name > other.name
+    def __ge__(self, other) -> bool:
+        return self.name >= other.name
+
     #getters and setters
     @property
     def name(self) -> str:
