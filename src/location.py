@@ -19,20 +19,20 @@ class Location:
     	pass
 
     def add_neighbor(self, neighbor: Location) -> None:
-    	if neighbor not in self._neighbors:
+    	if neighbor not in self.neighbors:
     		self._neighbors.append(neighbor)
 
     def add_item(self, item_id: int) -> None:
-        if item_id not in self._items:
+        if item_id not in self.items:
             self._items.append(item_id)
 
     def add_character(self, character_id: int) -> None:
-        if character_id not in self._characters:
+        if character_id not in self.characters:
             self._characters.append(character_id)
 
     # base functions
     def __str__(self) -> str:
-        return f"Name: {self._name}\nDescription: {self._description}\nCharacters: {self._characters}"
+        return f"Name: {self.name}\nDescription: {self.description}\nCharacters: {self.characters}"
 
     def __eq__(self, other) -> bool:
     	if isinstance(other, Location):
