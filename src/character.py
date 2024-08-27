@@ -1,7 +1,7 @@
 # Character Class
 
 class Character:
-    def __init__(self, ID: int, name: str, playable: bool, , traits: list[str], current_location: int = None, inventory: dict = {}) -> None:
+    def __init__(self, ID: int, name: str, playable: bool, traits: list[str], current_location: int = None, inventory: dict = {}) -> None:
         self._ID = ID
         self._name = name # character's name
         self._traits = traits # traits the character has
