@@ -23,6 +23,9 @@ class Character:
             else:
                 del self.inventory[item_id]
 
+    def move(self, new_location: int) -> None:
+        self.current_location = new_location
+
     # base functions
     def __str__(self) -> str:
         return f"Name: {self.name}\nCurrent Location: {self.currentLocation}\nInventory: {self.inventory}"
