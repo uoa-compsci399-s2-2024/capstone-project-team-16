@@ -4,9 +4,6 @@ from dotenv import load_dotenv
 
 import os
 
-session_messages = list()
-
-
 def main() -> None:
     # load environment variables and fetch api key
     load_dotenv()
