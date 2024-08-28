@@ -71,7 +71,7 @@ class Character:
         return f"Name: {self.name}\nCurrent Location: {self.current_location}\nInventory: {self.inventory}"
 
     def __eq__(self, other) -> bool:
-        if isinstance(other, Character):
+        if isinstance(other, self.__class__):
             return self.id_ == other.id_
         return False
 

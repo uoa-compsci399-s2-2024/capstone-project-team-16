@@ -3,8 +3,7 @@
 def character_template(quantity: int, type_of_char: str, tropes: list, themes: list) -> str:
     """Template for generating characters"""
     user_message = (f"Create a detailed description of {quantity} {type_of_char} character/s including their "
-                    "name, a list of traits, age, gender, occupation, a dictionary of "
-                    "their inventory and a brief backstory. Keep the character consistent "
+                    "name and a list of traits. Keep the character consistent "
                     f"with the the tropes of {tropes} and the themes of {themes}. Return this "
                     "in JSON format.")
     return user_message

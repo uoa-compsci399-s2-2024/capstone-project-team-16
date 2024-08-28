@@ -38,7 +38,7 @@ class Item:
         return self.name
 
     def __eq__(self, other) -> bool:
-        if isinstance(other, Item):
+        if isinstance(other, self.__class__):
             return self.id_ == other.id_
         return False
 
@@ -94,7 +94,7 @@ class Item:
     def type_(self) -> str:
         """Getter for type attribute"""
         return self._type_
-    @type.setter
+    @type_.setter
     def type_(self, type_: str) -> None:
         """Setter for type attribute"""
         self._type_ = type_
