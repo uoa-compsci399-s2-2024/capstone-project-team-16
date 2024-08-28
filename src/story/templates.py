@@ -23,6 +23,9 @@ def location_template(quantity: int, tropes: list, themes: list) -> str:
     return user_message
 
 
-def main_template() -> str:
-    pass
+def main_template(quantity: int, tropes: list, themes: list) -> str:
+    user_message = ("Generate {quantity} choices our player can take that logically blend in generated locations, "
+                    "characters and items. Make sure the choices are consistent with the tropes of {tropes} and "
+                    "the themes of {themes}. Return this in JSON format.").format(quantity=quantity, tropes=tropes, themes=themes)
+    return user_message
 
