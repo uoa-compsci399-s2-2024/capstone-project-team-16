@@ -1,9 +1,11 @@
 from openai import AsyncOpenAI
 
+from ..main import session_messages
 
-async def chat_with_gpt(client: AsyncOpenAI, session_messages: list, system_message: str,
-                        user_message: str, context: bool, freq_penalty: int = 0,
-                        tokens: int = 10, pres_penalty: int = 0, temp: int = 1) -> str:
+
+async def chat_with_gpt(client: AsyncOpenAI, system_message: str, user_message: str,
+                        context: bool, freq_penalty: int = 0, tokens: int = 10,
+                        pres_penalty: int = 0, temp: int = 1) -> str:
     # when we want to generate a prompt that needs relevant story details
     if context:
         # add the latest prompt to our global list

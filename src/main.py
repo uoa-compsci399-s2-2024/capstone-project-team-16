@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 import os
 import asyncio
 
-messages = list()
+session_messages = list()
 
 
 async def main() -> None:
