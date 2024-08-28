@@ -1,20 +1,24 @@
-from openai import OpenAI
+from openai import AsyncOpenAI
 
 from dotenv import load_dotenv
 
 import os
+import asyncio
 
-def main() -> None:
+messages = list()
+
+
+async def main() -> None:
     # load environment variables and fetch api key
     load_dotenv()
     openai_api_key = os.getenv('OPENAI_API_KEY')
 
     # initialise client
-    client = OpenAI(api_key=openai_api_key)
+    client = AsyncOpenAI(api_key=openai_api_key)
 
 
 if __name__ == "__main__":
-    main()
+    asyncio.run(main())
 
 
 
