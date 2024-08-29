@@ -72,11 +72,11 @@ class Character:
 
     def __eq__(self, other) -> bool:
         if isinstance(other, Character):
-            return self.id_ == other.id_
+            return self._id_ == other.ID
         return False
 
     def __hash__(self) -> int:
-        return hash(self.id_)
+        return hash(self._id_)
 
     def __lt__(self, other) -> bool:
         return self.name < other.name
@@ -93,7 +93,7 @@ class Character:
     # getters and setters
 
     @property
-    def id_(self) -> int:
+    def ID(self) -> int:
         """Getter for ID attribute"""
         return self._id_
 

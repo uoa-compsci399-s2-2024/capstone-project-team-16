@@ -9,9 +9,9 @@ class Item:
 
     def __init__(
         self,
-        id_: int,
+        id: int,
         name: str,
-        type_: str,
+        category: str,
         weight: float,
         price: float = 1
     ) -> None:
@@ -21,29 +21,29 @@ class Item:
                 id_ (int): unique object ID
                 name (str): item name
                 weight (float): weight of the item
-                type (str): type of the item
+                category (str): category of the item
                 price (float): price of the item
         """
-        self._id_ = id_
+        self._id_ = id
         self._name = name
         self._weight = weight
-        self._type_ = type_
+        self._category = category
         self._price = price
 
     # base functions
     def __str__(self) -> str:
-        return self.name
+        return self._name
 
     def __repr__(self) -> str:
-        return self.name
+        return self._name
 
     def __eq__(self, other) -> bool:
         if isinstance(other, Item):
-            return self.id_ == other.id_
+            return self._id_ == other._id_
         return False
 
     def __hash__(self) -> int:
-        return hash(self.id_)
+        return hash(self._id_)
 
     def __lt__(self, other) -> bool:
         return self.name < other.name
@@ -59,7 +59,7 @@ class Item:
 
     # getters and setters
     @property
-    def id_(self) -> int:
+    def ID(self) -> int:
         """Getter for ID attribute"""
         return self._id_
 
@@ -91,10 +91,10 @@ class Item:
         self._weight = weight
 
     @property
-    def type_(self) -> str:
-        """Getter for type attribute"""
-        return self._type_
-    @type.setter
-    def type_(self, type_: str) -> None:
-        """Setter for type attribute"""
-        self._type_ = type_
+    def category(self) -> str:
+        """Getter for category attribute"""
+        return self._category
+    @category.setter
+    def category(self, category: str) -> None:
+        """Setter for category attribute"""
+        self._category = category

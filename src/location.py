@@ -1,3 +1,4 @@
+from typing import Self
 """Location class"""
 
 class Location:
@@ -12,7 +13,7 @@ class Location:
         characters: list[int],
         items: list[int],
         description: str,
-        neighbors: list[Location]
+        neighbors: list[Self]
     ) -> None:
         """
         Initialises a Location instance.
@@ -39,7 +40,7 @@ class Location:
         list. If needed also do this with items"""
         pass
 
-    def add_neighbor(self, neighbor: Location) -> None:
+    def add_neighbor(self, neighbor: Self) -> None:
         """Adds a Location object to the list of neighbors this Location has"""
         if neighbor not in self.neighbors:
             self._neighbors.append(neighbor)
@@ -70,11 +71,11 @@ class Location:
 
     def __eq__(self, other) -> bool:
         if isinstance(other, Location):
-            return self.id_ == other.id_
+            return self._id_ == other.ID
         return False
 
     def __hash__(self) -> int:
-        return hash(self.id_)
+        return hash(self._id_)
 
     def __lt__(self, other) -> bool:
         return self.name < other.name
@@ -91,7 +92,7 @@ class Location:
     # getters and setters
 
     @property
-    def id_(self) -> int:
+    def ID(self) -> int:
         """Getter for ID attribute"""
         return self._id_
 
@@ -132,10 +133,10 @@ class Location:
         self._description = description
 
     @property
-    def neighbors(self) -> list[Location]:
+    def neighbors(self) -> list[Self]:
         """Getter for neighbors attribute"""
         return self._neighbors
     @neighbors.setter
-    def neighbors(self, neighbors: list[Location]) -> None:
+    def neighbors(self, neighbors: list[Self]) -> None:
         """Setter for neighbors attribute"""
         self._neighbors = neighbors
