@@ -1,21 +1,21 @@
 id,name,description,conflicts
-301,Evil AI,The story involves a sentient artificial intelligence turning against humanity,
-302,Evil Twin,The antagonist is the protagonist's evil twin,
+301,Evil AI,The story involves a sentient artificial intelligence turning against humanity,"[302,304,305,306,307,308,310,311,313,316,317,318]"
+302,Evil Twin,The antagonist is the protagonist's evil twin,"[301,305,306,307,311,317,320]"
 303,Arch Enemy,"The antagonist is the arch nemesis of the protagonist, their greatest enemy",
-304,Likeable Villain,"The antagonist is entertaining, charming or sympathetic",
-305,Ancient Evil,The antagonist is an evil force from the distant past,
-306,Aliens,The antagonist is extraterrestrial,
-307,Creepy Doll,The antagonist is a creepy possessed doll,
-308,Criminal Doppelganger,The antagonist looks very similar to the protagonist,
-309,Devil Complex,The antagonist claims to be the embodiment of evil,
-310,Super Villain,The antagonist has super powers,
-311,Eternal Villain,The antagonist is a villain who continuously appears in the world throughout the ages,
+304,Likeable Villain,"The antagonist is entertaining, charming or sympathetic","[301,307,309,317]"
+305,Ancient Evil,The antagonist is an evil force from the distant past,"[301,302,306,320]"
+306,Aliens,The antagonist is extraterrestrial,"[301,305,307,311,313,317,318,320]"
+307,Creepy Doll,The antagonist is a creepy possessed doll,"[301,304,306,308,313,317,320]"
+308,Criminal Doppelganger,The antagonist looks very similar to the protagonist,"[301,307,311,313,317,320]"
+309,Devil Complex,The antagonist claims to be the embodiment of evil,"[304,313]"
+310,Super Villain,The antagonist has super powers,"[301,317]"
+311,Eternal Villain,The antagonist is a villain who continuously appears in the world throughout the ages,"[301,302,306,308]"
 312,Fallen Hero,The antagonist was once a hero,
-313,Femme Fatale,The antagonist is a beautiful yet scheming woman who knows how to exploit her good looks against gullible men,
+313,Femme Fatale,The antagonist is a beautiful yet scheming woman who knows how to exploit her good looks against gullible men,"[301,306,307,308,309,317]"
 314,Hidden Villain,The antagonist is not revealed until the end of the story,
 315,The Mastermind,The antagonist is highly intelligent,
-316,Heartbroken Villain,The antagonist is driven by heartbreak,
-317,The Monster,The antagonist is a supernatural monster,
-318,Resurrected Evil,The antagonist has risen from the dead,
+316,Heartbroken Villain,The antagonist is driven by heartbreak,[301]
+317,The Monster,The antagonist is a supernatural monster,"[301,302,304,306,307,308,310,313]"
+318,Resurrected Evil,The antagonist has risen from the dead,"[301,306]"
 319,Tragic Villain,The antagonist is driven to evil by powers beyond their control,
-320,Fallen Mentor,The antagonist was once a mentor to the protagonist,
+320,Fallen Mentor,The antagonist was once a mentor to the protagonist,"[302,305,206,307,308]"
