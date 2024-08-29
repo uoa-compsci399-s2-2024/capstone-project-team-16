@@ -12,7 +12,7 @@ class Location:
         characters: list[int],
         items: list[int],
         description: str,
-        neighbors: list[Location]
+        neighbors: list['Location']
     ) -> None:
         """
         Initialises a Location instance.
@@ -39,7 +39,7 @@ class Location:
         list. If needed also do this with items"""
         pass
 
-    def add_neighbor(self, neighbor: Location) -> None:
+    def add_neighbor(self, neighbor: 'Location') -> None:
         """Adds a Location object to the list of neighbors this Location has"""
         if neighbor not in self.neighbors:
             self._neighbors.append(neighbor)
@@ -132,10 +132,10 @@ class Location:
         self._description = description
 
     @property
-    def neighbors(self) -> list[Location]:
+    def neighbors(self) -> list['Location']:
         """Getter for neighbors attribute"""
         return self._neighbors
     @neighbors.setter
-    def neighbors(self, neighbors: list[Location]) -> None:
+    def neighbors(self, neighbors: list['Location']) -> None:
         """Setter for neighbors attribute"""
         self._neighbors = neighbors
