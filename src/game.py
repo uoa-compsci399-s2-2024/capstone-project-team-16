@@ -32,7 +32,8 @@ def read_csv_file(file_name):
 
 
 def get_random_tropes(tropes_list, num_tropes):
-    """Returns a list of with the requested amount of randomly chosen tropes which do not conflict"""
+    """Returns a list of with the requested amount of
+    randomly chosen tropes which do not conflict"""
     random_tropes = []
 
     while len(random_tropes) < num_tropes:
@@ -40,14 +41,21 @@ def get_random_tropes(tropes_list, num_tropes):
         if trope not in random_tropes:
             if trope.conflicts is None:
                 random_tropes.append(trope)
-            elif len(set([r.id_ for r in random_tropes]).intersection(set(trope.conflicts))) == 0:
+            elif len({r.id_ for r in random_tropes}.intersection(set(trope.conflicts))) == 0:
                 random_tropes.append(trope)
     return random_tropes
 
 
-def select_tropes(plot_tropes_csv_file, protagonist_tropes_csv_file, antagonist_tropes_csv_file,
-                  num_plot_tropes, num_prot_tropes, num_ant_tropes):
-    """Selects and returns a list of three plot tropes, one protagonist trope and one antagonist trope from the
+def select_tropes(
+    plot_tropes_csv_file,
+    protagonist_tropes_csv_file,
+    antagonist_tropes_csv_file,
+    num_plot_tropes,
+    num_prot_tropes,
+    num_ant_tropes
+    ):
+    """Selects and returns a list of three plot tropes,
+    one protagonist trope and one antagonist trope from the
     trope csv files"""
     chosen_tropes = get_random_tropes(create_tropes(read_csv_file(plot_tropes_csv_file)), num_plot_tropes)
     chosen_tropes.extend(get_random_tropes(create_tropes(read_csv_file(protagonist_tropes_csv_file)), num_prot_tropes))

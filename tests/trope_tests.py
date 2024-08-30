@@ -34,7 +34,7 @@ class TropeSelectionTests(unittest.TestCase):
             self.assertEqual(type(r), Trope)
             if r.conflicts:
                 for c in r.conflicts:
-                    self.assertEqual(ids.__contains__(c), False)
+                    self.assertEqual(c in ids, False)
 
     def test_select_tropes(self):
         result = select_tropes(file_path, file_path_2, file_path_3, 3, 1, 1)
@@ -45,6 +45,4 @@ class TropeSelectionTests(unittest.TestCase):
             self.assertEqual(type(r), Trope)
             if r.conflicts:
                 for c in r.conflicts:
-                    self.assertEqual(ids.__contains__(c), False)
-
-
+                    self.assertEqual(c in ids, False)
