@@ -1,23 +1,23 @@
 """Location class"""
+import itertools
 
 class Location:
     """
     This class represents a location.
     """
+    id_iter = itertools.count()
 
     def __init__(
         self,
-        id_: int,
         name: str,
-        characters: list[int],
-        items: list[int],
         description: str,
-        neighbors: list['Location']
+        characters: list[int] = None,
+        items: list[int] = None,
+        neighbors: list['Location'] = None
     ) -> None:
         """
         Initialises a Location instance.
             Parameters:
-                id_ (int): unique object ID
                 name (str): location name
                 characters (list): list of IDs of characters at this location
                 items (list): list of IDs of items at this location
@@ -25,12 +25,12 @@ class Location:
                 neighbors (list): list of Location objects this location connects to
 
         """
-        self._id_ = id_
+        self._id_ = next(Location.id_iter)
         self._name = name
-        self._characters = characters
-        self._items = items
+        self._characters = characters or []
+        self._items = items or []
         self._description = description
-        self._neighbors = neighbors
+        self._neighbors = neighbors or []
 
     def populate(self, num_characters: int) -> None:
         """Send prompt to LLM such as 'This is x location in x story with 
@@ -66,6 +66,9 @@ class Location:
 
     # base functions
     def __str__(self) -> str:
+        return f"Name: {self.name}\nDescription: {self.description}\nCharacters: {self.characters}"
+
+    def __repr__(self) -> str:
         return f"Name: {self.name}\nDescription: {self.description}\nCharacters: {self.characters}"
 
     def __eq__(self, other) -> bool:
