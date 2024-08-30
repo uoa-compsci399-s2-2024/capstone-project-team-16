@@ -1,3 +1,6 @@
+"""Mapper helper functions to convert JSON output
+from the API into instances of our defined classes."""
+
 import json
 from location import Location
 from character import Character
@@ -6,7 +9,8 @@ from item import Item
 
 def create_location_from_json(json_str: str) -> Location:
     """
-    Takes a JSON string as input, deserializes it, and converts it into a new instance of the Location class.
+    Takes a JSON string as input, deserializes it, 
+    and converts it into a new instance of the Location class.
     
     Parameters:
         json_str (str): The JSON string to be deserialized into a Location object.
@@ -22,11 +26,12 @@ def create_location_from_json(json_str: str) -> Location:
         name=location['name'],
         description=location['description']
         ) for location in data]
-      
+
 
 def create_character_from_json(json_str: str) -> Character:
     """
-    Takes a JSON string as input, deserializes it, and converts it into a new instance of the Character class.
+    Takes a JSON string as input, deserializes it,
+    and converts it into a new instance of the Character class.
     
     Parameters:
         json_str (str): The JSON string to be deserialized into a Character object.
@@ -42,11 +47,12 @@ def create_character_from_json(json_str: str) -> Character:
         name=character['name'],
         traits=character['traits']
         ) for character in data]
-      
+
 
 def create_item_from_json(json_str: str) -> Item:
     """
-    Takes a JSON string as input, deserializes it, and converts it into a new instance of the Item class.
+    Takes a JSON string as input, deserializes it, and 
+    converts it into a new instance of the Item class.
     
     Parameters:
         json_str (str): The JSON string to be deserialized into an Item object.
@@ -64,4 +70,3 @@ def create_item_from_json(json_str: str) -> Item:
         weight=item['weight'],
         type_=item['type']
         ) for item in data]
-      
