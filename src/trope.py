@@ -1,11 +1,12 @@
 """Trope Class"""
-
+import itertools
 
 class Trope:
     """A class defining a trope object in an interactive story."""
+
+    id_iter = itertools.count()
     def __init__(
             self,
-            id_: int,
             name: str,
             description: str,
             conflicts: list[int] = None
@@ -19,7 +20,7 @@ class Trope:
                 description (str): description of the trope
                 conflicts (list): ID's of conflicting tropes
         """
-        self._id_ = id_
+        self._id_ = next(Trope.id_iter)
         self._name = name
         self._description = description
         self._conflicts = conflicts
