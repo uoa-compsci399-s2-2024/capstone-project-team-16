@@ -2,6 +2,7 @@
 from location import Location
 from character import Character
 from item import Item
+from trope import Trope
 
 class World:
     """A class for keeping track of all of the
@@ -11,14 +12,14 @@ class World:
         locations: dict = None,
         items: dict = None,
         characters: dict = None,
-        tropes: list[str] = None,
+        tropes: dict = None,
         themes: list[str] = None
     ) -> None:
         """initialises a World instance"""
         self._locations = locations or {}
         self._items = items or {}
         self._characters = characters or {}
-        self._tropes = tropes or []
+        self._tropes = tropes or {}
         self._themes = themes or []
 
     def add_location(self, location: Location) -> None:
@@ -36,9 +37,10 @@ class World:
         unique ID as its key in the dictionary"""
         self.items[item.id_] = item
 
-    def add_trope(self, trope: str) -> None:
-        """adds a trope to the world's tropes"""
-        self.tropes.append(trope)
+    def add_trope(self, trope: Trope) -> None:
+        """adds a Trope object to the world, setting its
+        unique ID as its key in the dictionary"""
+        self.tropes[trope.id_] = trope
 
     def add_theme(self, theme: str) -> None:
         """adds a theme to the world's themes"""
@@ -60,10 +62,10 @@ class World:
         if item_id in self.items.keys():
             del self.items[item_id]
 
-    def remove_trope(self, trope: str) -> None:
-        """remove a trope from the world's tropes"""
-        if trope in self.tropes:
-            self.tropes.remove(trope)
+    def remove_trope(self, trope_id: int) -> None:
+        """remove a Trope object from the world's items by its unique ID"""
+        if trope_id in self.tropes.keys():
+            del self.tropes[trope_id]
 
     def remove_theme(self, theme: str) -> None:
         """remove a theme from the world's themes"""
@@ -86,7 +88,7 @@ class World:
         return self._items
 
     @property
-    def tropes(self) -> list[str]:
+    def tropes(self) -> dict:
         """Getter for tropes attribute"""
         return self._tropes
 
