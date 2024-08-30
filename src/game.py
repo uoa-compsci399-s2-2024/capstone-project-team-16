@@ -3,7 +3,7 @@ import os
 import csv
 import random
 
-from trope import Trope
+from src.trope import Trope
 
 
 def create_tropes(rows):

@@ -1,9 +1,9 @@
 import unittest
 from src.game import *
 
-file_path = os.path.join(os.path.dirname(os.getcwd()), 'src/story/plot_tropes.csv')
-file_path_2 = os.path.join(os.path.dirname(os.getcwd()), 'src/story/protagonist_tropes.csv')
-file_path_3 = os.path.join(os.path.dirname(os.getcwd()), 'src/story/antagonist_tropes.csv')
+file_path = os.path.join(os.path.dirname(os.getcwd()), os.getcwd(), 'src/story/plot_tropes.csv')
+file_path_2 = os.path.join(os.path.dirname(os.getcwd()), os.getcwd(), 'src/story/protagonist_tropes.csv')
+file_path_3 = os.path.join(os.path.dirname(os.getcwd()), os.getcwd(), 'src/story/antagonist_tropes.csv')
 
 
 class TropeSelectionTests(unittest.TestCase):
