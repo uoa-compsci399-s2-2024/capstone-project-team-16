@@ -1,4 +1,5 @@
 """Item class"""
+import itertools
 
 class Item:
     """
@@ -6,10 +7,10 @@ class Item:
     All items will inherit from this class, adding their
     own usage methods and attributes as required
     """
+    id_iter = itertools.count()
 
     def __init__(
         self,
-        id_: int,
         name: str,
         type_: str,
         weight: float,
@@ -24,7 +25,7 @@ class Item:
                 type (str): type of the item
                 price (float): price of the item
         """
-        self._id_ = id_
+        self._id_ = next(Item.id_iter)
         self._name = name
         self._weight = weight
         self._type_ = type_
@@ -32,10 +33,10 @@ class Item:
 
     # base functions
     def __str__(self) -> str:
-        return self.name
+        return f"Name: {self.name}\nWeight: {self.weight}\nPrice: {self.price}\nType: {self.type_}"
 
     def __repr__(self) -> str:
-        return self.name
+        return f"Name: {self.name}\nWeight: {self.weight}\nPrice: {self.price}\nType: {self.type_}"
 
     def __eq__(self, other) -> bool:
         if isinstance(other, self.__class__):

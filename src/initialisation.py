@@ -1,4 +1,6 @@
-from utils import templates, prompt
+import json
+
+from utils import templates, prompt, mappers
 from world import World
 
 def initialise_game(client):
@@ -14,6 +16,7 @@ def initialise_game(client):
 
 	characters = prompt.chat_with_gpt(client, "", templates.character_template(3, "main", tropes, themes), None, tokens=500)
 
+
 	# Construct prompt and generate the locations using the tropes and theme
 
 	locations = prompt.chat_with_gpt(client, "", templates.location_template(3, tropes, themes), None, tokens=500)
@@ -25,12 +28,24 @@ def initialise_game(client):
 
 
 	current_world = World()
-
-	# mappers go here
-
-	# for character in mapped_characters: current_world.add_character(character)
-	# etc
-
 	print(characters)
 	print(locations)
 	print(items)
+	# mappers go here
+	mapped_characters = mappers.create_character_from_json(characters)
+	mapped_locations = mappers.create_location_from_json(locations)
+	mapped_items = mappers.create_item_from_json(items)
+
+	for character in mapped_characters:
+		current_world.add_character(character)
+
+	for location in mapped_locations:
+		current_world.add_location(location)
+
+	for item in mapped_items:
+		current_world.add_item(item)
+
+	print(current_world.characters)
+	print(current_world.locations)
+	print(current_world.items)
+
