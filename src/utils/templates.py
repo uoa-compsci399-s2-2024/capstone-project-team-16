@@ -19,11 +19,30 @@ def item_template(quantity: int, tropes: list, theme: str) -> str:
     return user_message
 
 
-def location_template(quantity: int, tropes: list, theme: str) -> str:
-    """Template for generating locations"""
-    user_message = (f"Create {quantity} location/s with a name and a 3 sentence description of the area. Keep them "
-                    f"consistent with the the tropes of {tropes} and the themes of {theme}. "
-                    "Return this in JSON format with the first key being 'locations'.")
+def initial_location_template(quantity: int, tropes: list, themes: list) -> str:
+    """Template for generating the initial locations"""
+    user_message = (f"Create {quantity} location/s with a name and a description of the area. The locations should "
+                    "connect to each other and are allowed cycles. 30% of the locations should have a JSON null as "
+                    "a neighbour, rounding up. At least one Location needs to have JSON null as a neighbour."
+                    "Descriptions for the location should have no more than 100 words. Keep the location consistent "
+                    f"with the tropes of {tropes} and the themes of {themes}. Return this in JSON format. "
+                    "Following this format as an example: "
+                    "{\"locations\": [{ \"name\": Location, \"description\": Description of Location, \"neighbours\": "
+                    "A List of Neighbouring locations allowing for null }]}")
+    return user_message
+
+
+def flow_on_location_template(quantity: int, prev_location_name: str, tropes: list, themes: list) -> str:
+    """Template for generating flow on locations with a previous node as a neighbor."""
+    user_message = (f"Create {quantity} location/s with a name and a description of the area. The locations should "
+                    "connect to each other and are allowed cycles. 30% of the locations should have a JSON null as "
+                    "a neighbour At least one Location needs to have JSON null as a neighbour. Only one location "
+                    f"is allowed to have a neighbour called {prev_location_name}. {prev_location_name} Should NOT be "
+                    "included as a location Descriptions for the location should have no more than 100 words. Keep the "
+                    f"location consistent with the tropes of {tropes} and the themes of {themes}. Return this in JSON "
+                    "format. Following this format as an example: "
+                    "{‘locations’: [{ \"name\": Location, \"description\": Description of Location, \"neighbours\": "
+                    "A List of Neighbouring locations allowing for null }]}")
     return user_message
 
 
