@@ -1,23 +1,28 @@
+from utils.templates import character_template, item_template
+from utils.prompt import chat_with_gpt
+from utils.mappers import create_character_from_json, create_item_from_json
+
+
 """Location class"""
-import itertools
 
 class Location:
     """
     This class represents a location.
     """
-    id_iter = itertools.count()
 
     def __init__(
         self,
+        id_: int,
         name: str,
+        characters: list[int],
+        items: list[int],
         description: str,
-        characters: list[int] = None,
-        items: list[int] = None,
-        neighbors: list['Location'] = None
+        neighbors: list[Location]
     ) -> None:
         """
         Initialises a Location instance.
             Parameters:
+                id_ (int): unique object ID
                 name (str): location name
                 characters (list): list of IDs of characters at this location
                 items (list): list of IDs of items at this location
@@ -25,21 +30,40 @@ class Location:
                 neighbors (list): list of Location objects this location connects to
 
         """
-        self._id_ = next(Location.id_iter)
+        self._id_ = id_
         self._name = name
-        self._characters = characters or []
-        self._items = items or []
+        self._characters = characters
+        self._items = items
         self._description = description
-        self._neighbors = neighbors or []
+        self._neighbors = neighbors
 
-    def populate(self, num_characters: int) -> None:
+    def populate(self, num_characters: int, num_items: int, world: World, client: OpenAI) -> None:
         """Send prompt to LLM such as 'This is x location in x story with 
         num_characters of characters. Generate xyz stats for each character.'
         Once characters generated, add them (or their id numbers) to self.characters
         list. If needed also do this with items"""
-        pass
 
-    def add_neighbor(self, neighbor: 'Location') -> None:
+        character_response = chat_with_gpt(
+            client,
+            "You are a knowledgeable chatbot that creates unique characters",
+            character_template(num_characters, "", world._tropes, world._themes[-1]),
+            False
+        )
+        item_response = chat_with_gpt(
+            client,
+            "You are a knowledgeable chatbot that creates unique items",
+            item_template(num_items, world._tropes, world._themes[-1]),
+            False
+        )
+        characters = create_character_from_json(character_response)
+        items = create_item_from_json(item_response)
+        
+        for character in characters:
+            self.add_character(character)
+        for item in items
+            self.add_item(item) #this assumes mappers handles lists
+
+    def add_neighbor(self, neighbor: Location) -> None:
         """Adds a Location object to the list of neighbors this Location has"""
         if neighbor not in self.neighbors:
             self._neighbors.append(neighbor)
@@ -68,11 +92,8 @@ class Location:
     def __str__(self) -> str:
         return f"Name: {self.name}\nDescription: {self.description}\nCharacters: {self.characters}"
 
-    def __repr__(self) -> str:
-        return f"Name: {self.name}\nDescription: {self.description}\nCharacters: {self.characters}"
-
     def __eq__(self, other) -> bool:
-        if isinstance(other, self.__class__):
+        if isinstance(other, Location):
             return self.id_ == other.id_
         return False
 
@@ -135,10 +156,10 @@ class Location:
         self._description = description
 
     @property
-    def neighbors(self) -> list['Location']:
+    def neighbors(self) -> list[Location]:
         """Getter for neighbors attribute"""
         return self._neighbors
     @neighbors.setter
-    def neighbors(self, neighbors: list['Location']) -> None:
+    def neighbors(self, neighbors: list[Location]) -> None:
         """Setter for neighbors attribute"""
         self._neighbors = neighbors
