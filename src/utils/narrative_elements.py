@@ -6,7 +6,7 @@ import random
 from src.trope import Trope
 
 
-def create_tropes(rows) -> list[Trope]:
+def create_tropes(rows: list[dict]) -> list[Trope]:
     """Creates a list of Trope objects from a row"""
     trope_objects = []
     for row in rows:
@@ -19,7 +19,7 @@ def create_tropes(rows) -> list[Trope]:
     return trope_objects
 
 
-def read_csv_file(file_name) -> list[dict]:
+def read_csv_file(file_name: str) -> list[dict]:
     """Reads a csv file and returns a list of the rows as dictionaries"""
     if not os.path.exists(file_name):
         raise FileNotFoundError(f"path {file_name} does not exist!")
@@ -31,7 +31,7 @@ def read_csv_file(file_name) -> list[dict]:
     return rows
 
 
-def get_random_tropes(tropes_list, num_tropes) -> list[Trope]:
+def get_random_tropes(tropes_list: list[Trope], num_tropes: int) -> list[Trope]:
     """Returns a list of with the requested amount of
     randomly chosen tropes which do not conflict"""
     random_tropes = []
@@ -46,7 +46,7 @@ def get_random_tropes(tropes_list, num_tropes) -> list[Trope]:
     return random_tropes
 
 
-def get_random_theme(themes_file) -> str:
+def get_random_theme(themes_file: str) -> str:
     if not os.path.exists(themes_file):
         raise FileNotFoundError(f"path {themes_file} does not exist!")
     with open(themes_file) as file:
@@ -55,13 +55,13 @@ def get_random_theme(themes_file) -> str:
 
 
 def select_narrative_elements(
-        themes_file,
-        plot_tropes_csv_file,
-        protagonist_tropes_csv_file,
-        antagonist_tropes_csv_file,
-        num_plot_tropes,
-        num_prot_tropes,
-        num_ant_tropes
+        themes_file: str,
+        plot_tropes_csv_file: str,
+        protagonist_tropes_csv_file: str,
+        antagonist_tropes_csv_file: str,
+        num_plot_tropes: int,
+        num_prot_tropes: int,
+        num_ant_tropes: int
 ) -> tuple[str, list[Trope]]:
     """Selects and returns a list of one theme, three plot
     tropes, one protagonist trope and one antagonist trope
