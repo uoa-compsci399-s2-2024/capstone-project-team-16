@@ -94,7 +94,7 @@ class Item:
     def type_(self) -> str:
         """Getter for type attribute"""
         return self._type_
-    @type.setter
+    @type_.setter
     def type_(self, type_: str) -> None:
         """Setter for type attribute"""
         self._type_ = type_
