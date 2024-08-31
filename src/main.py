@@ -1,23 +1,20 @@
+""" Main module """
+import os
 
+from openai import OpenAI
 
-def initialise_game():
-    # Choose the tropes
+from dotenv import load_dotenv
 
-    # Choose the theme
+def main() -> None:
+    """ Main function to run game """
+    # load environment variables and fetch api key
+    load_dotenv()
+    openai_api_key = os.getenv('OPENAI_API_KEY')
 
-    # Construct prompt and generate the scene using the tropes and theme
-    
-    # Construct prompt and generate the locations using the tropes and theme
-    
-    # Construct prompt and generate characters using the tropes and theme
+    # initialise client
+    client = OpenAI(api_key=openai_api_key)
 
-    # Construct prompt for generating player choices and store them
-
-    pass
-
-
-def main():
-    initialise_game()
+    # Construct prompt for generating player choices and store them - put this in initialisation.py
 
 
 if __name__ == "__main__":
