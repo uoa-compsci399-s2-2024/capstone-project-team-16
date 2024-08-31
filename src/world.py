@@ -4,6 +4,7 @@ from character import Character
 from item import Item
 from trope import Trope
 
+
 class World:
     """A class for keeping track of all of the
     current game's objects and their instances."""
@@ -13,7 +14,8 @@ class World:
         items: dict = None,
         characters: dict = None,
         tropes: dict = None,
-        themes: list[str] = None
+        themes: list[str] = None,
+        choices: list[str] = None
     ) -> None:
         """initialises a World instance"""
         self._locations = locations or {}
@@ -21,6 +23,7 @@ class World:
         self._characters = characters or {}
         self._tropes = tropes or {}
         self._themes = themes or []
+        self._choices = choices or []
 
     def add_location(self, location: Location) -> None:
         """adds a Location object to the world, setting
@@ -72,6 +75,16 @@ class World:
         if theme in self.themes:
             self.themes.remove(theme)
 
+    def set_choices(self, choices: list) -> None:
+        """set the choices list which represents the
+        current choices the player is presented with"""
+        self._choices = choices
+
+    def delete_choices(self) -> None:
+        """resets the choices list to an empty list, so
+        we can repopulate it at the next set of choices"""
+        self._choices = []
+
     @property
     def locations(self) -> dict:
         """Getter for locations attribute"""
@@ -96,3 +109,8 @@ class World:
     def themes(self) -> list[str]:
         """Getter for themes attribute"""
         return self._themes
+
+    @property
+    def choices(self) -> list[str]:
+        """Getter for choices attribute"""
+        return self._choices
