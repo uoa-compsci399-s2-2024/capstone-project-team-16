@@ -39,7 +39,7 @@ class Location:
         list. If needed also do this with items"""
         pass
 
-    def add_neighbor(self, neighbor: 'Location') -> None:
+    def add_neighbor(self, neighbor: 'Location' or None) -> None:
         """Adds a Location object to the list of neighbors this Location has"""
         if neighbor not in self.neighbors:
             self._neighbors.append(neighbor)

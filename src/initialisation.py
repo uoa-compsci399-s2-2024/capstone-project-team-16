@@ -40,7 +40,7 @@ def initialise_game(client):
     locations = prompt.chat_with_gpt(
         client,
         "",
-        templates.location_template(3, tropes, themes),
+        templates.initial_location_template(6, tropes, themes),
         None,
         tokens=500
     )
@@ -59,7 +59,7 @@ def initialise_game(client):
 
     # mappers go here
     mapped_characters = mappers.create_character_from_json(characters)
-    mapped_locations = mappers.create_location_from_json(locations)
+    mapped_locations = mappers.create_location_from_json(json_str=locations)
     mapped_items = mappers.create_item_from_json(items)
 
     for character in mapped_characters:
