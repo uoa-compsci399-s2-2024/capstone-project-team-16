@@ -1,0 +1,20 @@
+Fantasy
+Urban Fantasy
+Dark Fantasy
+Historical Fantasy
+Mythical
+Fairytale
+Horror
+Body Horror
+Gothic
+Psychological Horror
+Mystery
+Paranormal Mystery
+Legal
+Science Fiction
+Western
+Cyberpunk
+Steampunk
+Action
+Thriller
+Comedy
