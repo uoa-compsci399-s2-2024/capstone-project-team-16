@@ -5,6 +5,8 @@ from openai import OpenAI
 
 from dotenv import load_dotenv
 
+from initialisation import initialise_game
+
 def main() -> None:
     """ Main function to run game """
     # load environment variables and fetch api key
@@ -13,6 +15,8 @@ def main() -> None:
 
     # initialise client
     client = OpenAI(api_key=openai_api_key)
+
+    initialise_game(client)
 
 
 if __name__ == "__main__":
