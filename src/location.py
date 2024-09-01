@@ -1,3 +1,7 @@
+from utils.mappers import create_character_from_json, create_item_from_json
+from utils.prompt import chat_with_gpt
+from utils.templates import character_template, item_template
+
 """Location class"""
 import itertools
 
@@ -32,12 +36,31 @@ class Location:
         self._description = description
         self._neighbors = neighbors or []
 
-    def populate(self, num_characters: int) -> None:
+    def populate(self, num_characters: int, num_items: int, world: World, client: OpenAI) -> None:
         """Send prompt to LLM such as 'This is x location in x story with 
         num_characters of characters. Generate xyz stats for each character.'
         Once characters generated, add them (or their id numbers) to self.characters
         list. If needed also do this with items"""
-        pass
+
+        character_response = chat_with_gpt(
+            client,
+            "You are a knowledgeable chatbot that creates unique characters",
+            character_template(num_characters, "", world.tropes, world.themes[-1]),
+            False
+        )
+        item_response = chat_with_gpt(
+            client,
+            "You are a knowledgeable chatbot that creates unique items",
+            item_template(num_items, world.tropes, world.themes[-1]),
+            False
+        )
+        characters = create_character_from_json(character_response)
+        items = create_item_from_json(item_response)
+        
+        for character in characters:
+            self.add_character(character)
+        for item in items
+            self.add_item(item)
 
     def add_neighbor(self, neighbor: 'Location') -> None:
         """Adds a Location object to the list of neighbors this Location has"""
