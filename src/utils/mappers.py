@@ -2,19 +2,20 @@
 from the API into instances of our defined classes."""
 
 import json
-from location import Location
-from character import Character
-from item import Item
+from src.location import Location
+from src.character import Character
+from src.item import Item
 
 
-def create_location_from_json(json_str: str, previous_location: Location or None = None) -> list[Location]:
+def create_location_from_json(json_str: str,
+                              previous_location: Location or None = None) -> list[Location]:
     """
     Takes a JSON string as input, deserializes it,
     and converts it into a new instance of the Location class.
     
     Parameters:
         json_str (str): The JSON string to be deserialized into a Location object.
-        previous_location (Optional[Location]|None): The previous Location object for creating flow on sections.
+        previous_location (Optional[Location]|None): The previous Location object
     
     Returns:
         list[Location]: A list of new instances of the Location class.
@@ -53,8 +54,7 @@ def create_location_from_json(json_str: str, previous_location: Location or None
     return created_locations
 
 
-
-def create_character_from_json(json_str: str) -> Character:
+def create_character_from_json(json_str: str) -> list[Character]:
     """
     Takes a JSON string as input, deserializes it,
     and converts it into a new instance of the Character class.
@@ -68,14 +68,13 @@ def create_character_from_json(json_str: str) -> Character:
     json_str = json_str.strip('```json').strip('```').strip()
     data = json.loads(json_str)["characters"]
 
-
     return [Character(
         name=character['name'],
         traits=character['traits']
         ) for character in data]
 
 
-def create_item_from_json(json_str: str) -> Item:
+def create_item_from_json(json_str: str) -> list[Item]:
     """
     Takes a JSON string as input, deserializes it, and 
     converts it into a new instance of the Item class.
@@ -88,7 +87,6 @@ def create_item_from_json(json_str: str) -> Item:
     """
     json_str = json_str.strip('```json').strip('```').strip()
     data = json.loads(json_str)["items"]
-
 
     return [Item(
         name=item['name'],
