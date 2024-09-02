@@ -73,12 +73,12 @@ class Location:
         return f"Name: {self.name}\nDescription: {self.description}\nCharacters: {self.characters}"
 
     def __eq__(self, other) -> bool:
-        if isinstance(other, Location):
-            return self._id_ == other.id_
+        if isinstance(other, Self):
+            return self.id_ == other.id_
         return False
 
     def __hash__(self) -> int:
-        return hash(self._id_)
+        return hash(self.id_)
 
     def __lt__(self, other) -> bool:
         return self.name < other.name

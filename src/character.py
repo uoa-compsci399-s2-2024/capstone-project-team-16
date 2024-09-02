@@ -80,7 +80,7 @@ class Character:
         return False
 
     def __hash__(self) -> int:
-        return hash(self._id_)
+        return hash(self.id_)
 
     def __lt__(self, other) -> bool:
         return self.name < other.name
