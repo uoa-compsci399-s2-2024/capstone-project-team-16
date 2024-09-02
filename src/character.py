@@ -1,13 +1,18 @@
 """Character Class"""
 
+import itertools
+
+
 class Character:
     """A class defining a character object in an interactive story."""
+
+    id_iter = itertools.count()
+
     def __init__(
         self,
-        id_: int,
         name: str,
-        playable: bool,
         traits: list[str],
+        playable: bool = False,
         current_location: int = None,
         inventory: dict = None
     ) -> None:
@@ -15,7 +20,6 @@ class Character:
         Initialises a Character instance.
 
             Parameters:
-                id_ (int): unique object ID
                 name (str): character's name
                 traits (list): traits the character has
                 current_location (int): ID of the current node
@@ -23,7 +27,7 @@ class Character:
                 playable (boolean): whether the character is playable
         """
 
-        self._id_ = id_
+        self._id_ = next(Character.id_iter)
         self._name = name
         self._traits = traits
         self._current_location = current_location
@@ -65,14 +69,14 @@ class Character:
 
     # base functions
     def __str__(self) -> str:
-        return f"Name: {self.name}\nCurrent Location: {self.current_location}\nInventory: {self.inventory}"
+        return f"Name: {self.name}\nCurrent Location: {self.current_location}\nTraits: {self.traits}"
 
     def __repr__(self) -> str:
-        return f"Name: {self.name}\nCurrent Location: {self.current_location}\nInventory: {self.inventory}"
+        return f"Name: {self.name}\nCurrent Location: {self.current_location}\nTraits: {self.traits}"
 
     def __eq__(self, other) -> bool:
-        if isinstance(other, Character):
-            return self._id_ == other.ID
+        if isinstance(other, self.__class__):
+            return self.id_ == other.id_
         return False
 
     def __hash__(self) -> int:

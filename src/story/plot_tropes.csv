@@ -1,0 +1,26 @@
+id,name,description,conflicts
+101,The Chosen One,The protagonist is destined to save the world according to fate and prophecy,"[102,111,113,118]"
+102,Damsel in Distress,The protagonist must rescue a person who has been kidnapped or captured,"[101,105]"
+103,Wrongly Accused,The protagonist has been wrongly accused and convicted of a crime,"[104,106,107,113,116,117]"
+104,After the End,The story takes place in an apocalyptic setting,"[103,110,112,113,115,122,124]"
+105,A Hero is Born,The story begins with the birth of the protagonist,"[102,106,107]"
+106,"Out of Job, into the Plot",The protagonist loses their job shortly before or after the action begins,"[103,105,115]"
+107,Resurrected,The protagonist is brought back from the dead,"[103,105,115]"
+108,The Quest,The protagonist must go on a dangerous quest,
+109,Enemies to Allies,The protagonist must work with a former enemy or rival against a greater threat,
+110,Secret Society,"The protagonist takes on a powerful, secret, evil organisation","[104,113]"
+111,Alternate Universe,"The protagonist is in a parallel world, different from their own ","[101,115,117,118]"
+112,Impending Apocalypse,The protagonist must prevent an apocalyptic event,"[104,110,122]"
+113,Mysterious Small Town,The story takes place in a small town full of secrets,"[101,103,104,110,116,122]"
+114,Conjuring Evil,The protagonist must defeat a dark evil force which is conjured at the start of the story,
+115,Rags to Riches ,The protagonist comes from a poor background but attains a large amount of wealth,"[104,106,107,111,117,118,122]"
+116,Road Trip,The protagonist is on a road trip,"[103,113]"
+117,Time Travel,The protagonist travels through time,"[103,111,115,118]"
+118,Lost in Time,The protagonist is stuck in a different time period,"[101,111,115,117]"
+119,Prophecy,The protagonist is driven by a prophecy,
+120,Dark Past,The protagonist has experienced great loss or hardship in the past,
+121,Redemption Arc,The protagonist wants to redeem themselves for bad deeds or horrible mistakes they've made in the past,
+122,Dystopia,The story takes place in a world where there is great injustice and suffering due to totalitarian rule,"[104,112,113,115,124]"
+123,Fish Out of Water,The protagonist is in an unfamiliar and uncomfortable environment,
+124,Amateur Sleuth,The protagonist finds themselves involved in a mystery which they must solve despite having no experience solving mysteries,"[104,122]"
+125,Alien Invasion,The story involves aliens arriving on Earth,
