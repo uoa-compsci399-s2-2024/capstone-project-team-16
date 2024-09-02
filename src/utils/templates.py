@@ -54,5 +54,5 @@ def choices_template(quantity: int, tropes: list, theme: str) -> str:
     """Template for generating story choices"""
     user_message = (f"Generate {quantity} choices our player can take that logically blend in generated locations, "
                     f"characters and items. Make sure the choices are consistent with the tropes of {tropes} and "
-                    f"the themes of {theme}. Return this in JSON format.")
+                    f"the themes of {theme}. Return this in JSON format with choices being the first key")
     return user_message
