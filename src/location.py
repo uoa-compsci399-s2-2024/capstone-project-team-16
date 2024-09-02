@@ -60,7 +60,7 @@ class Location:
         
         for character in characters:
             self.add_character(character)
-        for item in items
+        for item in items:
             self.add_item(item)
 
     def add_neighbor(self, neighbor: Self) -> None:
