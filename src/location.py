@@ -1,3 +1,4 @@
+from typing import Self
 from utils.mappers import create_character_from_json, create_item_from_json
 from utils.prompt import chat_with_gpt
 from utils.templates import character_template, item_template
@@ -17,7 +18,7 @@ class Location:
         description: str,
         characters: list[int] = None,
         items: list[int] = None,
-        neighbors: list['Location'] = None
+        neighbors: list[Self] = None
     ) -> None:
         """
         Initialises a Location instance.
@@ -62,7 +63,7 @@ class Location:
         for item in items
             self.add_item(item)
 
-    def add_neighbor(self, neighbor: 'Location' or None) -> None:
+    def add_neighbor(self, neighbor: Self) -> None:
         """Adds a Location object to the list of neighbors this Location has"""
         if neighbor not in self.neighbors:
             self._neighbors.append(neighbor)
@@ -95,7 +96,7 @@ class Location:
         return f"Name: {self.name}\nDescription: {self.description}\nCharacters: {self.characters}"
 
     def __eq__(self, other) -> bool:
-        if isinstance(other, self.__class__):
+        if isinstance(other, Self):
             return self.id_ == other.id_
         return False
 
@@ -158,10 +159,10 @@ class Location:
         self._description = description
 
     @property
-    def neighbors(self) -> list['Location']:
+    def neighbors(self) -> list[Self]:
         """Getter for neighbors attribute"""
         return self._neighbors
     @neighbors.setter
-    def neighbors(self, neighbors: list['Location']) -> None:
+    def neighbors(self, neighbors: list[Self]) -> None:
         """Setter for neighbors attribute"""
         self._neighbors = neighbors

@@ -12,7 +12,7 @@ class Item:
     def __init__(
         self,
         name: str,
-        type_: str,
+        category: str,
         weight: float,
         price: float = 1
     ) -> None:
@@ -22,21 +22,21 @@ class Item:
                 id_ (int): unique object ID
                 name (str): item name
                 weight (float): weight of the item
-                type (str): type of the item
+                category (str): category of the item
                 price (float): price of the item
         """
         self._id_ = next(Item.id_iter)
         self._name = name
         self._weight = weight
-        self._type_ = type_
+        self._category = category
         self._price = price
 
     # base functions
     def __str__(self) -> str:
-        return f"Name: {self.name}\nWeight: {self.weight}\nPrice: {self.price}\nType: {self.type_}"
+        return f"Name: {self.name}\nWeight: {self.weight}\nPrice: {self.price}\nType: {self.category}"
 
     def __repr__(self) -> str:
-        return f"Name: {self.name}\nWeight: {self.weight}\nPrice: {self.price}\nType: {self.type_}"
+        return f"Name: {self.name}\nWeight: {self.weight}\nPrice: {self.price}\nType: {self.category}"
 
     def __eq__(self, other) -> bool:
         if isinstance(other, self.__class__):
@@ -92,10 +92,10 @@ class Item:
         self._weight = weight
 
     @property
-    def type_(self) -> str:
-        """Getter for type attribute"""
-        return self._type_
-    @type_.setter
-    def type_(self, type_: str) -> None:
-        """Setter for type attribute"""
-        self._type_ = type_
+    def category(self) -> str:
+        """Getter for category attribute"""
+        return self._category
+    @category.setter
+    def category(self, category: str) -> None:
+        """Setter for category attribute"""
+        self._category = category
