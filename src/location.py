@@ -74,7 +74,7 @@ class Location:
 
     def __eq__(self, other) -> bool:
         if isinstance(other, Location):
-            return self._id_ == other.ID
+            return self._id_ == other.id_
         return False
 
     def __hash__(self) -> int:
@@ -95,7 +95,7 @@ class Location:
     # getters and setters
 
     @property
-    def ID(self) -> int:
+    def id_(self) -> int:
         """Getter for ID attribute"""
         return self._id_
 

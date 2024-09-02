@@ -33,10 +33,10 @@ class Item:
 
     # base functions
     def __str__(self) -> str:
-        return f"Name: {self.name}\nWeight: {self.weight}\nPrice: {self.price}\nType: {self.type_}"
+        return f"Name: {self.name}\nWeight: {self.weight}\nPrice: {self.price}\nType: {self.category}"
 
     def __repr__(self) -> str:
-        return f"Name: {self.name}\nWeight: {self.weight}\nPrice: {self.price}\nType: {self.type_}"
+        return f"Name: {self.name}\nWeight: {self.weight}\nPrice: {self.price}\nType: {self.category}"
 
     def __eq__(self, other) -> bool:
         if isinstance(other, self.__class__):
@@ -60,7 +60,7 @@ class Item:
 
     # getters and setters
     @property
-    def ID(self) -> int:
+    def id_(self) -> int:
         """Getter for ID attribute"""
         return self._id_
 

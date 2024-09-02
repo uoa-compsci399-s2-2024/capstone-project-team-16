@@ -5,39 +5,39 @@ from src.location import Location
 
 @pytest.fixture
 def item_1():
-    return Item(0, "Flaming Sword of Greatness", "Slashing", 5.0, 35.5)
+    return Item("Flaming Sword of Greatness", "Slashing", 5.0, 35.5)
 
 @pytest.fixture
 def item_2():
-    return Item(1, "Cube of Force", "Wondrous Item", 1.2, 23.3)
+    return Item("Cube of Force", "Wondrous Item", 1.2, 23.3)
 
 @pytest.fixture
 def character_1():
-    return Character(0, "Gandalf", True, ["Wizard"], 0, {0: 1, 1: 2})
+    return Character("Gandalf", ["Wizard"], True, 0, {0: 1, 1: 2})
 
 @pytest.fixture
 def character_2():
-    return Character(1, "Frodo", True, ["Hobbit"], 1, {2: 1, 3: 1})
+    return Character("Frodo", ["Hobbit"], True, 1, {2: 1, 3: 1})
 
 @pytest.fixture
 def location_1():
-    return Location(0, "Shire", [0,1], [0,1], "A peaceful place", [0, 1, 2])
+    return Location("Shire", "A peaceful place", [0,1], [0,1], [0, 1, 2])
 
 @pytest.fixture
 def location_2():
-    return Location(1, "Mordor", [2,3], [2,3], "A dangerous place", [4, 5, 6])
+    return Location("Mordor",  "A dangerous place", [2,3], [2,3], [4, 5, 6])
 
 def test_item_init(item_1, item_2):
     # Initialisation testing, Getter testing
-    assert str(item_1) == "Flaming Sword of Greatness"
-    assert item_1.ID == 0
+    assert str(item_1) == "Name: Flaming Sword of Greatness\nWeight: 5.0\nPrice: 35.5\nType: Slashing"
+    assert item_1.id_ == 0
     assert item_1.name == "Flaming Sword of Greatness"
     assert item_1.category == "Slashing"
     assert item_1.weight == 5.0
     assert item_1.price == 35.5
 
-    assert str(item_2) == "Cube of Force"
-    assert item_2.ID == 1
+    assert str(item_2) == "Name: Cube of Force\nWeight: 1.2\nPrice: 23.3\nType: Wondrous Item"
+    assert item_2.id_ == 1
     assert item_2.name == "Cube of Force"
     assert item_2.category == "Wondrous Item"
     assert item_2.weight == 1.2
@@ -49,7 +49,7 @@ def test_item_equality(item_1, item_2):
     assert item_1 == item_1
 
 def test_item_hash(item_1):
-    assert hash(item_1) == hash(item_1.ID)
+    assert hash(item_1) == hash(item_1.id_)
 
 def test_item_comparisons(item_1, item_2):
     assert item_1 > item_2
@@ -66,8 +66,7 @@ def test_item_setters(item_1):
     item_1.price = 5.0
 
     # Testing setters
-    assert str(item_1) == "Broken Flaming Sword of Greatness"
-    assert item_1.ID == 0
+    assert str(item_1) == "Name: Broken Flaming Sword of Greatness\nWeight: 0.6\nPrice: 5.0\nType: Inert"
     assert item_1.name == "Broken Flaming Sword of Greatness"
     assert item_1.category == "Inert"
     assert item_1.weight == 0.6
@@ -76,14 +75,12 @@ def test_item_setters(item_1):
 
 def test_character_init(character_1, character_2):
     # Initialisation testing, Getter testing
-    assert character_1.ID == 0
     assert character_1.name == "Gandalf"
     assert character_1.playable == True
     assert character_1.traits == ["Wizard"]
     assert character_1.current_location == 0
     assert character_1.inventory == {0: 1, 1: 2}
 
-    assert character_2.ID == 1
     assert character_2.name == "Frodo"
     assert character_2.playable == True
     assert character_2.traits == ["Hobbit"]
@@ -95,7 +92,7 @@ def test_character_equality(character_1, character_2):
     assert character_1 == character_1
 
 def test_character_hash(character_1):
-    assert hash(character_1) == hash(character_1.ID)
+    assert hash(character_1) == hash(character_1.id_)
 
 def test_character_comparisons(character_1, character_2):
     assert character_1 > character_2
@@ -113,7 +110,6 @@ def test_character_setters(character_1):
     character_1.inventory = {0: 2, 1: 1}
 
     # Testing setters
-    assert character_1.ID == 0
     assert character_1.name == "Gandalf the Grey"
     assert character_1.playable == False
     assert character_1.traits == ["Wizard", "Grey"]
@@ -148,14 +144,12 @@ def test_character_move(character_1):
 
 def test_location_init(location_1, location_2):
     # Initialisation testing, Getter testing
-    assert location_1.ID == 0
     assert location_1.name == "Shire"
     assert location_1.characters == [0, 1]
     assert location_1.items == [0, 1]
     assert location_1.description == "A peaceful place"
     assert location_1.neighbors == [0, 1, 2]
 
-    assert location_2.ID == 1
     assert location_2.name == "Mordor"
     assert location_2.characters == [2, 3]
     assert location_2.items == [2, 3]
@@ -167,7 +161,7 @@ def test_location_equality(location_1, location_2):
     assert location_1 == location_1
 
 def test_location_hash(location_1):
-    assert hash(location_1) == hash(location_1.ID)
+    assert hash(location_1) == hash(location_1.id_)
 
 def test_location_comparisons(location_1, location_2):
     assert location_1 > location_2
@@ -184,7 +178,6 @@ def test_location_setters(location_1):
     location_1.connections = [1, 2, 3]
 
     # Testing setters
-    assert location_1.ID == 0
     assert location_1.name == "The Shire"
     assert location_1.characters == [1, 2]
     assert location_1.items == [1, 2]

@@ -97,7 +97,7 @@ class Character:
     # getters and setters
 
     @property
-    def ID(self) -> int:
+    def id_(self) -> int:
         """Getter for ID attribute"""
         return self._id_
 
