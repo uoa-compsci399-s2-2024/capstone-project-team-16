@@ -1,10 +1,11 @@
 """ Template functions for generating prompts to send to LLM """
 
-def character_template(quantity: int, type_of_char: str, tropes: list, themes: list) -> str:
+
+def character_template(quantity: int, type_of_char: str, tropes: list, theme: str) -> str:
     """Template for generating characters"""
     user_message = (f"Create {quantity} {type_of_char} character/s including their "
                     "name and a list of 1-5 word traits. Keep the character consistent "
-                    f"with the the tropes of {tropes} and the themes of {themes}. Return this "
+                    f"with the the tropes of {tropes} and the themes of {theme}. Return this "
                     "in JSON format with the first key being 'characters'.")
     return user_message
 
