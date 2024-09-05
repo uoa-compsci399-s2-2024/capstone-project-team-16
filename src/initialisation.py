@@ -57,11 +57,15 @@ def initialise_game(client):
     choices = prompt.chat_with_gpt(
         client,
         "You are a knowledgeable chatbot that gives a list of choices",
-        templates.choices_template(5, tropes, theme),
+        templates.initial_choices_template(5, tropes, theme),
         True,
         tokens=500
     )
 
+    # add the initial JSON objects to their world.py lists
+    World.add_json_location(locations)
+    World.add_json_character(characters)
+    World.add_json_item(items)
 
     # mappers go here
     mapped_characters = mappers.create_character_from_json(characters)

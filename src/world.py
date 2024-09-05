@@ -25,20 +25,38 @@ class World:
         self._themes = themes or []
         self._choices = choices or []
 
+        """A list of JSON objects to pass to our 
+        choices template for better choice generation"""
+        self._json_locations = []
+        self._json_items = []
+        self._json_characters =[]
+
     def add_location(self, location: Location) -> None:
         """adds a Location object to the world, setting
         its unique ID as its key in the dictionary"""
         self.locations[location.id_] = location
+
+    def add_json_location(self, json_str: str) -> None:
+        """adds a JSON object to the json_locations list"""
+        self._json_locations.append(json_str)
 
     def add_character(self, character: Character) -> None:
         """adds a Character object to the world, setting its
         unique ID as its key in the dictionary"""
         self.characters[character.id_] = character
 
+    def add_json_character(self, json_str: str) -> None:
+        """adds a JSON object to the json_characters list"""
+        self._json_characters.append(json_str)
+
     def add_item(self, item: Item) -> None:
         """adds an Item object to the world, setting its
         unique ID as its key in the dictionary"""
         self.items[item.id_] = item
+
+    def add_json_item(self, json_str: str) -> None:
+        """adds a JSON object to the json_items list"""
+        self._json_items.append(json_str)
 
     def add_trope(self, trope: Trope) -> None:
         """adds a Trope object to the world, setting its
@@ -91,14 +109,29 @@ class World:
         return self._locations
 
     @property
+    def json_locations(self) -> list:
+        """Getter for json_locations attribute"""
+        return self._json_locations
+
+    @property
     def characters(self) -> dict:
         """Getter for characters attribute"""
         return self._characters
 
     @property
+    def json_characters(self) -> list:
+        """Getter for json_characters attribute"""
+        return self._json_characters
+
+    @property
     def items(self) -> dict:
         """Getter for items attribute"""
         return self._items
+
+    @property
+    def json_items(self) -> list:
+        """Getter for json_items attribute"""
+        return self._json_items
 
     @property
     def tropes(self) -> dict:

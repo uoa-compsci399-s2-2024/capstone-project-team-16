@@ -1,5 +1,6 @@
 """ Template functions for generating prompts to send to LLM """
 
+import src.world
 
 def character_template(quantity: int, type_of_char: str, tropes: list, theme: str) -> str:
     """Template for generating characters"""
@@ -51,9 +52,24 @@ def flow_on_location_template(quantity: int,
     return user_message
 
 
-def choices_template(quantity: int, tropes: list, theme: str) -> str:
-    """Template for generating story choices"""
-    user_message = (f"Generate {quantity} choices our player can take that logically blend in generated locations, "
-                    f"characters and items. Make sure the choices are consistent with the tropes of {tropes} and "
-                    f"the themes of {theme}. Return this in JSON format with choices being the first key")
+def initial_choices_template(quantity: int, tropes: list, theme: str) -> str:
+    """Template for generating initial story choices"""
+    user_message = (f"Generate {quantity} choices our player can take that make sense for the beginning of a story. "
+                    f"These choices should reflect that we're just starting the story and should not speed up the pace "
+                    f"of our story rapidly. Make sure the choices are consistent with the tropes of {tropes} and the "
+                    f"theme of {theme}. Return this in JSON format with choices being the first key")
+    return user_message
+
+
+def flow_on_choices_template(quantity: int, tropes: list, theme: str,
+                             json_locations: list, json_characters: list,
+                             json_items: list) -> str:
+    """Template for generating subsequent story choices"""
+    user_message = (f"Generate {quantity} choices our player can take that make sense for the current pacing of the "
+                    f"story. The choices must be consistent with the current pacing of the story and can speed it up "
+                    f"slightly but not too much. Make sure the choices are consistent with the tropes of {tropes} and "
+                    f"the theme of {theme}. Incorporate some of the characters, items or locations from the given "
+                    f"objects into the choices if it makes sense to do so. The objects are in JSON format and are as "
+                    f"follows: The list of characters: {json_characters}. The list of items: {json_items}. The list of "
+                    f"locations: {json_locations}. Return this in JSON format with choices being the first key.")
     return user_message
