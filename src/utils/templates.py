@@ -57,3 +57,16 @@ def choices_template(quantity: int, tropes: list, theme: str) -> str:
                     f"characters and items. Make sure the choices are consistent with the tropes of {tropes} and "
                     f"the themes of {theme}. Return this in JSON format with choices being the first key")
     return user_message
+
+
+def scene_template(location_name: str, location_description: str, items: list,
+                   characters: list) -> str:
+    """Template for generating a scene"""
+    user_message = ("You are to create a scene using the following information and output a JSON "
+                    f"dictionary. The location is {location_name}, {location_description}. "
+                    f"The items in this location are: {items} The Characters in this location "
+                    f"are: {characters} Using this information generate text description "
+                    "for a scene for the player to interact with. The scene should not be more than"
+                    " 200 words in length and should be output in a JSON dictionary in the "
+                    "following format:{'scene': description of the scene}")
+    return user_message
