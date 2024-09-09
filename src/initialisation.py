@@ -63,9 +63,9 @@ def initialise_game(client):
     )
 
     # add the initial JSON objects to their world.py lists
-    World.add_json_location(locations)
-    World.add_json_character(characters)
-    World.add_json_item(items)
+    current_world.add_json_location(locations)
+    current_world.add_json_character(characters)
+    current_world.add_json_item(items)
 
     # mappers go here
     mapped_characters = mappers.create_character_from_json(characters)
