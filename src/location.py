@@ -1,10 +1,11 @@
-from typing import Self
-from utils.mappers import create_character_from_json, create_item_from_json
-from utils.prompt import chat_with_gpt
-from utils.templates import character_template, item_template
-
 """Location class"""
 import itertools
+from typing import Self
+from src.utils.prompt import chat_with_gpt
+from src.utils.templates import character_template, item_template
+from src.utils.mappers import chracter_mapper, item_mapper
+
+
 
 class Location:
     """
@@ -37,7 +38,7 @@ class Location:
         self._description = description
         self._neighbors = neighbors or []
 
-    def populate(self, num_characters: int, num_items: int, world: World, client: OpenAI) -> None:
+    def populate(self, num_characters: int, num_items: int, world: 'World', client: 'OpenAI') -> None:
         """Send prompt to LLM such as 'This is x location in x story with 
         num_characters of characters. Generate xyz stats for each character.'
         Once characters generated, add them (or their id numbers) to self.characters
@@ -55,13 +56,13 @@ class Location:
             item_template(num_items, world.tropes, world.themes[-1]),
             False
         )
-        characters = create_character_from_json(character_response)
-        items = create_item_from_json(item_response)
-        
+        characters = chracter_mapper.create_character_from_json(character_response)
+        items = item_mapper.create_item_from_json(item_response)
+        # Add Objects to internal lists
         for character in characters:
-            self.add_character(character)
+            self.add_character(character.id_)
         for item in items:
-            self.add_item(item)
+            self.add_item(item.id_)
 
     def add_neighbor(self, neighbor: Self) -> None:
         """Adds a Location object to the list of neighbors this Location has"""
@@ -96,7 +97,7 @@ class Location:
         return f"Name: {self.name}\nDescription: {self.description}\nCharacters: {self.characters}"
 
     def __eq__(self, other) -> bool:
-        if isinstance(other, Self):
+        if isinstance(other, self.__class__):
             return self.id_ == other.id_
         return False
 
