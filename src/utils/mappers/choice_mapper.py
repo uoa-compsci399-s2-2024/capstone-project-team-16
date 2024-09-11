@@ -1,3 +1,7 @@
+"""
+This is a json to object Mapper for choices creating a list of choices for the game to display
+"""
+
 import json
 
 

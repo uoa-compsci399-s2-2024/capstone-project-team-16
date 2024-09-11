@@ -1,3 +1,6 @@
+"""
+This is a JSON to object mapper for Characters it turns a JSON string to a Character Object
+"""
 import json
 from src.character import Character
 

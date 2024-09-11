@@ -1,3 +1,6 @@
+"""
+This is a JSON to object mapper for Items it turns a JSON string to a Item Object
+"""
 import json
 from src.item import Item
 

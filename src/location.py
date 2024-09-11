@@ -1,9 +1,11 @@
+"""Location class"""
+import itertools
 from typing import Self
 from src.utils.prompt import chat_with_gpt
 from src.utils.templates import character_template, item_template
 from src.utils.mappers import chracter_mapper, item_mapper
-"""Location class"""
-import itertools
+
+
 
 class Location:
     """
@@ -56,7 +58,7 @@ class Location:
         )
         characters = chracter_mapper.create_character_from_json(character_response)
         items = item_mapper.create_item_from_json(item_response)
-        
+        # Add Objects to internal lists
         for character in characters:
             self.add_character(character.id_)
         for item in items:
@@ -95,7 +97,7 @@ class Location:
         return f"Name: {self.name}\nDescription: {self.description}\nCharacters: {self.characters}"
 
     def __eq__(self, other) -> bool:
-        if isinstance(other, Self):
+        if isinstance(other, self.__class__):
             return self.id_ == other.id_
         return False
 
