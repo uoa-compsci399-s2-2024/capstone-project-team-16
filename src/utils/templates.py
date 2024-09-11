@@ -73,3 +73,16 @@ def flow_on_choices_template(quantity: int, tropes: list, theme: str,
                     f"follows: The list of characters: {json_characters}. The list of items: {json_items}. The list of "
                     f"locations: {json_locations}. Return this in JSON format with choices being the first key.")
     return user_message
+
+def demo_choices_movement_template(list_of_neighbours: list):
+    """Template for generating a choices for movement options in the demo"""
+    user_message = ("You are to generate movement choices for the user. The locations connected to "
+                    f"this location are: {list_of_neighbours} ) The format is \"Name(ID)\", if one "
+                    "of the Neighbours are None you are to create a text description describing "
+                    "the user going into a mysterious location, You are to be creative with how "
+                    "the user can go to this mysterious unknown location You are to return the "
+                    "movement choices in a JSON file in the following format { 'choices': [{ "
+                    "'description': A very short text description to display to the user, "
+                    "'new_location': the ID of the location you are to move to or None if the "
+                    "location is unknown} ]}")
+    return user_message

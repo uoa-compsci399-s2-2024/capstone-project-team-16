@@ -139,8 +139,8 @@ class World:
         return self._tropes
 
     @property
-    def themes(self) -> list[str]:
-        """Getter for themes attribute"""
+    def theme(self) -> str:
+        """Getter for theme attribute"""
         return self._theme
 
     @property
