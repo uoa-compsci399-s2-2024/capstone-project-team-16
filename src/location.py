@@ -1,8 +1,7 @@
 from typing import Self
 from src.utils.prompt import chat_with_gpt
 from src.utils.templates import character_template, item_template
-from src.utils.mappers import create_character_from_json, create_item_from_json
-
+from src.utils.mappers import chracter_mapper, item_mapper
 """Location class"""
 import itertools
 
@@ -55,8 +54,8 @@ class Location:
             item_template(num_items, world.tropes, world.themes[-1]),
             False
         )
-        characters = create_character_from_json(character_response)
-        items = create_item_from_json(item_response)
+        characters = chracter_mapper.create_character_from_json(character_response)
+        items = item_mapper.create_item_from_json(item_response)
         
         for character in characters:
             self.add_character(character.id_)

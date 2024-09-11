@@ -2,7 +2,8 @@ import os
 from openai import OpenAI
 from dotenv import load_dotenv
 import pytest
-from src.utils import prompt, templates, mappers
+from src.utils import prompt, templates
+from src.utils.mappers import location_mapper
 from src.location import Location
 
 @pytest.fixture
@@ -35,7 +36,7 @@ def test_location_generation_init(client, tropes, theme):
         temp=2
     )
 
-    mapped_locations = mappers.create_location_from_json(json_str=locations)
+    mapped_locations = location_mapper.create_location_from_json(json_str=locations)
 
     # Tests
 
