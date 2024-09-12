@@ -7,7 +7,7 @@ from world import World
 from openai import OpenAI
 from utils.templates import demo_choices_movement_template, scene_template
 from utils.prompt import chat_with_gpt
-from utils.mappers import scene_mapper
+from utils.mappers import scene_mapper, choice_mapper
 
 # This is just for readability's sake
 import textwrap
