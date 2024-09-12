@@ -10,6 +10,52 @@ from game import game_loop
 
 from character import Character
 
+
+def print_art() -> None:
+    print("      _,.")
+    print("    ,` -.)")
+    print("   ( _/-\\\\-._")
+    print("  /,|`--._,-^|            ,")
+    print("  \\_| |`-._/||          ,'|")
+    print("    |  `-, / |         /  /")
+    print("    |     || |        /  /")
+    print("     `r-._||/   __   /  /")
+    print(" __,-<_     )`-/  `./  /")
+    print("'  \\   `---'   \\   /  /")
+    print("    |           |./  /")
+    print("    /           //  /")
+    print("\\_/' \\         |/  /")
+    print(" |    |   _,^-'/  /")
+    print(" |    , ``  (\\/  /_")
+    print("  \\,.->._    \\X-=/^")
+    print("  (  /   `-._//^`")
+    print("   `Y-.____(__}")
+    print("    |     {__)")
+    print("          ()")
+
+def print_title() -> None:
+
+    print("    .___                          .___          /\\ __         __          .___              ")
+    print("  __| _/____   _____   ____     __| _/____   ___)//  |_      |__|__ __  __| _/ ____   ____  ")
+    print(" / __ |/ __ \\ /     \\ /  _ \\   / __ |/  _ \\ /    \\   __\\     |  |  |  \\/ __ | / ___\\_/ __ \\ ")
+    print("/ /_/ \\  ___/|  Y Y  (  <_> ) / /_/ (  <_> )   |  \\  |       |  |  |  / /_/ |/ /_/  >  ___/ ")
+    print("\\____ |\\___  >__|_|  /\\____/  \\____ |\\____/|___|  /__|   /\\__|  |____/\\____ |\\___  / \\___  >")
+    print("     \\/    \\/      \\/              \\/           \\/       \\______|          \\/_____/      \\/ ")
+    print("")
+
+def print_description() -> None:
+
+
+    print("In this game, you will embark on a thrilling quest")
+    print("filled with danger, mystery, and magic. Your choices")
+    print("will determine the outcome of your adventure.")
+    print()
+
+def start_game() -> bool:
+
+    user_input = input("> Press enter to start game... ")
+    return True
+
 def initialise_game(client):
     """Initialises the tropes, themes,
     characters, locations and items
