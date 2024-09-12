@@ -76,9 +76,14 @@ def game_loop(player: Character, world: World, client: OpenAI) -> None:
             temp=0.5
         )
         mapped_choices = choice_mapper.create_demo_choices_from_json(choices)
-        print(mapped_choices)
-        
-        choice_selection(mapped_choices)
+
+        for choice in mapped_choices:
+            print(choice)
+        for neighbor in current_location.neighbors:
+            if neighbor is not None:
+                print(neighbor.name, neighbor.id_)
+            else:
+                print(None)
 
 
         input("END GAME?")

@@ -25,9 +25,7 @@ def create_demo_choices_from_json(json_str: str) -> dict:
     json_str = json_str.strip('```json').strip('```').strip()
     data = json.loads(json_str)["choices"]
 
-    i = 0
-    choices = {}
+    choices = []
     for choice in data:
-        choices[i] = (choice['description'], choice['new_location'])
-        i += 1
+        choices.append((choice['description'], choice['new_location']))
     return choices
