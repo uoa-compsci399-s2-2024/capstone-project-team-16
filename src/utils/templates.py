@@ -82,8 +82,8 @@ def demo_choices_movement_template(list_of_neighbours: list):
                     "the user can go to this mysterious unknown location You are to return the "
                     "movement choices in a JSON file in the following format { 'choices': [{ "
                     "'description': A very short text description to display to the user, "
-                    "'new_location': the ID of the location you are to move to or None if the "
-                    "location is unknown} ]}")
+                    "'new_location': the integer number ID of the location you are to move to or "
+                    "None if the location is unknown} ]}")
     return user_message
 
 
