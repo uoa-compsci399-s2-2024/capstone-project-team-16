@@ -44,7 +44,7 @@ def create_location_from_json(json_str: str,
             if neighbour is None:
                 location.add_neighbor(None)
             else:
-                location.add_neighbor(neighbour)
+                location.add_neighbor(name_to_location_dict[neighbour])
 
                 # Removes null from previous neighbour
                 if neighbour is previous_location:
