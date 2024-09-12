@@ -32,6 +32,7 @@ def print_art() -> None:
     print("   `Y-.____(__}")
     print("    |     {__)")
     print("          ()")
+    print("")
 
 def print_title() -> None:
 
