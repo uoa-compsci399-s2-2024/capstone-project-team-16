@@ -35,6 +35,12 @@ def move_character(character_object: character.Character, current_location: loca
             if current_location in mapped_new_location.neighbors:
                 new_location = mapped_new_location
 
-        character_object.move(new_location.id_)
-        current_location.remove_character(character_object.id_)
-        new_location.add_character(character_object.id_)
+
+        # DIRTY IF STATEMENT THIS IS HERE DUE TO A PROMPT ERORR OCCURING
+        if new_location is not None:
+            character_object.move(new_location.id_)
+            current_location.remove_character(character_object.id_)
+            new_location.add_character(character_object.id_)
+        else:
+            print("DEBUG: REAL SORRY THIS IS AN ISSUE WITH FLOW ON LOCATION NOT CONNECTING "
+                  "SO SORRY CANT MOVE LOCATIONS :(")

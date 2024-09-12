@@ -143,6 +143,7 @@ def initialise_game(client):
 
     # Easy Way to create a Playable Character FOR DEMO
     player = Character(input("Input your character's name:\n> "), [], playable=True)
+
     current_world.add_character(player)
     # Adds Player to the ID 0 location and vice versa
     player.current_location = (current_world.locations[0]).id_
