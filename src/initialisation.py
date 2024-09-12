@@ -1,7 +1,7 @@
 """Module for initialising the game"""
 import os
 from utils import templates, prompt
-from src.utils.mappers import character_mapper, location_mapper, item_mapper
+from utils.mappers import character_mapper, location_mapper, item_mapper
 from world import World
 #from game import get_random_tropes, read_csv_file, create_tropes
 from utils.narrative_elements import get_random_tropes, get_random_theme, read_csv_file, create_tropes
@@ -15,10 +15,10 @@ def initialise_game(client):
     characters, locations and items
     for the game."""
 
-    plot_tropes_path = os.path.join(os.path.dirname(os.getcwd()), 'src/story/plot_tropes.csv')
+    plot_tropes_path = 'src/story/plot_tropes.csv'
     # file_path_2 = os.path.join(os.path.dirname(os.getcwd()), 'src/story/protagonist_tropes.csv')
     # file_path_3 = os.path.join(os.path.dirname(os.getcwd()), 'src/story/antagonist_tropes.csv')
-    themes_path = os.path.join(os.path.dirname(os.getcwd()), 'src/story/themes.txt')
+    themes_path = 'src/story/themes.txt'
 
     current_world = World()
 

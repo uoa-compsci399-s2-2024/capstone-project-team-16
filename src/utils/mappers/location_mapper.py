@@ -2,7 +2,7 @@
 This is a JSON to object mapper for Locations  it turns a JSON string to a Character Object
 """
 import json
-from src.location import Location
+from location import Location
 
 
 def create_location_from_json(json_str: str,

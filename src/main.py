@@ -5,7 +5,7 @@ from openai import OpenAI
 
 from dotenv import load_dotenv
 
-from src.initialisation import initialise_game
+from initialisation import initialise_game
 
 
 def main() -> None:

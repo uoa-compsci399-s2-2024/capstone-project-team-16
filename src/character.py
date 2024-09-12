@@ -14,7 +14,7 @@ class Character:
         traits: list[str],
         playable: bool = False,
         current_location: int = None,
-        inventory: dict = None
+        inventory: dict = {}
     ) -> None:
         """
         Initialises a Character instance.

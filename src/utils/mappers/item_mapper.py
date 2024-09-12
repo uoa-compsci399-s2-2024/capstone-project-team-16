@@ -2,7 +2,7 @@
 This is a JSON to object mapper for Items it turns a JSON string to a Item Object
 """
 import json
-from src.item import Item
+from item import Item
 
 
 def create_item_from_json(json_str: str) -> list[Item]:

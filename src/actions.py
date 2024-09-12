@@ -1,9 +1,9 @@
 """This is a file of all possible actions for the game"""
 
-from src import location, character, item, world
-from src.utils.prompt import chat_with_gpt
-from src.utils.templates import flow_on_location_template
-from src.utils.mappers import location_mapper
+import location, character, item, world
+from utils.prompt import chat_with_gpt
+from utils.templates import flow_on_location_template
+from utils.mappers import location_mapper
 
 
 def move_character(character_object: character.Character, current_location: location.Location,

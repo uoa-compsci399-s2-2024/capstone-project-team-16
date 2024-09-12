@@ -1,9 +1,9 @@
 """Location class"""
 import itertools
 from typing import Self
-from src.utils.prompt import chat_with_gpt
-from src.utils.templates import character_template, item_template
-from src.utils.mappers import character_mapper, item_mapper
+from utils.prompt import chat_with_gpt
+from utils.templates import character_template, item_template
+from utils.mappers import character_mapper, item_mapper
 
 
 
