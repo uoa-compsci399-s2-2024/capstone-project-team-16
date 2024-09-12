@@ -1,9 +1,14 @@
 """Module for initialising the game"""
 import os
-from utils import templates, prompt, mappers
+from utils import templates, prompt
+from src.utils.mappers import character_mapper, location_mapper, item_mapper
 from world import World
 #from game import get_random_tropes, read_csv_file, create_tropes
 from utils.narrative_elements import get_random_tropes, get_random_theme, read_csv_file, create_tropes
+from game import game_loop
+
+
+from character import Character
 
 def initialise_game(client):
     """Initialises the tropes, themes,
@@ -13,7 +18,7 @@ def initialise_game(client):
     plot_tropes_path = os.path.join(os.path.dirname(os.getcwd()), 'src/story/plot_tropes.csv')
     # file_path_2 = os.path.join(os.path.dirname(os.getcwd()), 'src/story/protagonist_tropes.csv')
     # file_path_3 = os.path.join(os.path.dirname(os.getcwd()), 'src/story/antagonist_tropes.csv')
-    themes_path = os.path.join(os.path.dirname(os.getcwd()), 'src/story/themes/txt')
+    themes_path = os.path.join(os.path.dirname(os.getcwd()), 'src/story/themes.txt')
 
     current_world = World()
 
@@ -27,66 +32,81 @@ def initialise_game(client):
     current_world.add_theme(theme)
 
     # Construct prompt and generate the characters using the tropes and theme
-    characters = prompt.chat_with_gpt(
-        client,
-        "You are a knowledgeable chatbot that creates unique characters",
-        templates.character_template(3, "sec", tropes, theme),
-        False,
-        tokens=500
-    )
-
+    # Commenting this out as do we need to create characters if we are populating locations with
+    # them individually
+    # characters = prompt.chat_with_gpt(
+    #    client,
+    #    "You are a knowledgeable chatbot that creates unique characters",
+    #    templates.character_template(3, "sec", tropes, theme),
+    #    False,
+    #    tokens=500
+    #)
+    print("DEBUG: CREATING LOCATIONS")
     # Construct prompt and generate the locations using the tropes and theme
     locations = prompt.chat_with_gpt(
         client,
         "You are a knowledgeable chatbot that creates unique locations",
-        templates.initial_location_template(6, tropes, theme),
+        templates.initial_location_template(5, tropes, theme),
         False,
-        tokens=500
+        tokens=600,
+        temp=2
     )
-
+    print("DEBUG: FINISHED CREATING LOCATIONS")
     # Construct prompt and generate items using the tropes and theme
-    items = prompt.chat_with_gpt(
-        client,
-        "You are a knowledgeable chatbot that creates unique items",
-        templates.item_template(3, tropes, theme),
-        False,
-        tokens=500
-    )
+    # Same with this do we need items in locations? if we have a populate within location
+    # items = prompt.chat_with_gpt(
+    #     client,
+    #     "You are a knowledgeable chatbot that creates unique items",
+    #     templates.item_template(3, tropes, theme),
+    #     False,
+    #     tokens=500
+    # )
 
     # Construct prompt and generate player choices using the tropes and theme
-    choices = prompt.chat_with_gpt(
-        client,
-        "You are a knowledgeable chatbot that gives a list of choices",
-        templates.initial_choices_template(5, tropes, theme),
-        True,
-        tokens=500
-    )
+    # Choices are created within the game loop so arent needed here
+    # choices = prompt.chat_with_gpt(
+    #     client,
+    #     "You are a knowledgeable chatbot that gives a list of choices",
+    #     templates.initial_choices_template(5, tropes, theme),
+    #     True,
+    #     tokens=500
+    # )
 
     # add the initial JSON objects to their world.py lists
     current_world.add_json_location(locations)
-    current_world.add_json_character(characters)
-    current_world.add_json_item(items)
+    #current_world.add_json_character(characters)
+    #current_world.add_json_item(items)
 
     # mappers go here
-    mapped_characters = mappers.create_character_from_json(characters)
-    mapped_locations = mappers.create_location_from_json(json_str=locations)
-    mapped_items = mappers.create_item_from_json(items)
-    mapped_choices = mappers.create_choices_from_json(choices)
+    #mapped_characters = character_mapper.create_character_from_json(characters)
+    mapped_locations = location_mapper.create_location_from_json(json_str=locations)
+    #mapped_items = item_mapper.create_item_from_json(items)
+    #mapped_choices = choice_mapper.create_choices_from_json(choices)
 
-    for character in mapped_characters:
-        current_world.add_character(character)
+    #for character in mapped_characters:
+    #    current_world.add_character(character)
 
     for location in mapped_locations:
         current_world.add_location(location)
 
-    for item in mapped_items:
-        current_world.add_item(item)
+    #for item in mapped_items:
+    #    current_world.add_item(item)
 
-    current_world.set_choices(mapped_choices)
+    #current_world.set_choices(mapped_choices)
 
-    print(current_world.characters)
+    # Easy Way to create a Playable Character FOR DEMO
+    player = Character(input("Input your character's name:\n> "), [], playable=True)
+    current_world.add_character(player)
+    # Adds Player to the ID 0 location and vice versa
+    player.current_location = (current_world.locations[0]).id_
+    (current_world.locations[0]).add_character(player.id_)
+
+
+    print("----------------LOCATIONS---------------")
     print(current_world.locations)
-    print(current_world.items)
-    print(current_world.choices)
-    print(tropes)
+    print("----------------TROPES---------------")
     print(current_world.tropes)
+    print("----------------THEME---------------")
+    print(current_world.theme)
+
+    game_loop(player, current_world, client)

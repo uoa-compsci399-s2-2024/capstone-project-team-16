@@ -3,7 +3,7 @@ import itertools
 from typing import Self
 from src.utils.prompt import chat_with_gpt
 from src.utils.templates import character_template, item_template
-from src.utils.mappers import chracter_mapper, item_mapper
+from src.utils.mappers import character_mapper, item_mapper
 
 
 
@@ -56,7 +56,7 @@ class Location:
             item_template(num_items, world.tropes, world.themes[-1]),
             False
         )
-        characters = chracter_mapper.create_character_from_json(character_response)
+        characters = character_mapper.create_character_from_json(character_response)
         items = item_mapper.create_item_from_json(item_response)
         # Add Objects to internal lists
         for character in characters:

@@ -25,7 +25,7 @@ def initial_location_template(quantity: int, tropes: list, theme: str) -> str:
                     "locations should connect to each other and are allowed cycles. 30% of the "
                     "locations should have a JSON null as a neighbour, rounding up. At least one "
                     "Location needs to have JSON null as a neighbour. Descriptions for the location"
-                    " should have no more than 100 words. Keep the location consistent with the "
+                    " should have no more than 50 words. Keep the location consistent with the "
                     f"tropes of {tropes} and the themes of {theme}. Return this in JSON format. "
                     "Following this format as an example: "
                     "{\"locations\": [{ \"name\": Location, \"description\": Description of "
@@ -95,6 +95,6 @@ def scene_template(location_name: str, location_description: str, items: list,
                     f"The items in this location are: {items} The Characters in this location "
                     f"are: {characters} Using this information generate text description "
                     "for a scene for the player to interact with. The scene should not be more than"
-                    " 200 words in length and should be output in a JSON dictionary in the "
+                    " 100 words in length and should be output in a JSON dictionary in the "
                     "following format:{'scene': description of the scene}")
     return user_message

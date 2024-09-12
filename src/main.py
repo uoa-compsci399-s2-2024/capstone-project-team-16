@@ -5,6 +5,8 @@ from openai import OpenAI
 
 from dotenv import load_dotenv
 
+from src.initialisation import initialise_game
+
 
 def main() -> None:
     """ Main function to run game """
@@ -15,6 +17,8 @@ def main() -> None:
     # initialise client
     client = OpenAI(api_key=openai_api_key)
 
+    # initialise the game
+    initialise_game(client)
 
 if __name__ == "__main__":
     main()

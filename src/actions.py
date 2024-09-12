@@ -26,6 +26,10 @@ def move_character(character_object: character.Character, current_location: loca
         mapped_new_locations = location_mapper.create_location_from_json(
             previous_location=current_location, json_str=new_locations)
 
+        # Add the new locations to the locations within the world
+        for mapped_location in mapped_new_locations:
+            world_object.add_location(mapped_location)
+
         # Find the connection in the new locations
         for mapped_new_location in mapped_new_locations:
             if current_location in mapped_new_location.neighbors:
