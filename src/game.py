@@ -57,7 +57,9 @@ def game_loop(player: Character, world: World, client: OpenAI) -> None:
 
         current_location = world.locations[player.current_location]
         # Displays the Scene for the user to view
+        print("")
         display_scene(client, current_location, world)
+        print("")
 
         choices = chat_with_gpt(
             client=client,
