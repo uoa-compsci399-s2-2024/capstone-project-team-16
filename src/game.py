@@ -12,7 +12,7 @@ from utils.mappers import scene_mapper, choice_mapper
 # This is just for readability's sake
 import textwrap
 
-def choice_selection(choices: list[str]) -> str:
+def choice_selection(choices: list[tuple]) -> str:
     '''Function to get user input for the choice'''
 
     for i, choice in enumerate(choices, start=1):
@@ -76,8 +76,9 @@ def game_loop(player: Character, world: World, client: OpenAI) -> None:
             temp=0.5
         )
         mapped_choices = choice_mapper.create_demo_choices_from_json(choices)
-        for choice in mapped_choices:
-            print(mapped_choices[choice])
+        print(mapped_choices)
+        
+        choice_selection(mapped_choices)
 
 
         input("END GAME?")
