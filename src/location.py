@@ -69,6 +69,11 @@ class Location:
         if neighbor not in self.neighbors:
             self._neighbors.append(neighbor)
 
+    def remove_neighbor(self, neighbor: Self) -> None:
+        """Removes a Location object from the list of neighbors this Location has"""
+        if neighbor in self.neighbors:
+            self._neighbors.remove(neighbor)
+
     def add_item(self, item_id: int) -> None:
         """Adds the ID of an item to the list of items at this location"""
         if item_id not in self.items:

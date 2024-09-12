@@ -126,7 +126,7 @@ def initialise_game(client):
 
     # mappers go here
     #mapped_characters = character_mapper.create_character_from_json(characters)
-    mapped_locations = location_mapper.create_location_from_json(json_str=locations)
+    mapped_locations = location_mapper.create_location_from_json(json_str=locations, world=current_world)
     #mapped_items = item_mapper.create_item_from_json(items)
     #mapped_choices = choice_mapper.create_choices_from_json(choices)
 

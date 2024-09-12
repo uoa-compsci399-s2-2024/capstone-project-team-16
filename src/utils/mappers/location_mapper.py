@@ -3,10 +3,10 @@ This is a JSON to object mapper for Locations  it turns a JSON string to a Chara
 """
 import json
 from location import Location
+from world import World
 
 
-def create_location_from_json(json_str: str,
-                              previous_location: Location or None = None) -> list[Location]:
+def create_location_from_json(json_str: str, world: World, previous_location: Location or None = None) -> list[Location]:
     """
     Takes a JSON string as input, deserializes it,
     and converts it into a new instance of the Location class.
@@ -14,7 +14,7 @@ def create_location_from_json(json_str: str,
     Parameters:
         json_str (str): The JSON string to be deserialized into a Location object.
         previous_location (Optional[Location]|None): The previous Location object.
-
+        world (World): the World Object
     Returns:
         list[Location]: A list of new instances of the Location class.
     """
@@ -46,9 +46,11 @@ def create_location_from_json(json_str: str,
             else:
                 location.add_neighbor(name_to_location_dict[neighbour])
 
-                # Removes null from previous neighbour
-                if neighbour is previous_location:
-                    previous_location.remove_neighbor(None)
+                if previous_location is not None:
+                    # Removes null from previous neighbour
+                    if neighbour == previous_location.name:
+                        world.locations[previous_location.id_].remove_neighbor(None)
+                        world.locations[previous_location.id_].add_neighbor(location)
 
     # Remove the existing previous location so duplication does not occur
     if previous_location is not None:

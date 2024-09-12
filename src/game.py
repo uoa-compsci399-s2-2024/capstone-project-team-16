@@ -31,10 +31,6 @@ def choice_selection(choices: list[tuple]) -> str:
             print("Not number") #will need to change these
 
 
-def get_choices() -> list[str]:
-    ''''Function to get choices when that is written'''
-    pass
-
 
 def display_scene(client: OpenAI, location: Location, world: World) -> None:
     """Function to display the scene the player is in"""
@@ -51,10 +47,6 @@ def display_scene(client: OpenAI, location: Location, world: World) -> None:
     mapped_scene = scene_mapper.create_scene_from_json(scene)
     print(textwrap.fill(mapped_scene, 100))
 
-
-def pass_choice(choice: str) -> None:
-    '''Function to process the users choice'''
-    pass
 
 
 def game_loop(player: Character, world: World, client: OpenAI) -> None:
@@ -79,17 +71,11 @@ def game_loop(player: Character, world: World, client: OpenAI) -> None:
         )
         mapped_choices = choice_mapper.create_demo_choices_from_json(choices)
 
-        print(choice_selection(mapped_choices))
-
-
-        input("END GAME?")
-        game_over = True
-
-        #player_choice = choice_selection(choices)
-        #move_character(
-        #    character_object=player,
-        #    current_location=current_location,
-        #    new_location=player_choice,
-        #    client=client,
-        #    world_object=world
-        #)
+        # Returns the tuple choice of (desc, id)
+        player_choice = choice_selection(mapped_choices)
+        if player_choice[1] is not None:
+            new_location = world.locations[player_choice[1]]
+        else:
+            new_location = None
+        # use the move action to move the player
+        move_character(player, current_location, new_location, client, world)

@@ -38,7 +38,7 @@ def test_location_generation_init(client, tropes, theme):
 
     print(locations)
 
-    mapped_locations = location_mapper.create_location_from_json(json_str=locations)
+    mapped_locations = location_mapper.create_location_from_json(json_str=locations, world=world)
 
     print(mapped_locations)
 
