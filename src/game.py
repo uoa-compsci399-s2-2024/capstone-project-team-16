@@ -15,13 +15,15 @@ import textwrap
 def choice_selection(choices: list[tuple]) -> str:
     '''Function to get user input for the choice'''
 
-    for i, choice in enumerate(choices, start=1):
+    updated_choices = [choices[i][0] for i in range(len(choices))]
+
+    for i, choice in enumerate(updated_choices, start=1):
         print(f"{i}. {choice}")
     
     while True:
         try:
             selection = int(input("> "))
-            if 1 <= selection <= len(choices):
+            if 1 <= selection <= len(updated_choices):
                 return choices[selection - 1]
             else:
                 print("Invalid number")
@@ -77,13 +79,7 @@ def game_loop(player: Character, world: World, client: OpenAI) -> None:
         )
         mapped_choices = choice_mapper.create_demo_choices_from_json(choices)
 
-        for choice in mapped_choices:
-            print(choice)
-        for neighbor in current_location.neighbors:
-            if neighbor is not None:
-                print(neighbor.name, neighbor.id_)
-            else:
-                print(None)
+        print(choice_selection(mapped_choices))
 
 
         input("END GAME?")
