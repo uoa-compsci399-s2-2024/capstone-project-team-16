@@ -1,6 +1,5 @@
 """ Template functions for generating prompts to send to LLM """
 
-import src.world
 
 def character_template(quantity: int, type_of_char: str, tropes: list, theme: str) -> str:
     """Template for generating characters"""
@@ -26,7 +25,7 @@ def initial_location_template(quantity: int, tropes: list, theme: str) -> str:
                     "locations should connect to each other and are allowed cycles. 30% of the "
                     "locations should have a JSON null as a neighbour, rounding up. At least one "
                     "Location needs to have JSON null as a neighbour. Descriptions for the location"
-                    " should have no more than 100 words. Keep the location consistent with the "
+                    " should have no more than 50 words. Keep the location consistent with the "
                     f"tropes of {tropes} and the themes of {theme}. Return this in JSON format. "
                     "Following this format as an example: "
                     "{\"locations\": [{ \"name\": Location, \"description\": Description of "
@@ -82,7 +81,20 @@ def demo_choices_movement_template(list_of_neighbours: list):
                     "the user going into a mysterious location, You are to be creative with how "
                     "the user can go to this mysterious unknown location You are to return the "
                     "movement choices in a JSON file in the following format { 'choices': [{ "
-                    "'description': A very short text description to display to the user, "
-                    "'new_location': the ID of the location you are to move to or None if the "
-                    "location is unknown} ]}")
+                    "'description': A very short text description to display to the user, with "
+                    "displaying the name ONLY, 'new_location': the integer number ID of the "
+                    "location you are to move to or None if the location is unknown} ]}")
+    return user_message
+
+
+def scene_template(location_name: str, location_description: str, items: list,
+                   characters: list) -> str:
+    """Template for generating a scene"""
+    user_message = ("You are to create a scene using the following information and output a JSON "
+                    f"dictionary. The location is {location_name}, {location_description}. "
+                    f"The items in this location are: {items} The Characters in this location "
+                    f"are: {characters} Using this information generate text description "
+                    "for a scene for the player to interact with. The scene should not be more than"
+                    " 100 words in length and should be output in a JSON dictionary in the "
+                    "following format:{'scene': description of the scene}")
     return user_message

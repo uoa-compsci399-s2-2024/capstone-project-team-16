@@ -1,9 +1,9 @@
 """This is a file of all possible actions for the game"""
 
-from src import location, character, item, world
-from src.utils.prompt import chat_with_gpt
-from src.utils.templates import flow_on_location_template
-from src.utils.mappers import location_mapper
+import location, character, item, world
+from utils.prompt import chat_with_gpt
+from utils.templates import flow_on_location_template
+from utils.mappers import location_mapper
 
 
 def move_character(character_object: character.Character, current_location: location.Location,
@@ -24,13 +24,23 @@ def move_character(character_object: character.Character, current_location: loca
                                       tokens=500)
         # Map the new Locations
         mapped_new_locations = location_mapper.create_location_from_json(
-            previous_location=current_location, json_str=new_locations)
+            previous_location=current_location, json_str=new_locations, world=world_object)
+
+        # Add the new locations to the locations within the world
+        for mapped_location in mapped_new_locations:
+            world_object.add_location(mapped_location)
 
         # Find the connection in the new locations
         for mapped_new_location in mapped_new_locations:
             if current_location in mapped_new_location.neighbors:
                 new_location = mapped_new_location
 
-        character_object.move(new_location.id_)
-        current_location.remove_character(character_object.id_)
-        new_location.add_character(character_object.id_)
+
+        # DIRTY IF STATEMENT THIS IS HERE DUE TO A PROMPT ERORR OCCURING
+        if new_location is not None:
+            character_object.move(new_location.id_)
+            current_location.remove_character(character_object.id_)
+            new_location.add_character(character_object.id_)
+        else:
+            print("DEBUG: REAL SORRY THIS IS AN ISSUE WITH FLOW ON LOCATION NOT CONNECTING "
+                  "SO SORRY CANT MOVE LOCATIONS :(")

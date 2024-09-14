@@ -1,9 +1,9 @@
 """Location class"""
 import itertools
 from typing import Self
-from src.utils.prompt import chat_with_gpt
-from src.utils.templates import character_template, item_template
-from src.utils.mappers import chracter_mapper, item_mapper
+from utils.prompt import chat_with_gpt
+from utils.templates import character_template, item_template
+from utils.mappers import character_mapper, item_mapper
 
 
 
@@ -56,7 +56,7 @@ class Location:
             item_template(num_items, world.tropes, world.themes[-1]),
             False
         )
-        characters = chracter_mapper.create_character_from_json(character_response)
+        characters = character_mapper.create_character_from_json(character_response)
         items = item_mapper.create_item_from_json(item_response)
         # Add Objects to internal lists
         for character in characters:
@@ -68,6 +68,11 @@ class Location:
         """Adds a Location object to the list of neighbors this Location has"""
         if neighbor not in self.neighbors:
             self._neighbors.append(neighbor)
+
+    def remove_neighbor(self, neighbor: Self) -> None:
+        """Removes a Location object from the list of neighbors this Location has"""
+        if neighbor in self.neighbors:
+            self._neighbors.remove(neighbor)
 
     def add_item(self, item_id: int) -> None:
         """Adds the ID of an item to the list of items at this location"""

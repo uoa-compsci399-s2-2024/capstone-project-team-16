@@ -41,7 +41,7 @@ def chat_with_gpt(client: OpenAI, system_message: str, user_message: str,
             frequency_penalty=freq_penalty,
             max_tokens=tokens,
             presence_penalty=pres_penalty,
-            temperature=1
+            temperature=temp
         )
 
     return completion.choices[0].message.content
