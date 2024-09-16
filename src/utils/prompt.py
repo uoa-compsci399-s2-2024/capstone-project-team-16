@@ -6,7 +6,7 @@ SESSION_MESSAGES = []
 
 def chat_with_gpt(client: OpenAI, system_message: str, user_message: str,
                   context: bool, freq_penalty: int = 0, tokens: int = 10,
-                  pres_penalty: int = 0, temp: int = 1) -> str:
+                  pres_penalty: int = 0, temp: float = 1) -> str:
     """Sends off a prompt to ChatGPT"""
 
     # when we want to generate a prompt that needs relevant story details
@@ -41,7 +41,7 @@ def chat_with_gpt(client: OpenAI, system_message: str, user_message: str,
             frequency_penalty=freq_penalty,
             max_tokens=tokens,
             presence_penalty=pres_penalty,
-            temperature=1
+            temperature=temp
         )
 
     return completion.choices[0].message.content
