@@ -1,16 +1,14 @@
 """This is a file of all possible actions for the game"""
 
+import location, character, item, world
 from utils.prompt import chat_with_gpt
 from utils.templates import flow_on_location_template
 from utils.mappers import location_mapper
 
 
-def move_character(new_location_id: int, args: list) -> None:
+def move_character(new_location_id: int, client: 'OpenAI', world_object: world.World,
+    character_object: character.Character, current_location: location.Location) -> None:
     """This is an action to move a character from one location to another"""
-    client = args[0]
-    world_object = args[1]
-    character_object = args[2]
-    current_location = args[3]
 
     if new_location_id is None:
         new_location = None
@@ -60,10 +58,11 @@ def move_character(new_location_id: int, args: list) -> None:
 ACTIONS_DICT = {"new_location": move_character}
 
 
-def process_user_choice(actions: dict, args: list) -> None:
+def process_user_choice(actions: dict, client: 'OpenAI', world_object: world.World,
+    character_object: character.Character, current_location: location.Location) -> None:
     for action in actions.keys():
         if action in ACTIONS_DICT:
-            ACTIONS_DICT[action](actions[action], args)
+            ACTIONS_DICT[action](actions[action], client, world_object, character_object, current_location)
         else:
             print("ACTION NOT FOUND")
             print(action)
