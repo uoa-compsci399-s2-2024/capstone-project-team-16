@@ -1,32 +1,41 @@
 """Game Loop"""
 
-from actions import move_character, process_user_choice
+# This is just for readability's sake
+import textwrap
+from openai import OpenAI
+
+from actions import process_user_choice
 from character import Character
 from location import Location
 from world import World
-from openai import OpenAI
 from utils.templates import flow_on_choices_template, scene_template
 from utils.prompt import chat_with_gpt
 from utils.mappers import scene_mapper, choice_mapper
-# This is just for readability's sake
-import textwrap
 
 def choice_selection(choices: list[tuple]) -> str:
-    '''Function to get user input for the choice'''
+    """Function to get user input for the choice"""
 
     updated_choices = [choices[i][0] for i in range(len(choices))]
+    selection = None
 
     for i, choice in enumerate(updated_choices, start=1):
         print(f"{i}. {choice}")
-    
-    while True:
-        try:
-            selection = int(input("> "))
-            return choices[selection - 1]
-        except KeyError:
-            print("Invalid number") #will need to change these
-        except KeyboardInterrupt:
-            break
+
+    while not selection:
+        user_input = input("> ")
+        if not user_input.isdigit():
+            print("Please enter a number")
+            continue
+        else:
+            user_input = int(user_input)
+
+        if user_input <= len(choices) and user_input > 0:
+            selection = choices[user_input - 1]
+        else:
+            print("Invalid number")
+
+
+    return selection
 
 
 
@@ -48,7 +57,7 @@ def display_scene(client: OpenAI, location: Location, world: World) -> None:
 
 
 def game_loop(player: Character, world: World, client: OpenAI) -> None:
-
+    """The main game loop, defines what happens after every user choice"""
     game_over = False
 
     while not game_over:

@@ -13,7 +13,7 @@ def character_template(quantity: int, type_of_char: str, tropes: list, theme: st
 def item_template(quantity: int, tropes: list, theme: str) -> str:
     """Template for generating items"""
     user_message = (f"Create {quantity} item/s including their name, "
-                    "price, weight and type. Keep the item consistent "
+                    "price, weight and category. Keep the item consistent "
                     f"with the the tropes of {tropes} and the themes of {theme}. Return this "
                     "in JSON format with the first key being 'items'.")
     return user_message

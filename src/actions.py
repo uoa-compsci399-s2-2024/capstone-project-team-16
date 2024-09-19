@@ -1,6 +1,5 @@
 """This is a file of all possible actions for the game"""
 
-import location, character, item, world
 from utils.prompt import chat_with_gpt
 from utils.templates import flow_on_location_template
 from utils.mappers import location_mapper
@@ -12,7 +11,7 @@ def move_character(new_location_id: int, args: list) -> None:
     world_object = args[1]
     character_object = args[2]
     current_location = args[3]
-    
+
     if new_location_id is None:
         new_location = None
     elif new_location_id == -1:
@@ -68,4 +67,3 @@ def process_user_choice(actions: dict, args: list) -> None:
         else:
             print("ACTION NOT FOUND")
             print(action)
-
