@@ -67,6 +67,7 @@ def initialise_game(client):
     # file_path_3 = os.path.join(os.path.dirname(os.getcwd()), 'src/story/antagonist_tropes.csv')
     themes_path = str(os.getcwd()) + '/src/story/themes.txt'
 
+
     current_world = World()
 
     # Choose the tropes

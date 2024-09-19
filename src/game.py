@@ -11,6 +11,7 @@ from world import World
 from utils.templates import flow_on_choices_template, scene_template
 from utils.prompt import chat_with_gpt
 from utils.mappers import scene_mapper, choice_mapper
+from utils.playthroughs import create_temp_story_file, write_scene_and_choice, save_playthrough_as_file, wipe_temp_file
 
 def choice_selection(choices: list[tuple]) -> str:
     """Function to get user input for the choice"""
@@ -39,7 +40,7 @@ def choice_selection(choices: list[tuple]) -> str:
 
 
 
-def display_scene(client: OpenAI, location: Location, world: World) -> None:
+def display_scene(client: OpenAI, location: Location, world: World) -> str:
     """Function to display the scene the player is in"""
     scene = chat_with_gpt(
         client=client,
@@ -52,12 +53,15 @@ def display_scene(client: OpenAI, location: Location, world: World) -> None:
     )
 
     mapped_scene = scene_mapper.create_scene_from_json(scene)
-    print(textwrap.fill(mapped_scene, 100))
-
-
+    #print(textwrap.fill(mapped_scene, 100))
+    return textwrap.fill(mapped_scene, 100)
+  
 
 def game_loop(player: Character, world: World, client: OpenAI) -> None:
     """The main game loop, defines what happens after every user choice"""
+        # create the temp file to store the story
+    create_temp_story_file()
+    wipe_temp_file()
     game_over = False
 
     while not game_over:
@@ -65,7 +69,9 @@ def game_loop(player: Character, world: World, client: OpenAI) -> None:
         current_location = world.locations[player.current_location]
         # Displays the Scene for the user to view
         print("")
-        display_scene(client, current_location, world)
+        #display_scene(client, current_location, world)
+        mapped_scene = display_scene(client, current_location, world)
+        print(mapped_scene)
         print("")
 
         choices = chat_with_gpt(
@@ -83,9 +89,8 @@ def game_loop(player: Character, world: World, client: OpenAI) -> None:
 
         # Returns the tuple choice of (desc, id)
         player_choice = choice_selection(mapped_choices)
+    
+
         process_user_choice(player_choice[1], [client, world, player, current_location])
-        #if player_choice[1] is not None:
-        #    new_location = world.locations[player_choice[1]]
-        #else:
-        #    new_location = None
-        # use the move action to move the player
+        # create a fresh txt file for this playthrough, store it and wipe temp for repeated use
+        save_playthrough_as_file()
