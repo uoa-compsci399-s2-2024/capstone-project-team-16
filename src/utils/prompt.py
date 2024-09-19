@@ -14,7 +14,7 @@ def chat_with_gpt(client: OpenAI, system_message: str, user_message: str,
         # add the latest prompt to our global list
         SESSION_MESSAGES.append({"role": "user", "content": user_message})
 
-        completion = client.chat.completions.create(
+        completion = client.beta.chat.completions.parse(
             model="gpt-4o-mini-2024-07-18",
             messages=SESSION_MESSAGES,
             frequency_penalty=freq_penalty,
@@ -33,7 +33,7 @@ def chat_with_gpt(client: OpenAI, system_message: str, user_message: str,
 
     # when we want to generate a prompt that doesn't need story like the creation of weapons
     else:
-        completion = client.chat.completions.create(
+        completion = client.beta.chat.completions.parse(
             model="gpt-4o-mini-2024-07-18",
             messages=[
                 {"role": "system", "content": system_message},
