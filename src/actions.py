@@ -61,6 +61,32 @@ ACTIONS_DICT = {"new_location": move_character}
 
 
 def process_user_choice(actions: dict, args: list) -> None:
+    """Function to process the choices the user makes using our in-built action functions.
+    It goes through the actions dictionary and, for each action present, calls its relevant function.
+
+    ACTIONS_DICT is a dictionary in key:value pairs of function_name:actual_function such that
+    when we call ACTIONS_DICT[function_name](), it's the equivalent of calling actual_function()
+
+    Parameters:
+        actions: A dictionary containing all of the actions taken 
+            in this choice, initially given to us in JSON format via ChatGPT.
+        args: A list of all arguments needed for any of the action functions. 
+            Different functions may need different parameters, but we're iterating through ACTIONS_DICT without knowing
+            which function we're using each time, so this way each function uses 
+            only the indices of args that it needs and our code remains simple.
+            Example:
+
+            move(args: list)
+                new_location_id = args[0]
+                world = args[1]
+                ...
+
+            talk(args: list)
+                character = args[2]
+                ...
+
+            ACTIONS_DICT[action]([new_location_id, world, character])"""
+
     for action in actions.keys():
         if action in ACTIONS_DICT:
             ACTIONS_DICT[action](actions[action], args)
