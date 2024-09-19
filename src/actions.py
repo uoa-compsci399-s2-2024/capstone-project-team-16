@@ -1,14 +1,25 @@
 """This is a file of all possible actions for the game"""
 
-import location, character, item, world
 from utils.prompt import chat_with_gpt
 from utils.templates import flow_on_location_template
 from utils.mappers import location_mapper
 
 
-def move_character(character_object: character.Character, current_location: location.Location,
-                   new_location: location.Location, client: 'OpenAI', world_object: world.World):
+def move_character(new_location_id: int, args: list) -> None:
     """This is an action to move a character from one location to another"""
+    client = args[0]
+    world_object = args[1]
+    character_object = args[2]
+    current_location = args[3]
+
+    if new_location_id is None:
+        new_location = None
+    elif new_location_id == -1:
+        new_location = current_location
+    else:
+        new_location = world_object.locations[new_location_id]
+
+
     if new_location is not None:
         character_object.move(new_location.id_)
         current_location.remove_character(character_object.id_)
@@ -44,3 +55,41 @@ def move_character(character_object: character.Character, current_location: loca
         else:
             print("DEBUG: REAL SORRY THIS IS AN ISSUE WITH FLOW ON LOCATION NOT CONNECTING "
                   "SO SORRY CANT MOVE LOCATIONS :(")
+
+
+ACTIONS_DICT = {"new_location": move_character}
+
+
+def process_user_choice(actions: dict, args: list) -> None:
+    """Function to process the choices the user makes using our in-built action functions.
+    It goes through the actions dictionary and, for each action present, calls its relevant function.
+
+    ACTIONS_DICT is a dictionary in key:value pairs of function_name:actual_function such that
+    when we call ACTIONS_DICT[function_name](), it's the equivalent of calling actual_function()
+
+    Parameters:
+        actions: A dictionary containing all of the actions taken 
+            in this choice, initially given to us in JSON format via ChatGPT.
+        args: A list of all arguments needed for any of the action functions. 
+            Different functions may need different parameters, but we're iterating through ACTIONS_DICT without knowing
+            which function we're using each time, so this way each function uses 
+            only the indices of args that it needs and our code remains simple.
+            Example:
+
+            move(args: list)
+                new_location_id = args[0]
+                world = args[1]
+                ...
+
+            talk(args: list)
+                character = args[2]
+                ...
+
+            ACTIONS_DICT[action]([new_location_id, world, character])"""
+
+    for action in actions.keys():
+        if action in ACTIONS_DICT:
+            ACTIONS_DICT[action](actions[action], args)
+        else:
+            print("ACTION NOT FOUND")
+            print(action)
