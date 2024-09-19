@@ -83,7 +83,7 @@ def game_loop(player: Character, world: World, client: OpenAI) -> None:
 
         # Returns the tuple choice of (desc, id)
         player_choice = choice_selection(mapped_choices)
-        process_user_choice(player_choice[1], client, world, player, current_location)
+        process_user_choice(player_choice[1], [client, world, player, current_location])
         #if player_choice[1] is not None:
         #    new_location = world.locations[player_choice[1]]
         #else:
