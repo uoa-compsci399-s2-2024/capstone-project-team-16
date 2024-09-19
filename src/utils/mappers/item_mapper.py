@@ -23,5 +23,5 @@ def create_item_from_json(json_str: str) -> list[Item]:
         name=item['name'],
         price=item['price'],
         weight=item['weight'],
-        type_=item['type']
+        category=item['category']
     ) for item in data]

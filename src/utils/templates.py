@@ -13,7 +13,7 @@ def character_template(quantity: int, type_of_char: str, tropes: list, theme: st
 def item_template(quantity: int, tropes: list, theme: str) -> str:
     """Template for generating items"""
     user_message = (f"Create {quantity} item/s including their name, "
-                    "price, weight and type. Keep the item consistent "
+                    "price, weight and category. Keep the item consistent "
                     f"with the the tropes of {tropes} and the themes of {theme}. Return this "
                     "in JSON format with the first key being 'items'.")
     return user_message
@@ -62,15 +62,20 @@ def initial_choices_template(quantity: int, tropes: list, theme: str) -> str:
 
 def flow_on_choices_template(quantity: int, tropes: list, theme: str,
                              json_locations: list, json_characters: list,
-                             json_items: list) -> str:
+                             json_items: list, actions: list) -> str:
     """Template for generating subsequent story choices"""
     user_message = (f"Generate {quantity} choices our player can take that make sense for the current pacing of the "
-                    f"story. The choices must be consistent with the current pacing of the story and can speed it up "
+                    f"story. The actions in the choices may only include one or more of the following actions: {actions}."
+                    f"The choices must be consistent with the current pacing of the story and can speed it up "
                     f"slightly but not too much. Make sure the choices are consistent with the tropes of {tropes} and "
                     f"the theme of {theme}. Incorporate some of the characters, items or locations from the given "
                     f"objects into the choices if it makes sense to do so. The objects are in JSON format and are as "
                     f"follows: The list of characters: {json_characters}. The list of items: {json_items}. The list of "
-                    f"locations: {json_locations}. Return this in JSON format with choices being the first key.")
+                    f"locations: {json_locations}. You are to return the "
+                    "choices in a JSON file in the following format { 'choices': [{ "
+                    "'description': A very short text description to display to the user, with "
+                    "displaying the name ONLY, 'actions': {'new_location': the integer number ID of the "
+                    "location you are to move to, -1 if the location is unknown or None if the choice does not involve moving location} } }")
     return user_message
 
 def demo_choices_movement_template(list_of_neighbours: list):
