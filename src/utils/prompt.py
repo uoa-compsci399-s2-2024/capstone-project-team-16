@@ -5,7 +5,7 @@ SESSION_MESSAGES = []
 
 
 def chat_with_gpt(client: OpenAI, system_message: str, user_message: str,
-                  context: bool, freq_penalty: int = 0, tokens: int = 10,
+                  context: bool, structure, freq_penalty: int = 0, tokens: int = 10,
                   pres_penalty: int = 0, temp: float = 1) -> str:
     """Sends off a prompt to ChatGPT"""
 
@@ -20,7 +20,8 @@ def chat_with_gpt(client: OpenAI, system_message: str, user_message: str,
             frequency_penalty=freq_penalty,
             max_tokens=tokens,
             presence_penalty=pres_penalty,
-            temperature=temp
+            temperature=temp,
+            response_format=structure
         )
         # add the latest response to our global list
         SESSION_MESSAGES.append(
@@ -41,7 +42,8 @@ def chat_with_gpt(client: OpenAI, system_message: str, user_message: str,
             frequency_penalty=freq_penalty,
             max_tokens=tokens,
             presence_penalty=pres_penalty,
-            temperature=temp
+            temperature=temp,
+            response_format=structure
         )
 
     return completion.choices[0].message.content
