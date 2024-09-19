@@ -6,9 +6,21 @@ from utils.templates import flow_on_location_template
 from utils.mappers import location_mapper
 
 
-def move_character(character_object: character.Character, current_location: location.Location,
-                   new_location: location.Location, client: 'OpenAI', world_object: world.World):
+def move_character(new_location_id: int, args: list) -> None:
     """This is an action to move a character from one location to another"""
+    client = args[0]
+    world_object = args[1]
+    character_object = args[2]
+    current_location = args[3]
+    
+    if new_location_id is None:
+        new_location = None
+    elif new_location_id == -1:
+        new_location = current_location
+    else:
+        new_location = world_object.locations[new_location_id]
+
+
     if new_location is not None:
         character_object.move(new_location.id_)
         current_location.remove_character(character_object.id_)
@@ -44,3 +56,16 @@ def move_character(character_object: character.Character, current_location: loca
         else:
             print("DEBUG: REAL SORRY THIS IS AN ISSUE WITH FLOW ON LOCATION NOT CONNECTING "
                   "SO SORRY CANT MOVE LOCATIONS :(")
+
+
+ACTIONS_DICT = {"new_location": move_character}
+
+
+def process_user_choice(actions: dict, args: list) -> None:
+    for action in actions.keys():
+        if action in ACTIONS_DICT:
+            ACTIONS_DICT[action](actions[action], args)
+        else:
+            print("ACTION NOT FOUND")
+            print(action)
+
