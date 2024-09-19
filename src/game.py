@@ -8,7 +8,7 @@ from openai import OpenAI
 from utils.templates import demo_choices_movement_template, scene_template
 from utils.prompt import chat_with_gpt
 from utils.mappers import scene_mapper, choice_mapper
-from utils.playthroughs import write_scene_and_choice, save_playthrough_as_file, wipe_temp_file
+from utils.playthroughs import create_temp_story_file, write_scene_and_choice, save_playthrough_as_file, wipe_temp_file
 
 # This is just for readability's sake
 import textwrap
@@ -51,6 +51,9 @@ def display_scene(client: OpenAI, location: Location, world: World) -> str:
   
 
 def game_loop(player: Character, world: World, client: OpenAI) -> None:
+    # create the temp file to store the story
+    create_temp_story_file()
+    wipe_temp_file()
 
     game_over = False
 
@@ -91,4 +94,3 @@ def game_loop(player: Character, world: World, client: OpenAI) -> None:
     
     # create a fresh txt file for this playthrough, store it and wipe temp for repeated use
     save_playthrough_as_file()
-    wipe_temp_file()

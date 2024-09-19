@@ -3,6 +3,13 @@ import shutil
 
 temp_file_path = str(os.getcwd()) + '\\story\\temp_story_store.txt'
 
+
+def create_temp_story_file():
+    if not os.path.exists(temp_file_path):
+        with open(temp_file_path, 'x'):
+            pass
+
+
 def write_scene_and_choice(scene_str: str, choice_str: str) -> None:
     with open(temp_file_path, 'a') as file:
         file.write(scene_str)
