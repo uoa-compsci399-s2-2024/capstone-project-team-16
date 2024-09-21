@@ -35,7 +35,7 @@ def move_character(new_location_id: int, args: list) -> None:
                                       tokens=500)
         # Map the new Locations
         mapped_new_locations = location_mapper.create_location_from_json(
-            previous_location=current_location, json_str=new_locations, world=world_object)
+            previous_location=current_location.id_, json_str=new_locations, world=world_object)
 
         # Add the new locations to the locations within the world
         for mapped_location in mapped_new_locations:

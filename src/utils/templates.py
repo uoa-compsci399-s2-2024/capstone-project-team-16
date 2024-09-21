@@ -26,11 +26,7 @@ def initial_location_template(quantity: int, tropes: list, theme: str) -> str:
                     "locations should have a JSON null as a neighbour, rounding up. At least one "
                     "Location needs to have JSON null as a neighbour. Descriptions for the location"
                     " should have no more than 50 words. Keep the location consistent with the "
-                    f"tropes of {tropes} and the themes of {theme}. Return this in JSON format. "
-                    "Following this format as an example: "
-                    "{\"locations\": [{ \"name\": Location, \"description\": Description of "
-                    "Location, \"neighbours\": A List of Neighbouring locations allowing for null "
-                    "}]}")
+                    f"tropes of {tropes} and the themes of {theme}.")
     return user_message
 
 

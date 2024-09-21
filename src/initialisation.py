@@ -1,12 +1,11 @@
 """Module for initialising the game"""
 import os
-from utils import templates, prompt
+from utils import templates, prompt, structures
 from utils.mappers import character_mapper, location_mapper, item_mapper
 from world import World
 #from game import get_random_tropes, read_csv_file, create_tropes
 from utils.narrative_elements import get_random_tropes, get_random_theme, read_csv_file, create_tropes
 from game import game_loop
-
 
 from character import Character
 
@@ -97,7 +96,8 @@ def initialise_game(client):
         templates.initial_location_template(5, tropes, theme),
         False,
         tokens=600,
-        temp=1
+        temp=1,
+        structure=structures.SectionStructure
     )
     print("DEBUG: FINISHED CREATING LOCATIONS")
     # Construct prompt and generate items using the tropes and theme
