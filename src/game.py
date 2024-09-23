@@ -67,12 +67,10 @@ def visualise_locations(locations: list[Location], style="graphic") -> None:
     if style == "graphic":
         # Create a graph from the locations
         edge_list = pd.concat(
-            [pd.DataFrame([[location.name, neighbor.name]], columns=["Loc1", "Loc2"]) for location in locations for
-             neighbor in location.neighbors], ignore_index=True)
+            [pd.DataFrame([[location.name, neighbor.name]], columns=["Loc1", "Loc2"]) for location in locations for neighbor in location.neighbors], ignore_index=True)
         graph = nx.from_pandas_edgelist(edge_list, "Loc1", "Loc2")
         # get the old positions of the nodes
-        old_pos = {location.name: (location.coords[0], location.coords[1]) for location in locations if
-                   location.coords is not None}
+        old_pos = {location.name: (location.coords[0], location.coords[1]) for location in locations if location.coords is not None}
         pos = None
         if old_pos == {}:
             pos = nx.spring_layout(graph)
@@ -80,11 +78,10 @@ def visualise_locations(locations: list[Location], style="graphic") -> None:
             # get a new layout that adds the old positions
             pos = nx.spring_layout(graph, pos=old_pos, fixed=old_pos.keys())
         # update the positions of the locations
-        for key, coords in pos.items():
-            for location in locations:
-                if location.name == key:
-                    location.coords = (coords[0], coords[1])
-                    break
+        for location in locations:
+            if location.coords is None:
+                location.coords = pos[location.name]
+                break
         nx.draw(graph, pos, with_labels=True)
         plt.show()
     elif style == "text":
