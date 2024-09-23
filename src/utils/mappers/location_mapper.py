@@ -38,7 +38,7 @@ def create_location_from_json(json_str: str, world: World, previous_location_id:
 
     none_edge_made = False
     for location in section:
-        degree = random.randrange(1, 4)
+        degree = random.randrange(1, 3)
         for i in range(degree):
             if len(location.neighbors) <= degree:
                 neighbour = None

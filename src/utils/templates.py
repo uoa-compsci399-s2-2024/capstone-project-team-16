@@ -19,32 +19,15 @@ def item_template(quantity: int, tropes: list, theme: str) -> str:
     return user_message
 
 
-def initial_location_template(quantity: int, tropes: list, theme: str) -> str:
+def location_template(quantity: int, tropes: list, theme: str) -> str:
     """Template for generating the initial locations"""
-    user_message = (f"Create {quantity} location/s with a name and a description of the area. The "
-                    "locations should connect to each other and are allowed cycles. 30% of the "
-                    "locations should have a JSON null as a neighbour, rounding up. At least one "
-                    "Location needs to have JSON null as a neighbour. Descriptions for the location"
-                    " should have no more than 50 words. Keep the location consistent with the "
-                    f"tropes of {tropes} and the themes of {theme}.")
+    user_message = (f"Create {quantity} location/s with a name and a description of the area. "
+                    f"Descriptions do not have to be full sentences and should only include "
+                    f"important descriptors of the location. Descriptions for the location"
+                    " should have no more than 50 words. Keep the location name and description "
+                    f"consistent with the tropes of {tropes} and the themes of {theme}.")
     return user_message
 
-
-def flow_on_location_template(quantity: int,
-                              prev_location_name: str, tropes: list, theme: str) -> str:
-    """Template for generating flow on locations with a previous node as a neighbor."""
-    user_message = (f"Create {quantity} location/s with a name and a description of the area. The "
-                    "locations should connect to each other and are allowed cycles. 30% of the "
-                    "locations should have a JSON null as a neighbour At least one Location needs "
-                    "to have JSON null as a neighbour. Only one location is allowed to have a "
-                    f"neighbour called {prev_location_name}. {prev_location_name} Should NOT be "
-                    "included as a location Descriptions for the location should have no more than "
-                    f"100 words. Keep the location consistent with the tropes of {tropes} and "
-                    f"the themes of {theme}. Return this in JSON format. Following this format as "
-                    "an example: {\"locations\": [{ \"name\": Location, \"description\": "
-                    "Description of Location, \"neighbours\": A List of Neighbouring locations "
-                    "allowing for null }]}")
-    return user_message
 
 
 def initial_choices_template(quantity: int, tropes: list, theme: str) -> str:
