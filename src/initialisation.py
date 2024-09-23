@@ -93,7 +93,7 @@ def initialise_game(client):
     # Construct prompt and generate the locations using the tropes and theme
     locations = prompt.chat_with_gpt(
         client,
-        "You are a knowledgeable chatbot that creates unique locations",
+        templates.location_system_message(),
         templates.initial_location_template(5, tropes, theme),
         False,
         tokens=600,
