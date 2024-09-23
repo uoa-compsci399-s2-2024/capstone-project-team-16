@@ -59,14 +59,36 @@ def display_scene(client: OpenAI, location: Location, world: World) -> str:
     return textwrap.fill(mapped_scene, 100)
   
 def visualise_locations(locations: list[Location], style="graphic") -> None:
-    """Function to visualise the locations in the game"""
+    """Function to visualise the locations in the game
+    Args:
+        locations (list[Location]): list of Location objects
+        style (str): style of visualisation, either "graphic" or "text"
+    """
     if style == "graphic":
-        edge_list = pd.concat([pd.DataFrame([[location.name, neighbor.name]], columns=["Loc1", "Loc2"]) for location in locations for neighbor in location.neighbors], ignore_index=True)
+        # Create a graph from the locations
+        edge_list = pd.concat(
+            [pd.DataFrame([[location.name, neighbor.name]], columns=["Loc1", "Loc2"]) for location in locations for
+             neighbor in location.neighbors], ignore_index=True)
         graph = nx.from_pandas_edgelist(edge_list, "Loc1", "Loc2")
-        nx.draw(graph, with_labels=True)
+        # get the old positions of the nodes
+        old_pos = {location.name: (location.coords[0], location.coords[1]) for location in locations if
+                   location.coords is not None}
+        pos = None
+        if old_pos == {}:
+            pos = nx.spring_layout(graph)
+        else:
+            # get a new layout that adds the old positions
+            pos = nx.spring_layout(graph, pos=old_pos, fixed=old_pos.keys())
+        # update the positions of the locations
+        for key, coords in pos.items():
+            for location in locations:
+                if location.name == key:
+                    location.coords = (coords[0], coords[1])
+                    break
+        nx.draw(graph, pos, with_labels=True)
         plt.show()
-    else:
-        pass
+    elif style == "text":
+        print('not implemented yet')
 
 def game_loop(player: Character, world: World, client: OpenAI) -> None:
     """The main game loop, defines what happens after every user choice"""
