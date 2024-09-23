@@ -1,28 +1,43 @@
 """ Template functions for generating prompts to send to LLM """
 
-character_system_message = ("You are an imaginative game character generator. Create diverse and intriguing "
+
+def character_system_message():
+    system_message = ("You are an imaginative game character generator. Create diverse and intriguing "
                             "characters for a role-playing game. Consider different attributes, such as "
                             "traits, motivations and friendliness. Make sure the characters "
                             "fit within a theme. Aim for creativity and originality!")
+    return system_message
 
-item_system_message = ("You are an imaginative game item generator. Create diverse and intriguing items "
+
+def item_system_message():
+    system_message = ("You are an imaginative game item generator. Create diverse and intriguing items "
                        "for a role-playing game. Consider different categories, such as "
                        "weapons, armor, potions, and artifacts. Make sure the items are balanced "
                        "for gameplay and fit within a theme. Aim for creativity and originality!")
+    return system_message
 
-location_system_message = ("You are an imaginative game location generator. Create diverse and intriguing"
+
+def location_system_message():
+    system_message = ("You are an imaginative game location generator. Create diverse and intriguing"
                            "locations for a role-playing game. Consider different attributes, such as "
                             "where it is, the items there and the characters there. Make sure the locations "
                            "are consistent and fit within a theme. Aim for creativity and originality!")
+    return system_message
 
-choices_system_message = ("You are a choice generator for a role playing game. Create engaging and meaningful "
+
+def choices_system_message():
+    system_message = ("You are a choice generator for a role playing game. Create engaging and meaningful "
                           "choices for the player. Promote exploration of the storyline. Focus on creativity "
                           "and depth to enhance player engagement and immersion.")
+    return system_message
 
-scene_system_message = ("You are a scene generator for a role playing game. Create immersive scenes that set the "
+
+def scene_system_message():
+    system_message = ("You are a scene generator for a role playing game. Create immersive scenes that set the "
                         "stage for player decisions, including vivid descriptions of the setting, atmosphere, "
                         "and key elements. Blend in prior items and characters into the scene if it makes sense. "
                         "Focus on creativity and depth to enhance player immersion and storytelling.")
+    return system_message
 
 
 def character_template(quantity: int, type_of_char: str, tropes: list, theme: str) -> str:
