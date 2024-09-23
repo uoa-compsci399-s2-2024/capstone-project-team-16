@@ -1,7 +1,7 @@
 """ Template functions for generating prompts to send to LLM """
 
 
-def character_system_message():
+def character_system_message() -> str:
     system_message = ("You are an imaginative game character generator. Create diverse and intriguing "
                             "characters for a role-playing game. Consider different attributes, such as "
                             "traits, motivations and friendliness. Make sure the characters "
@@ -9,7 +9,7 @@ def character_system_message():
     return system_message
 
 
-def item_system_message():
+def item_system_message() -> str:
     system_message = ("You are an imaginative game item generator. Create diverse and intriguing items "
                        "for a role-playing game. Consider different categories, such as "
                        "weapons, armor, potions, and artifacts. Make sure the items are balanced "
@@ -17,7 +17,7 @@ def item_system_message():
     return system_message
 
 
-def location_system_message():
+def location_system_message() -> str:
     system_message = ("You are an imaginative game location generator. Create diverse and intriguing"
                            "locations for a role-playing game. Consider different attributes, such as "
                             "where it is, the items there and the characters there. Make sure the locations "
@@ -25,14 +25,14 @@ def location_system_message():
     return system_message
 
 
-def choices_system_message():
+def choices_system_message() -> str:
     system_message = ("You are a choice generator for a role playing game. Create engaging and meaningful "
                           "choices for the player. Promote exploration of the storyline. Focus on creativity "
                           "and depth to enhance player engagement and immersion.")
     return system_message
 
 
-def scene_system_message():
+def scene_system_message() -> str:
     system_message = ("You are a scene generator for a role playing game. Create immersive scenes that set the "
                         "stage for player decisions, including vivid descriptions of the setting, atmosphere, "
                         "and key elements. Blend in prior items and characters into the scene if it makes sense. "

@@ -150,5 +150,4 @@ def initialise_game(client):
     player.current_location = (current_world.locations[0]).id_
     (current_world.locations[0]).add_character(player.id_)
 
-
     game_loop(player, current_world, client)
