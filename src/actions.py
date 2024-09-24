@@ -27,7 +27,7 @@ def move_character(new_location_id: int, args: list) -> None:
     else:
         # The new location is not known and as such needs to generate a new sector of the map
         new_locations = chat_with_gpt(client,
-                                      "You are a knowledgeable chatbot that creates unique items",
+                                      "You are a knowledgeable chatbot that creates unique locations",
                                       location_template(5, current_location.name,
                                                                 list(world_object.tropes.values()),
                                                                 world_object.theme),
