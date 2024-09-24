@@ -3,6 +3,7 @@
 from utils.prompt import chat_with_gpt
 from utils.templates import location_template
 from utils.mappers import location_mapper
+from utils.structures import SectionStructure
 
 
 def move_character(new_location_id: int, args: list) -> None:
@@ -32,7 +33,8 @@ def move_character(new_location_id: int, args: list) -> None:
                                                                 list(world_object.tropes.values()),
                                                                 world_object.theme),
                                       False,
-                                      tokens=500)
+                                      tokens=500,
+                                      structure=SectionStructure)
         # Map the new Locations
         mapped_new_locations = location_mapper.create_location_from_json(
             previous_location=current_location.id_, json_str=new_locations, world=world_object)
