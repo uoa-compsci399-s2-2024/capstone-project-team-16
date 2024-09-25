@@ -93,7 +93,7 @@ def initialise_game(client):
     locations = prompt.chat_with_gpt(
         client,
         templates.location_system_message(),
-        templates.initial_location_template(5, tropes, theme),
+        templates.location_template(5, tropes, theme),
         False,
         tokens=600,
         temp=1,
@@ -135,6 +135,9 @@ def initialise_game(client):
     #    current_world.add_character(character)
 
     for location in mapped_locations:
+        print(location.name)
+        print(location.description)
+        print([None if neighbor is None else neighbor.name for neighbor in location.neighbors])
         current_world.add_location(location)
 
     #for item in mapped_items:
