@@ -81,7 +81,6 @@ def visualise_locations(locations: list[Location], style="graphic") -> None:
         for location in locations:
             if location.coords is None:
                 location.coords = pos[location.name]
-                break
         nx.draw(graph, pos, with_labels=True)
         plt.show()
     elif style == "text":
