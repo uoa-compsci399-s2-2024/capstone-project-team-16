@@ -1,12 +1,11 @@
 """Module for initialising the game"""
 import os
-from utils import templates, prompt
+from utils import templates, prompt, structures
 from utils.mappers import character_mapper, location_mapper, item_mapper
 from world import World
 #from game import get_random_tropes, read_csv_file, create_tropes
 from utils.narrative_elements import get_random_tropes, get_random_theme, read_csv_file, create_tropes
 from game import game_loop
-
 
 from character import Character
 
@@ -94,10 +93,11 @@ def initialise_game(client):
     locations = prompt.chat_with_gpt(
         client,
         templates.location_system_message(),
-        templates.initial_location_template(5, tropes, theme),
+        templates.location_template(5, tropes, theme),
         False,
         tokens=600,
-        temp=1
+        temp=1,
+        structure=structures.SectionStructure
     )
     print("DEBUG: FINISHED CREATING LOCATIONS")
     # Construct prompt and generate items using the tropes and theme
@@ -135,6 +135,9 @@ def initialise_game(client):
     #    current_world.add_character(character)
 
     for location in mapped_locations:
+        print(location.name)
+        print(location.description)
+        print([None if neighbor is None else neighbor.name for neighbor in location.neighbors])
         current_world.add_location(location)
 
     #for item in mapped_items:
