@@ -89,11 +89,8 @@ def flow_on_choices_template(quantity: int, tropes: list, theme: str,
                     f"the theme of {theme}. Incorporate some of the characters, items or locations from the given "
                     f"objects into the choices if it makes sense to do so. The objects are in JSON format and are as "
                     f"follows: The list of characters: {json_characters}. The list of items: {json_items}. The list of "
-                    f"locations: {json_locations}. You are to return the "
-                    "choices in a JSON file in the following format { 'choices': [{ "
-                    "'description': A very short text description to display to the user, with "
-                    "displaying the name ONLY, 'actions': {'new_location': the integer number ID of the "
-                    "location you are to move to, -1 if the location is unknown or None if the choice does not involve moving location} } }")
+                    f"locations: {json_locations}. new_location action should be an integer of a "
+                    "location, None if you are not moving, or -1 if the location isnt known")
     return user_message
 
 def demo_choices_movement_template(list_of_neighbours: list):
@@ -118,6 +115,5 @@ def scene_template(location_name: str, location_description: str, items: list,
                     f"The items in this location are: {items} The Characters in this location "
                     f"are: {characters} Using this information generate text description "
                     "for a scene for the player to interact with. The scene should not be more than"
-                    " 100 words in length and should be output in a JSON dictionary in the "
-                    "following format:{'scene': description of the scene}")
+                    " 100 words in length.")
     return user_message

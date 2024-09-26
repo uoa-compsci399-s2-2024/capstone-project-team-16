@@ -13,3 +13,26 @@ class LocationStructure(BaseModel):
 class SectionStructure(BaseModel):
     """Structure for Section Location Generation"""
     locations: list[LocationStructure]
+
+
+# Scene Structure
+class SceneStructure(BaseModel):
+    """Structure for Scene Generation"""
+    scene: str
+
+
+# Choice Structure
+class ActionStructure(BaseModel):
+    """Structure for Action Generation"""
+    new_location: int or None
+
+
+class ChoiceSingularStructure(BaseModel):
+    """Structure for Choice Singular Generation"""
+    description: str
+    actions: ActionStructure
+
+
+class ChoicesStructure(BaseModel):
+    """Structure for Choice Generation"""
+    choices: list[ChoiceSingularStructure]
