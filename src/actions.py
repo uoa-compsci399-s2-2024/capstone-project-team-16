@@ -58,8 +58,24 @@ def move_character(new_location_id: int, args: list) -> None:
             print("DEBUG: REAL SORRY THIS IS AN ISSUE WITH FLOW ON LOCATION NOT CONNECTING "
                   "SO SORRY CANT MOVE LOCATIONS :(")
 
+def interact_with_item(item_to_interact_id: int, args:list) -> None:
+    """An action to have the player interact with an item"""
+    client = args[0]
+    world_object = args[1]
+    character_object = args[2]
+    current_location = args[3]
+    if item_to_interact_id is None:
+        item_to_interact = None
+    else:
+        item_to_interact = world_object.items[item_to_interact_id]
+        world_object.add_key_event(f"Player's character, {character_object.name},"
+            f"interacted with {item_to_interact} at {current_location}")
+            # note that this means in cases 
+            # where we both move and interact w item, we need to always process
+            # moving first - should be doable with structured outputs
 
-ACTIONS_DICT = {"new_location": move_character}
+AVAILABLE_ACTIONS = ["move location", "interact with item"]
+ACTIONS_DICT = {"new_location": move_character, "item_to_interact": interact_with_item}
 
 
 def process_user_choice(actions: dict, args: list) -> None:

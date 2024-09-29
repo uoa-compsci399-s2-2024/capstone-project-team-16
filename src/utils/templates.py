@@ -78,19 +78,21 @@ def initial_choices_template(quantity: int, tropes: list, theme: str) -> str:
     return user_message
 
 
-def flow_on_choices_template(quantity: int, tropes: list, theme: str,
+def flow_on_choices_template(quantity: int, tropes: list, theme: str, key_events:list,
                              json_locations: list, json_characters: list,
                              json_items: list, actions: list) -> str:
     """Template for generating subsequent story choices"""
     user_message = (f"Generate {quantity} choices our player can take that make sense for the current pacing of the "
                     f"story. The actions in the choices may only include one or more of the following actions: {actions}."
                     f"The choices must be consistent with the current pacing of the story and can speed it up "
-                    f"slightly but not too much. Make sure the choices are consistent with the tropes of {tropes} and "
-                    f"the theme of {theme}. Incorporate some of the characters, items or locations from the given "
+                    f"slightly but not too much. Make sure the choices are consistent with the tropes of {tropes}, "
+                    f"the theme of {theme}, and the key events that have happened so far {key_events}. "
+                    "Incorporate some of the characters, items or locations from the given "
                     f"objects into the choices if it makes sense to do so. The objects are in JSON format and are as "
                     f"follows: The list of characters: {json_characters}. The list of items: {json_items}. The list of "
                     f"locations: {json_locations}. new_location action should be an integer of a "
-                    "location, None if you are not moving, or -1 if the location isnt known")
+                    "location, None if you are not moving, or -1 if the location isnt known. "
+                    "item_to_interact should be an integer of an item or None if you are not interacting with an item.")
     return user_message
 
 def demo_choices_movement_template(list_of_neighbours: list):

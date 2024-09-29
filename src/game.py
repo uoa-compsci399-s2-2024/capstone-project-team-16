@@ -6,7 +6,7 @@ from openai import OpenAI
 import pandas as pd
 import networkx as nx
 import matplotlib.pyplot as plt
-from actions import process_user_choice
+from actions import process_user_choice, AVAILABLE_ACTIONS
 from character import Character
 from location import Location
 from world import World
@@ -109,9 +109,9 @@ def game_loop(player: Character, world: World, client: OpenAI) -> None:
             client=client,
             system_message="You are a knowledgable chatbot that generates choices",
             user_message=flow_on_choices_template(
-                4, world.tropes, world.theme, [f"{neighbor.name}({neighbor.id_})" if neighbor is not None else None for neighbor
+                4, world.tropes, world.theme, world.key_events, [f"{neighbor.name}({neighbor.id_})" if neighbor is not None else None for neighbor
                 in current_location.neighbors], [world.characters[cid] for cid in current_location.characters],
-                [world.items[iid] for iid in current_location.items], ["move location"]),
+                [world.items[iid] for iid in current_location.items], AVAILABLE_ACTIONS),
             context=False,
             tokens=500,
             temp=0.5,

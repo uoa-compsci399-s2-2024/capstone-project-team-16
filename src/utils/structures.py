@@ -25,6 +25,7 @@ class SceneStructure(BaseModel):
 class ActionStructure(BaseModel):
     """Structure for Action Generation"""
     new_location: int or None
+    item_to_interact: int or None
 
 
 class ChoiceSingularStructure(BaseModel):
@@ -36,3 +37,21 @@ class ChoiceSingularStructure(BaseModel):
 class ChoicesStructure(BaseModel):
     """Structure for Choice Generation"""
     choices: list[ChoiceSingularStructure]
+
+class ItemSingularStructure(BaseModel):
+    """Structure for generating a single item"""
+    name: str
+    price: float
+    weight: float
+    category: str
+
+class ItemsStructure(BaseModel):
+    """Structure for multiple item generation"""
+    items: list[ItemSingularStructure]
+
+class CharacterSingularStructure(BaseModel):
+    name: str
+    traits: list[str]
+
+class CharactersStructure(BaseModel):
+    characters: list[CharacterSingularStructure]
