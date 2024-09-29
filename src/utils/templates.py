@@ -28,15 +28,17 @@ def location_system_message() -> str:
 def choices_system_message() -> str:
     system_message = ("You are a choice generator for a role playing game. Create engaging and meaningful "
                           "choices for the player. Promote exploration of the storyline. Focus on creativity "
-                          "and depth to enhance player engagement and immersion.")
+                          "and depth to enhance player engagement and immersion, but keep the choices concise"
+                          "and readable for a game-like experience.")
     return system_message
 
 
 def scene_system_message() -> str:
-    system_message = ("You are a scene generator for a role playing game. Create immersive scenes that set the "
+    system_message = ("You are a scene generator for a choose-your-path role playing game. Create immersive scenes that set the "
                         "stage for player decisions, including vivid descriptions of the setting, atmosphere, "
                         "and key elements. Blend in prior items and characters into the scene if it makes sense. "
-                        "Focus on creativity and depth to enhance player immersion and storytelling.")
+                        "Focus on creativity and depth to enhance player immersion and storytelling.")#" Make use of whitespace"
+                        #"and make the scene readable and written in a game-like style")
     return system_message
 
 
@@ -58,13 +60,16 @@ def item_template(quantity: int, tropes: list, theme: str) -> str:
     return user_message
 
 
-def location_template(quantity: int, tropes: list, theme: str) -> str:
+def location_template(quantity: int, tropes: list, theme: str, num_items: int, num_characters: int) -> str:
     """Template for generating the initial locations"""
     user_message = (f"Create {quantity} location/s with a name and a description of the area. "
                     f"Descriptions do not have to be full sentences and should only include "
                     f"important descriptors of the location. Descriptions for the location"
                     " should have no more than 50 words. Keep the location name and description "
-                    f"consistent with the tropes of {tropes} and the themes of {theme}.")
+                    f"consistent with the tropes of {tropes} and the themes of {theme}. For each location,"
+                    f"also generate {num_items} items including their name, "
+                    f"price, weight and category. For each location, also generate {num_characters} characters"
+                    f"including their name and a list of 1-5 word traits. Keep your overall response to under 700 words.")
     return user_message
 
 
@@ -83,7 +88,8 @@ def flow_on_choices_template(quantity: int, tropes: list, theme: str, key_events
                              json_items: list, actions: list) -> str:
     """Template for generating subsequent story choices"""
     user_message = (f"Generate {quantity} choices our player can take that make sense for the current pacing of the "
-                    f"story. The actions in the choices may only include one or more of the following actions: {actions}."
+                    f"story. The actions in the choices may ONLY include one or more of the following actions: {actions}."
+                    f"No other actions can be available to the player if they are not in that list."
                     f"The choices must be consistent with the current pacing of the story and can speed it up "
                     f"slightly but not too much. Make sure the choices are consistent with the tropes of {tropes}, "
                     f"the theme of {theme}, and the key events that have happened so far {key_events}. "
@@ -109,13 +115,26 @@ def demo_choices_movement_template(list_of_neighbours: list):
     return user_message
 
 
-def scene_template(location_name: str, location_description: str, items: list,
+def initial_scene_template(location_name: str, location_description: str, items: list,
                    characters: list) -> str:
-    """Template for generating a scene"""
+    """Template for generating a scene to begin the game"""
     user_message = ("You are to create a scene using the following information and output a JSON "
                     f"dictionary. The location is {location_name}, {location_description}. "
                     f"The items in this location are: {items} The Characters in this location "
                     f"are: {characters} Using this information generate text description "
                     "for a scene for the player to interact with. The scene should not be more than"
+                    " 100 words in length.")
+    return user_message
+
+def flow_scene_template(location_name: str, location_description: str, items: list,
+                   characters: list, most_recent_choice: str, key_events: list[str]) -> str:
+    """Template for generating a scene after the user makes a choice"""
+    user_message = ("You are to create a scene using the following information and output a JSON "
+                    f"dictionary. The user has just chosen to do {most_recent_choice}."
+                    f"The key events that have happened so far are {key_events}."
+                    f"The location is {location_name}, {location_description}. "
+                    f"The items in this location are: {items} The Characters in this location "
+                    f"are: {characters} Using this information generate text description "
+                    "for the next scene in the story. The scene should not be more than"
                     " 100 words in length.")
     return user_message

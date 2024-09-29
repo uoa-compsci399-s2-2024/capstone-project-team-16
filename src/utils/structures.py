@@ -3,18 +3,6 @@
 from pydantic import BaseModel
 
 
-# Location Strucuters
-class LocationStructure(BaseModel):
-    """Structure for Location Generation"""
-    name: str
-    description: str
-
-
-class SectionStructure(BaseModel):
-    """Structure for Section Location Generation"""
-    locations: list[LocationStructure]
-
-
 # Scene Structure
 class SceneStructure(BaseModel):
     """Structure for Scene Generation"""
@@ -55,3 +43,15 @@ class CharacterSingularStructure(BaseModel):
 
 class CharactersStructure(BaseModel):
     characters: list[CharacterSingularStructure]
+
+# Location Structures
+class LocationStructure(BaseModel):
+    """Structure for Location Generation"""
+    name: str
+    description: str
+    items: list[ItemSingularStructure]
+    characters: list[CharacterSingularStructure]
+
+class SectionStructure(BaseModel):
+    """Structure for Section Location Generation"""
+    locations: list[LocationStructure]

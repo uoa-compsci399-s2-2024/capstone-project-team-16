@@ -52,7 +52,7 @@ class Location:
             character_template(num_characters, "", world.tropes, world.theme),
             False,
             CharactersStructure,
-            tokens=200
+            tokens=80
         )
         item_response = chat_with_gpt(
             client,
@@ -60,7 +60,7 @@ class Location:
             item_template(num_items, world.tropes, world.theme),
             False,
             ItemsStructure,
-            tokens=200
+            tokens=80
         )
         characters = character_mapper.create_character_from_json(character_response)
         items = item_mapper.create_item_from_json(item_response)

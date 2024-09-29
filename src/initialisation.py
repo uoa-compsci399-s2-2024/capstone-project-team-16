@@ -87,13 +87,12 @@ def initialise_game(client):
     locations = prompt.chat_with_gpt(
         client,
         templates.location_system_message(),
-        templates.location_template(5, tropes, theme),
+        templates.location_template(5, tropes, theme, NUM_ITEMS, NUM_CHARACTERS),
         False,
-        tokens=600,
-        temp=1,
+        tokens=700,
+        temp=0.5,
         structure=structures.SectionStructure
     )
-    print("DEBUG: FINISHED CREATING LOCATIONS")
 
 
     # add the initial JSON objects to their world.py lists
@@ -106,12 +105,10 @@ def initialise_game(client):
 
 
     for location in mapped_locations:
-        print(location.name)
-        print(location.description)
-        print([None if neighbor is None else neighbor.name for neighbor in location.neighbors])
-        location.populate(NUM_CHARACTERS, NUM_ITEMS, current_world, client)
+        #location.populate(NUM_CHARACTERS, NUM_ITEMS, current_world, client)
         current_world.add_location(location)
 
+    print("DEBUG: FINISHED CREATING LOCATIONS")
 
     # Easy Way to create a Playable Character FOR DEMO
     player = Character(input("Input your character's name:\n> "), [], playable=True)
