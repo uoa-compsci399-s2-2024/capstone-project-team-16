@@ -1,8 +1,9 @@
 """This is a file of all possible actions for the game"""
 
 from utils.prompt import chat_with_gpt
-from utils.templates import flow_on_location_template
+from utils.templates import location_template
 from utils.mappers import location_mapper
+from utils.structures import SectionStructure
 
 
 def move_character(new_location_id: int, args: list) -> None:
@@ -27,15 +28,16 @@ def move_character(new_location_id: int, args: list) -> None:
     else:
         # The new location is not known and as such needs to generate a new sector of the map
         new_locations = chat_with_gpt(client,
-                                      "You are a knowledgeable chatbot that creates unique items",
-                                      flow_on_location_template(5, current_location.name,
+                                      "You are a knowledgeable chatbot that creates unique locations",
+                                      location_template(5, current_location.name,
                                                                 list(world_object.tropes.values()),
                                                                 world_object.theme),
                                       False,
-                                      tokens=500)
+                                      tokens=500,
+                                      structure=SectionStructure)
         # Map the new Locations
         mapped_new_locations = location_mapper.create_location_from_json(
-            previous_location=current_location, json_str=new_locations, world=world_object)
+            previous_location=current_location.id_, json_str=new_locations, world=world_object)
 
         # Add the new locations to the locations within the world
         for mapped_location in mapped_new_locations:

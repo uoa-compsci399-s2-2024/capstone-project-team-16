@@ -14,6 +14,7 @@ from utils.templates import flow_on_choices_template, scene_template
 from utils.prompt import chat_with_gpt
 from utils.mappers import scene_mapper, choice_mapper
 from utils.playthroughs import create_temp_story_file, write_scene_and_choice, save_playthrough_as_file, wipe_temp_file
+from utils.structures import SceneStructure, ChoicesStructure
 
 def choice_selection(choices: list[tuple]) -> str:
     """Function to get user input for the choice"""
@@ -51,7 +52,8 @@ def display_scene(client: OpenAI, location: Location, world: World) -> str:
                                     [world.items[item_id] for item_id in location.items],
                                     [world.characters[character_id] for character_id in location.characters if (world.characters[character_id]).playable is not True]),
         context=False,
-        tokens=500
+        tokens=500,
+        structure= SceneStructure
     )
 
     mapped_scene = scene_mapper.create_scene_from_json(scene)
@@ -112,7 +114,8 @@ def game_loop(player: Character, world: World, client: OpenAI) -> None:
                 [world.items[iid] for iid in current_location.items], ["move location"]),
             context=False,
             tokens=500,
-            temp=0.5
+            temp=0.5,
+            structure=ChoicesStructure
         )
         mapped_choices = choice_mapper.create_choices_from_json(choices)
 
