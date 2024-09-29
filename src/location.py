@@ -37,6 +37,7 @@ class Location:
         self._items = items or []
         self._description = description
         self._neighbors = neighbors or []
+        self._coords = None
 
     def populate(self, num_characters: int, num_items: int, world: 'World', client: 'OpenAI') -> None:
         """Send prompt to LLM such as 'This is x location in x story with 
@@ -93,6 +94,15 @@ class Location:
         """Removes the ID of a character from the list of characters at this location"""
         if character_id in self.characters:
             self._characters.remove(character_id)
+
+    @property
+    def coords(self) -> tuple[int, int]:
+        """Gets the coordinates of this location"""
+        return self._coords
+    @coords.setter
+    def coords(self, coords: tuple[int, int]) -> None:
+        """Sets the coordinates of this location"""
+        self._coords = coords
 
     # base functions
     def __str__(self) -> str:
