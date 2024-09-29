@@ -1,6 +1,6 @@
 import os
 import shutil
-from src.initialisation import current_world
+from src.world import World
 
 temp_file_path = str(os.getcwd()) + '/src/story/temp_story_store.txt'
 
@@ -35,16 +35,16 @@ def wipe_temp_file() -> None:
         file.close()
 
 
-def show_background_data():
+def show_background_data(curr_world: World):
     print("----------")
     print("Locations:")
-    print(current_world.locations)
+    print(curr_world.locations)
     print("Items:")
-    print(current_world.items)
+    print(curr_world.items)
     print("Characters:")
-    print(current_world.characters)
+    print(curr_world.characters)
     print("Tropes")
-    print(current_world.tropes)
+    print(curr_world.tropes)
     print("Themes:")
-    print(current_world.theme)
+    print(curr_world.theme)
     print("----------")

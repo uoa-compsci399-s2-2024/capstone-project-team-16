@@ -10,8 +10,6 @@ from game import game_loop
 from character import Character
 
 
-current_world = World()
-
 def print_art() -> None:
     print("      _,.")
     print("    ,` -.)")
@@ -70,7 +68,7 @@ def initialise_game(client):
     themes_path = str(os.getcwd()) + '/src/story/themes.txt'
 
 
-    #current_world = World()
+    current_world = World()
 
     # Choose the tropes
     tropes = get_random_tropes(create_tropes(read_csv_file(plot_tropes_path)), 3)

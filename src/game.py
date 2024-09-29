@@ -17,7 +17,7 @@ from utils.playthroughs import create_temp_story_file, write_scene_and_choice, s
 from utils.structures import SceneStructure, ChoicesStructure
 from utils.playthroughs import show_background_data
 
-def choice_selection(choices: list[tuple]) -> str:
+def choice_selection(choices: list[tuple], curr_world: World) -> str:
     """Function to get user input for the choice"""
 
     updated_choices = [choices[i][0] for i in range(len(choices))]
@@ -29,7 +29,7 @@ def choice_selection(choices: list[tuple]) -> str:
     while not selection:
         user_input = input("> ")
         if user_input == "INFO":
-            show_background_data()
+            show_background_data(curr_world)
             continue
         if not user_input.isdigit():
             print("Please enter a number")
@@ -124,7 +124,7 @@ def game_loop(player: Character, world: World, client: OpenAI) -> None:
         mapped_choices = choice_mapper.create_choices_from_json(choices)
 
         # Returns the tuple choice of (desc, id)
-        player_choice = choice_selection(mapped_choices)
+        player_choice = choice_selection(mapped_choices, world)
     
 
         process_user_choice(player_choice[1], [client, world, player, current_location])
