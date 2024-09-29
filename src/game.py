@@ -8,7 +8,7 @@ from actions import process_user_choice
 from character import Character
 from location import Location
 from world import World
-from utils.templates import flow_on_choices_template, scene_template
+from utils.templates import flow_on_choices_template, scene_template, scene_system_message, choices_system_message
 from utils.prompt import chat_with_gpt
 from utils.mappers import scene_mapper, choice_mapper
 from utils.playthroughs import create_temp_story_file, write_scene_and_choice, save_playthrough_as_file, wipe_temp_file
@@ -21,7 +21,7 @@ def choice_selection(choices: list[tuple]) -> str:
     selection = None
 
     for i, choice in enumerate(updated_choices, start=1):
-        print(f"{i}. {choice}")
+        print(f"{i}. {choice}\n")
 
     while not selection:
         user_input = input("> ")
@@ -41,11 +41,11 @@ def choice_selection(choices: list[tuple]) -> str:
 
 
 
-def display_scene(client: OpenAI, location: Location, world: World) -> str:
+def display_scene(client: OpenAI, location: Location, world: World) -> None:
     """Function to display the scene the player is in"""
     scene = chat_with_gpt(
         client=client,
-        system_message="You are a knowledgable chatbot that generates a scene description",
+        system_message=scene_system_message(),
         user_message=scene_template(location.name, location.description,
                                     [world.items[item_id] for item_id in location.items],
                                     [world.characters[character_id] for character_id in location.characters if (world.characters[character_id]).playable is not True]),
@@ -55,8 +55,11 @@ def display_scene(client: OpenAI, location: Location, world: World) -> str:
     )
 
     mapped_scene = scene_mapper.create_scene_from_json(scene)
-    #print(textwrap.fill(mapped_scene, 100))
-    return textwrap.fill(mapped_scene, 100)
+    mapped_scene = mapped_scene.split(". ")
+    print()
+    for para in mapped_scene:
+        print(f"{textwrap.fill(para, 100)}.\n")
+    print()
   
 
 def game_loop(player: Character, world: World, client: OpenAI) -> None:
@@ -70,15 +73,11 @@ def game_loop(player: Character, world: World, client: OpenAI) -> None:
 
         current_location = world.locations[player.current_location]
         # Displays the Scene for the user to view
-        print("")
-        #display_scene(client, current_location, world)
-        mapped_scene = display_scene(client, current_location, world)
-        print(mapped_scene)
-        print("")
+        display_scene(client, current_location, world)
 
         choices = chat_with_gpt(
             client=client,
-            system_message="You are a knowledgable chatbot that generates choices",
+            system_message=choices_system_message(),
             user_message=flow_on_choices_template(
                 4, world.tropes, world.theme, [f"{neighbor.name}({neighbor.id_})" if neighbor is not None else None for neighbor
                 in current_location.neighbors], [world.characters[cid] for cid in current_location.characters],
