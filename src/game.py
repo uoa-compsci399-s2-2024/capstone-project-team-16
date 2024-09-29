@@ -15,6 +15,7 @@ from utils.prompt import chat_with_gpt
 from utils.mappers import scene_mapper, choice_mapper
 from utils.playthroughs import create_temp_story_file, write_scene_and_choice, save_playthrough_as_file, wipe_temp_file
 from utils.structures import SceneStructure, ChoicesStructure
+from utils.playthroughs import show_background_data
 
 def choice_selection(choices: list[tuple]) -> str:
     """Function to get user input for the choice"""
@@ -27,6 +28,9 @@ def choice_selection(choices: list[tuple]) -> str:
 
     while not selection:
         user_input = input("> ")
+        if user_input == "INFO":
+            show_background_data()
+            continue
         if not user_input.isdigit():
             print("Please enter a number")
             continue

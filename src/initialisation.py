@@ -10,6 +10,8 @@ from game import game_loop
 from character import Character
 
 
+current_world = World()
+
 def print_art() -> None:
     print("      _,.")
     print("    ,` -.)")
@@ -49,6 +51,7 @@ def print_description() -> None:
     print("In this game, you will embark on a thrilling quest")
     print("filled with danger, mystery, and magic. Your choices")
     print("will determine the outcome of your adventure.")
+    print("NOTE: If you should wish to view the data of this playthrough then enter INFO.")
     print()
 
 def start_game() -> bool:
@@ -67,7 +70,7 @@ def initialise_game(client):
     themes_path = str(os.getcwd()) + '/src/story/themes.txt'
 
 
-    current_world = World()
+    #current_world = World()
 
     # Choose the tropes
     tropes = get_random_tropes(create_tropes(read_csv_file(plot_tropes_path)), 3)

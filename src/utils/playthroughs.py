@@ -1,5 +1,6 @@
 import os
 import shutil
+from src.initialisation import current_world
 
 temp_file_path = str(os.getcwd()) + '/src/story/temp_story_store.txt'
 
@@ -32,3 +33,18 @@ def save_playthrough_as_file() -> None:
 def wipe_temp_file() -> None:
     with open(temp_file_path, 'w') as file:
         file.close()
+
+
+def show_background_data():
+    print("----------")
+    print("Locations:")
+    print(current_world.locations)
+    print("Items:")
+    print(current_world.items)
+    print("Characters:")
+    print(current_world.characters)
+    print("Tropes")
+    print(current_world.tropes)
+    print("Themes:")
+    print(current_world.theme)
+    print("----------")
