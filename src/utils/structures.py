@@ -25,6 +25,7 @@ class SceneStructure(BaseModel):
 class ActionStructure(BaseModel):
     """Structure for Action Generation"""
     new_location: int or None
+    character_id: int or None
 
 
 class ChoiceSingularStructure(BaseModel):

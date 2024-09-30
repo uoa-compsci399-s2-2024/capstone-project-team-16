@@ -59,6 +59,14 @@ def move_character(new_location_id: int, args: list) -> None:
                   "SO SORRY CANT MOVE LOCATIONS :(")
 
 
+def talk_to_character(character_id: int, args: list) -> None:
+    """This is an action that talks to a character"""
+    client = args[0]
+    world_object = args[1]
+    character_object_player = args[2]
+
+    
+
 ACTIONS_DICT = {"new_location": move_character}
 
 

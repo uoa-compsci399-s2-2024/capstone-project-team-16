@@ -82,7 +82,7 @@ def game_loop(player: Character, world: World, client: OpenAI) -> None:
             user_message=flow_on_choices_template(
                 4, world.tropes, world.theme, [f"{neighbor.name}({neighbor.id_})" if neighbor is not None else None for neighbor
                 in current_location.neighbors], [world.characters[cid] for cid in current_location.characters],
-                [world.items[iid] for iid in current_location.items], ["move location"]),
+                [world.items[iid] for iid in current_location.items], ["move location", "talk character"]),
             context=False,
             tokens=500,
             temp=0.5,

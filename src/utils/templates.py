@@ -90,7 +90,9 @@ def flow_on_choices_template(quantity: int, tropes: list, theme: str,
                     f"objects into the choices if it makes sense to do so. The objects are in JSON format and are as "
                     f"follows: The list of characters: {json_characters}. The list of items: {json_items}. The list of "
                     f"locations: {json_locations}. new_location action should be an integer of a "
-                    "location, None if you are not moving, or -1 if the location isnt known")
+                    "location, None if you are not moving, or -1 if the location isnt known. "
+                    "character_id should be an id of a character in the location or None if there "
+                    "is no characters in the location")
     return user_message
 
 def demo_choices_movement_template(list_of_neighbours: list):
