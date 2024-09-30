@@ -23,3 +23,9 @@ def create_character_from_json(json_str: str) -> list[Character]:
         name=character['name'],
         traits=character['traits']
     ) for character in data]
+
+def create_character_from_list(characters: list[dict]) -> list[Character]:
+    return [Character(
+        name=character['name'],
+        traits=character['traits']
+    ) for character in characters]

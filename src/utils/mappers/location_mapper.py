@@ -5,6 +5,7 @@ import json
 import random
 from location import Location
 from world import World
+from utils.mappers import item_mapper, character_mapper
 
 
 def create_location_from_json(json_str: str, world: World, previous_location_id: int or None = None) -> list[Location]:
@@ -29,7 +30,18 @@ def create_location_from_json(json_str: str, world: World, previous_location_id:
     section = []
     # Creates a location and adds to the list
     for location in data:
-        section.append(Location(location['name'], location['description']))
+        new_location = Location(location['name'], location['description'])
+        characters = character_mapper.create_character_from_list(location['characters'])
+        items = item_mapper.create_item_from_list(location['items'])
+        for character in characters:
+            world.add_character(character)
+            new_location.add_character(character.id_)
+
+        for item in items:
+            world.add_item(item)
+            new_location.add_item(item.id_)
+
+        section.append(new_location)
 
     # Neighbour mapping
     # rules

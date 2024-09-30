@@ -4,6 +4,7 @@ from typing import Self
 from utils.prompt import chat_with_gpt
 from utils.templates import character_template, item_template
 from utils.mappers import character_mapper, item_mapper
+from utils.structures import ItemsStructure, CharactersStructure
 
 
 
@@ -37,6 +38,7 @@ class Location:
         self._items = items or []
         self._description = description
         self._neighbors = neighbors or []
+        self._coords = None
 
     def populate(self, num_characters: int, num_items: int, world: 'World', client: 'OpenAI') -> None:
         """Send prompt to LLM such as 'This is x location in x story with 
@@ -47,22 +49,28 @@ class Location:
         character_response = chat_with_gpt(
             client,
             "You are a knowledgeable chatbot that creates unique characters",
-            character_template(num_characters, "", world.tropes, world.themes[-1]),
-            False
+            character_template(num_characters, "", world.tropes, world.theme),
+            False,
+            CharactersStructure,
+            tokens=80
         )
         item_response = chat_with_gpt(
             client,
             "You are a knowledgeable chatbot that creates unique items",
-            item_template(num_items, world.tropes, world.themes[-1]),
-            False
+            item_template(num_items, world.tropes, world.theme),
+            False,
+            ItemsStructure,
+            tokens=80
         )
         characters = character_mapper.create_character_from_json(character_response)
         items = item_mapper.create_item_from_json(item_response)
         # Add Objects to internal lists
         for character in characters:
             self.add_character(character.id_)
+            world.add_character(character)
         for item in items:
             self.add_item(item.id_)
+            world.add_item(item)
 
     def add_neighbor(self, neighbor: Self) -> None:
         """Adds a Location object to the list of neighbors this Location has"""
@@ -93,6 +101,15 @@ class Location:
         """Removes the ID of a character from the list of characters at this location"""
         if character_id in self.characters:
             self._characters.remove(character_id)
+
+    @property
+    def coords(self) -> tuple[int, int]:
+        """Gets the coordinates of this location"""
+        return self._coords
+    @coords.setter
+    def coords(self, coords: tuple[int, int]) -> None:
+        """Sets the coordinates of this location"""
+        self._coords = coords
 
     # base functions
     def __str__(self) -> str:

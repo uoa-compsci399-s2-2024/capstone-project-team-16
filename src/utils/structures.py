@@ -3,18 +3,6 @@
 from pydantic import BaseModel
 
 
-# Location Strucuters
-class LocationStructure(BaseModel):
-    """Structure for Location Generation"""
-    name: str
-    description: str
-
-
-class SectionStructure(BaseModel):
-    """Structure for Section Location Generation"""
-    locations: list[LocationStructure]
-
-
 # Scene Structure
 class SceneStructure(BaseModel):
     """Structure for Scene Generation"""
@@ -25,6 +13,7 @@ class SceneStructure(BaseModel):
 class ActionStructure(BaseModel):
     """Structure for Action Generation"""
     new_location: int or None
+    item_to_interact: int or None
     character_id: int or None
 
 
@@ -37,3 +26,33 @@ class ChoiceSingularStructure(BaseModel):
 class ChoicesStructure(BaseModel):
     """Structure for Choice Generation"""
     choices: list[ChoiceSingularStructure]
+
+class ItemSingularStructure(BaseModel):
+    """Structure for generating a single item"""
+    name: str
+    price: float
+    weight: float
+    category: str
+
+class ItemsStructure(BaseModel):
+    """Structure for multiple item generation"""
+    items: list[ItemSingularStructure]
+
+class CharacterSingularStructure(BaseModel):
+    name: str
+    traits: list[str]
+
+class CharactersStructure(BaseModel):
+    characters: list[CharacterSingularStructure]
+
+# Location Structures
+class LocationStructure(BaseModel):
+    """Structure for Location Generation"""
+    name: str
+    description: str
+    items: list[ItemSingularStructure]
+    characters: list[CharacterSingularStructure]
+
+class SectionStructure(BaseModel):
+    """Structure for Section Location Generation"""
+    locations: list[LocationStructure]

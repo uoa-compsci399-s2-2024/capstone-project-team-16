@@ -12,6 +12,7 @@ def chat_with_gpt(client: OpenAI, system_message: str, user_message: str,
     # when we want to generate a prompt that needs relevant story details
     if context:
         # add the latest prompt to our global list
+        SESSION_MESSAGES.append({"role": "system", "content": system_message})
         SESSION_MESSAGES.append({"role": "user", "content": user_message})
 
         completion = client.beta.chat.completions.parse(
