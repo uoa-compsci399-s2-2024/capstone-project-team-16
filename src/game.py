@@ -16,7 +16,7 @@ from utils.mappers import scene_mapper, choice_mapper
 from utils.playthroughs import create_temp_story_file, write_scene_and_choice, save_playthrough_as_file, wipe_temp_file
 from utils.structures import SceneStructure, ChoicesStructure
 
-def choice_selection(choices: list[tuple]) -> str:
+def choice_selection(choices: list[tuple], world: World) -> str:
     """Function to get user input for the choice"""
 
     updated_choices = [choices[i][0] for i in range(len(choices))]
@@ -27,11 +27,16 @@ def choice_selection(choices: list[tuple]) -> str:
 
     while not selection:
         user_input = input("> ")
+        if user_input.lower().strip() == "save":
+            #save this playthrough
+            save_playthrough_as_file(world, choices)
+            print("Playthrough saved")
+            print("Make a selection")
+            continue
         if not user_input.isdigit():
             print("Please enter a number")
             continue
-        else:
-            user_input = int(user_input)
+        user_input = int(user_input)
 
         if user_input <= len(choices) and user_input > 0:
             selection = choices[user_input - 1]
@@ -120,9 +125,7 @@ def game_loop(player: Character, world: World, client: OpenAI) -> None:
         mapped_choices = choice_mapper.create_choices_from_json(choices)
 
         # Returns the tuple choice of (desc, id)
-        player_choice = choice_selection(mapped_choices)
+        player_choice = choice_selection(mapped_choices, world)
     
 
         process_user_choice(player_choice[1], [client, world, player, current_location])
-        # create a fresh txt file for this playthrough, store it and wipe temp for repeated use
-        save_playthrough_as_file()

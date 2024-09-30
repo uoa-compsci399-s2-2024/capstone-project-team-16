@@ -1,5 +1,12 @@
 import os
 import shutil
+import json
+from src.world import World
+from src.utils.mappers.character_mapper import create_json_from_characters
+from src.utils.mappers.choice_mapper import create_json_from_choices
+from src.utils.mappers.item_mapper import create_json_from_item
+from src.utils.mappers.location_mapper import create_json_from_locations
+from src.utils.mappers.trope_mapper import create_json_from_tropes
 
 temp_file_path = str(os.getcwd()) + '/src/story/temp_story_store.txt'
 
@@ -19,18 +26,30 @@ def write_scene_and_choice(scene_str: str, choice_str: str) -> None:
         file.close()
 
 
-def save_playthrough_as_file() -> None:
+def save_playthrough_as_file(world: World, choices: tuple[str]) -> None:
     playthrough_name = str(input("Enter the name of your playthrough: "))
     playthrough_file_path = str(os.getcwd()) + f'/src/playthroughs/{playthrough_name}.txt'
-
     while os.path.exists(playthrough_file_path):
-        playthrough_name = str(input("That filename already exists. Please enter the name of your playthrough: "))
-        playthrough_file_path = str(os.getcwd()) + f'/src/playthroughs/{playthrough_name}.txt'
+        new_playthrough = str(input("That filename already exists. Would you like to overwrite it? y/n"))
+        if new_playthrough.lower() == 'y':
+            break
+        else:
+            playthrough_name = str(input("Enter a new name for your playthrough: "))
+            playthrough_file_path = str(os.getcwd()) + f'/src/playthroughs/{playthrough_name}.txt'
+    playthrough_file_path = str(os.getcwd()) + f'/src/playthroughs/{playthrough_name}.txt'
 
-    with open(playthrough_file_path, 'x') as file:
-        file.close()
-    
-    shutil.copy(temp_file_path, playthrough_file_path)
+    with open(playthrough_file_path, 'w') as file:
+        file.write(create_json_from_characters(world.characters))
+        file.write("\n\n")
+        file.write(create_json_from_item(world.items))
+        file.write("\n\n")
+        file.write(create_json_from_choices(choices))
+        file.write("\n\n")
+        file.write(create_json_from_locations(world.locations))
+        file.write("\n\n")
+        file.write(create_json_from_tropes(world.tropes))
+        file.write("\n\n")
+        file.write(json.dumps({"themes": world.theme}))
 
 
 def wipe_temp_file() -> None:

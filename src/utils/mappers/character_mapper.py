@@ -23,3 +23,21 @@ def create_character_from_json(json_str: str) -> list[Character]:
         name=character['name'],
         traits=character['traits']
     ) for character in data]
+
+def create_json_from_characters(characters: dict) -> str:
+    """
+    Takes a Character object as input, serializes it,
+    and converts it into a JSON string.
+
+    Parameters:
+        characters (list[Character]): A list of Character objects to be serialized into a JSON string.
+
+    Returns:
+        str: A JSON string representing the Character object.
+    """
+    return json.dumps({'characters': [{
+        "id": key,
+        "name": character.name,
+        "traits": character.traits,
+        "location": character.current_location #stores current location as ID
+    } for key, character in characters.items() if isinstance(character, Character)]})

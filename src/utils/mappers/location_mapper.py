@@ -71,3 +71,25 @@ def create_location_from_json(json_str: str, world: World, previous_location_id:
         random_location.add_neighbor(world.locations[previous_location_id])
 
     return section
+
+def create_json_from_locations(locations: dict) -> str:
+    """
+    Takes a list of locations as input, serializes it,
+    and converts it into a JSON string.
+
+    Parameters:
+        locations (list[Location]): The list of locations to be serialized into a JSON string.
+
+    Returns:
+        str: A JSON string representing the list of locations.
+    """
+    return json.dumps({
+        "locations": [
+            {
+                "id": key,
+                "name": location.name,
+                "description": location.description,
+                "neighbours": [neighbour.name for neighbour in location.neighbors if isinstance(neighbour, Location)]
+            } for key, location in locations.items() if isinstance(location, Location)
+        ]
+    })
