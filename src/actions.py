@@ -149,7 +149,7 @@ def talk_to_character(character_id: int, args: list) -> None:
 
 
 AVAILABLE_ACTIONS = ["move location", "interact with item", "talk to character"]
-ACTIONS_DICT = {"new_location": move_character, "item_to_interact": interact_with_item}
+ACTIONS_DICT = {"new_location": move_character, "item_to_interact": interact_with_item, "talk_with_character": talk_to_character}
 
 
 def process_user_choice(actions: dict, args: list) -> None:
