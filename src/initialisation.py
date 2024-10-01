@@ -135,9 +135,9 @@ def initialise_game(client):
     #    current_world.add_character(character)
 
     for location in mapped_locations:
-        print(location.name)
-        print(location.description)
-        print([None if neighbor is None else neighbor.name for neighbor in location.neighbors])
+    #    print(location.name)
+    #    print(location.description)
+    #    print([None if neighbor is None else neighbor.name for neighbor in location.neighbors])
         current_world.add_location(location)
 
     #for item in mapped_items:

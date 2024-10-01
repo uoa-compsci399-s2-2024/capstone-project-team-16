@@ -28,7 +28,8 @@ def location_system_message() -> str:
 def choices_system_message() -> str:
     system_message = ("You are a choice generator for a role playing game. Create engaging and meaningful "
                           "choices for the player. Promote exploration of the storyline. Focus on creativity "
-                          "and depth to enhance player engagement and immersion.")
+                          "and depth to enhance player engagement and immersion, but keep the choices concise"
+                          "and readable for a game-like experience.")
     return system_message
 
 
@@ -36,7 +37,8 @@ def scene_system_message() -> str:
     system_message = ("You are a scene generator for a role playing game. Create immersive scenes that set the "
                         "stage for player decisions, including vivid descriptions of the setting, atmosphere, "
                         "and key elements. Blend in prior items and characters into the scene if it makes sense. "
-                        "Focus on creativity and depth to enhance player immersion and storytelling.")
+                        "Focus on creativity and depth to enhance player immersion and storytelling.")#" Make use of whitespace"
+                        #"and make the scene readable and written in a game-like style")
     return system_message
 
 
