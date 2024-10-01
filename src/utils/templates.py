@@ -41,6 +41,13 @@ def scene_system_message() -> str:
                         #"and make the scene readable and written in a game-like style")
     return system_message
 
+def dialog_system_message() -> str:
+    system_message = ("You are a dialog creator for a role playing game. Create fitting dialog that"
+                      "characters will talk to the player with. Only create small talk and "
+                      "background information of that character. Do not have any meaningful dialog "
+                      "that would affect story. The dialog should fit within a theme and setting")
+    return system_message
+
 
 def character_template(quantity: int, type_of_char: str, tropes: list, theme: str) -> str:
     """Template for generating characters"""
@@ -137,4 +144,16 @@ def flow_scene_template(location_name: str, location_description: str, items: li
                     f"are: {characters} Using this information generate text description "
                     "for the next scene in the story. The scene should not be more than"
                     " 100 words in length.")
+    return user_message
+
+
+def dismissive_dialog_template() -> str:
+    """Template for generating dismissive dialog."""
+    user_message = ""
+    return user_message
+
+
+def talkative_dialog_template() -> str:
+    """Template for generating talkative dialog."""
+    user_message = ""
     return user_message

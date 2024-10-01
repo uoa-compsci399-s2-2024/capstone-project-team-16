@@ -1,9 +1,12 @@
 """This is a file of all possible actions for the game"""
 
 from utils.prompt import chat_with_gpt
-from utils.templates import location_template
-from utils.mappers import location_mapper
-from utils.structures import SectionStructure
+from utils.templates import (location_template, location_system_message, dialog_system_message,
+                             dialog_template)
+from utils.mappers import location_mapper, dialog_mapper
+from utils.structures import SectionStructure, DismissiveDialogStructure, TalkativeDialogStructure
+
+import random
 
 
 def move_character(new_location_id: int, args: list) -> None:
@@ -28,7 +31,7 @@ def move_character(new_location_id: int, args: list) -> None:
     else:
         # The new location is not known and as such needs to generate a new sector of the map
         new_locations = chat_with_gpt(client,
-                                      "You are a knowledgeable chatbot that creates unique locations",
+                                      location_system_message(),
                                       location_template(5, current_location.name,
                                                                 list(world_object.tropes.values()),
                                                                 world_object.theme),
@@ -79,6 +82,27 @@ def talk_to_character(character_id: int, args: list) -> None:
     client = args[0]
     world_object = args[1]
     character_object_player = args[2]
+
+    # 0.4 chance that the npc will be dismissive and only offer one line of dialog and a 0.6 chance
+    # that npc will be more talk active to the player object
+    talk_chance = random.randint(1, 10)
+    if talk_chance <= 6:
+        # NPC is talkative and wants to talk to the player
+        pass
+    else:
+        # NPC is not talkative on will only offer one dialog to the player
+        dialog_raw = chat_with_gpt(client,
+                               dialog_system_message(),
+                               dialog_template(),
+                               False,
+                               tokens=500,
+                               structure=DismissiveDialogStructure)
+        # Map the Dialog
+        dialog_text = dialog_mapper.dismissive_dialog_mapper(dialog_raw)
+        # Add the conversation to the characters converstaion history
+        world_object.characters[character_id].add_to_conversation_history(dialog_text)
+        print(dialog_text)
+
 
 
 AVAILABLE_ACTIONS = ["move location", "interact with item"]
