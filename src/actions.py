@@ -2,7 +2,7 @@
 
 from utils.prompt import chat_with_gpt
 from utils.templates import (location_template, location_system_message, dialog_system_message,
-                             dialog_template)
+                             dismissive_dialog_template, talkative_dialog_template)
 from utils.mappers import location_mapper, dialog_mapper
 from utils.structures import SectionStructure, DismissiveDialogStructure, TalkativeDialogStructure
 
@@ -23,7 +23,6 @@ def move_character(new_location_id: int, args: list) -> None:
     else:
         new_location = world_object.locations[new_location_id]
 
-
     if new_location is not None:
         character_object.move(new_location.id_)
         current_location.remove_character(character_object.id_)
@@ -33,8 +32,8 @@ def move_character(new_location_id: int, args: list) -> None:
         new_locations = chat_with_gpt(client,
                                       location_system_message(),
                                       location_template(5, current_location.name,
-                                                                list(world_object.tropes.values()),
-                                                                world_object.theme),
+                                                        list(world_object.tropes.values()),
+                                                        world_object.theme),
                                       False,
                                       tokens=500,
                                       structure=SectionStructure)
@@ -51,7 +50,6 @@ def move_character(new_location_id: int, args: list) -> None:
             if current_location in mapped_new_location.neighbors:
                 new_location = mapped_new_location
 
-
         # DIRTY IF STATEMENT THIS IS HERE DUE TO A PROMPT ERORR OCCURING
         if new_location is not None:
             character_object.move(new_location.id_)
@@ -61,7 +59,8 @@ def move_character(new_location_id: int, args: list) -> None:
             print("DEBUG: REAL SORRY THIS IS AN ISSUE WITH FLOW ON LOCATION NOT CONNECTING "
                   "SO SORRY CANT MOVE LOCATIONS :(")
 
-def interact_with_item(item_to_interact_id: int, args:list) -> None:
+
+def interact_with_item(item_to_interact_id: int, args: list) -> None:
     """An action to have the player interact with an item"""
     client = args[0]
     world_object = args[1]
@@ -72,10 +71,11 @@ def interact_with_item(item_to_interact_id: int, args:list) -> None:
     else:
         item_to_interact = world_object.items[item_to_interact_id]
         world_object.add_key_event(f"Player's character, {character_object.name},"
-            f"interacted with {item_to_interact} at {current_location}")
-            # note that this means in cases
-            # where we both move and interact w item, we need to always process
-            # moving first - should be doable with structured outputs
+                                   f"interacted with {item_to_interact} at {current_location}")
+        # note that this means in cases
+        # where we both move and interact w item, we need to always process
+        # moving first - should be doable with structured outputs
+
 
 def talk_to_character(character_id: int, args: list) -> None:
     """This is an action that talks to a character"""
@@ -88,21 +88,65 @@ def talk_to_character(character_id: int, args: list) -> None:
     talk_chance = random.randint(1, 10)
     if talk_chance <= 6:
         # NPC is talkative and wants to talk to the player
-        pass
+        dialog_raw = chat_with_gpt(client,
+                                   dialog_system_message(),
+                                   talkative_dialog_template(),
+                                   False,
+                                   tokens=500,
+                                   structure=TalkativeDialogStructure)
+        dialog_text = dialog_mapper.talkative_dialog_mapper(dialog_raw)
+        # End Conversation Trigger
+        end_conversation = False
+        count = 1
+        # Print the initial conversation start
+        print(dialog_text[0])
+        # Print user response
+        for i in range(1, len(dialog_text), 2):
+            print(f"{count}. {dialog_text[i]}\n")
+            count += 1
+        print(f"{count}. End Conversation.\n")
+        # Conversation loop
+        while not end_conversation:
+            user_input = input("> ")
+            if not user_input.isdigit():
+                print("Please enter a number")
+                continue
+            else:
+                user_input = int(user_input)
+            # User ends a conversation
+            if user_input == count:
+                end_conversation = True
+            # Prints the option the user selected and the NPC response then loops back to the conversation
+            elif count - 1 >= user_input > 0:
+                # Print Player Response
+                print(dialog_text[(user_input*2)-1], "\n")
+                # Print NPC Response to the Player Response
+                print(dialog_text[user_input*2], "\n")
+                # Reprint the dialog options
+                count = 1
+                for i in range(1, len(dialog_text), 2):
+                    print(f"{count}. {dialog_text[i]}\n")
+                    count += 1
+                print(f"{count}. End Conversation.\n")
+            else:
+                print("Invalid number")
+
+
+
+
     else:
         # NPC is not talkative on will only offer one dialog to the player
         dialog_raw = chat_with_gpt(client,
-                               dialog_system_message(),
-                               dialog_template(),
-                               False,
-                               tokens=500,
-                               structure=DismissiveDialogStructure)
+                                   dialog_system_message(),
+                                   dismissive_dialog_template(),
+                                   False,
+                                   tokens=500,
+                                   structure=DismissiveDialogStructure)
         # Map the Dialog
         dialog_text = dialog_mapper.dismissive_dialog_mapper(dialog_raw)
-        # Add the conversation to the characters converstaion history
+        # Add the conversation to the characters conversation history
         world_object.characters[character_id].add_to_conversation_history(dialog_text)
         print(dialog_text)
-
 
 
 AVAILABLE_ACTIONS = ["move location", "interact with item"]
