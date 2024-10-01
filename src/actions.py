@@ -82,7 +82,6 @@ def talk_to_character(character_id: int, args: list) -> None:
     client = args[0]
     world_object = args[1]
     character_object_player = args[2]
-
     # 0.4 chance that the npc will be dismissive and only offer one line of dialog and a 0.6 chance
     # that npc will be more talk active to the player object
     talk_chance = random.randint(1, 10)
@@ -130,15 +129,15 @@ def talk_to_character(character_id: int, args: list) -> None:
                 print(f"{count}. End Conversation.\n")
             else:
                 print("Invalid number")
-
-
-
-
     else:
         # NPC is not talkative on will only offer one dialog to the player
         dialog_raw = chat_with_gpt(client,
                                    dialog_system_message(),
-                                   dismissive_dialog_template(),
+                                   dismissive_dialog_template(
+                                       world_object.characters[character_id].name,
+                                       world_object.characters[character_id].traits,
+                                       character_object_player.name,
+                                       world_object.theme),
                                    False,
                                    tokens=500,
                                    structure=DismissiveDialogStructure)
@@ -149,7 +148,7 @@ def talk_to_character(character_id: int, args: list) -> None:
         print(dialog_text)
 
 
-AVAILABLE_ACTIONS = ["move location", "interact with item"]
+AVAILABLE_ACTIONS = ["move location", "interact with item", "talk to character"]
 ACTIONS_DICT = {"new_location": move_character, "item_to_interact": interact_with_item}
 
 
