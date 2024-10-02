@@ -37,7 +37,29 @@ def create_json_from_characters(characters: dict) -> str:
     """
     return json.dumps({'characters': [{
         "id": key,
+        "playable": character.playable,
         "name": character.name,
         "traits": character.traits,
+        "inventory": character.inventory,
         "location": character.current_location #stores current location as ID
     } for key, character in characters.items() if isinstance(character, Character)]})
+
+def create_character_from_json_save(character: dict) -> Character:
+    """
+    Takes a JSON string as input, deserializes it,
+    and converts it into a new instance of the Character class.
+
+    Parameters:
+        character (str): The JSON string to be deserialized into a Character object.
+
+    Returns:
+        Character: A new instance of the Character class.
+    """
+    return Character(
+        name=character['name'],
+        traits=character['traits'],
+        playable=character['playable'],
+        current_location=character['location'],
+        inventory=character['inventory'],
+        id=character['id']
+    )

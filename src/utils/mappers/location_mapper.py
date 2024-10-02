@@ -89,7 +89,23 @@ def create_json_from_locations(locations: dict) -> str:
                 "id": key,
                 "name": location.name,
                 "description": location.description,
-                "neighbours": [neighbour.name for neighbour in location.neighbors if isinstance(neighbour, Location)]
+                "neighbours": [neighbour.name for neighbour in location.neighbors if isinstance(neighbour, Location)],
+                "coords": location.coords,
+                "characters": location.characters,
+                "items": location.items
             } for key, location in locations.items() if isinstance(location, Location)
         ]
     })
+
+def create_location_from_json_save(location: dict) -> Location:
+    """
+    Takes a JSON string as input, deserializes it, and converts it into a new instance of the Location class.
+    """
+    return Location(
+        name=location['name'],
+        description=location['description'],
+        coords=location['coords'],
+        characters=location['characters'],
+        items=location['items'],
+        id=location['id']
+    )

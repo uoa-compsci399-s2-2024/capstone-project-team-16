@@ -17,6 +17,7 @@ class Location:
         self,
         name: str,
         description: str,
+        new_id: int = None,
         characters: list[int] = None,
         items: list[int] = None,
         neighbors: list[Self] = None
@@ -31,7 +32,7 @@ class Location:
                 neighbors (list): list of Location objects this location connects to
 
         """
-        self._id_ = next(Location.id_iter)
+        self._id_ = next(Location.id_iter) if new_id is None else new_id
         self._name = name
         self._characters = characters or []
         self._items = items or []

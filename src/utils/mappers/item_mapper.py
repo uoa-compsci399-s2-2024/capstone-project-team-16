@@ -44,3 +44,22 @@ def create_json_from_item(items: dict) -> str:
         "weight": item.weight,
         "category": item.category
     } for key, item in items.items() if isinstance(item, Item)]})
+
+def create_item_from_json_save(item: dict) -> Item:
+    """
+    Takes a JSON string as input, deserializes it, and
+    converts it into a new instance of the Item class.
+
+    Parameters:
+        item (str): The JSON string to be deserialized into a Item object.
+
+    Returns:
+        Item: A new instance of the Item class.
+    """
+    return Item(
+        name=item['name'],
+        price=item['price'],
+        weight=item['weight'],
+        category=item['category'],
+        id=item['id']
+    )
