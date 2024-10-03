@@ -75,6 +75,14 @@ def initialise_game(client):
         create_new_game(plot_tropes_path, themes_path, current_world, client)
 
 def load_game(client, current_world):
+    """
+    Load a game from a previous playthrough
+
+    Parameters:
+        client (OpenAI): the OpenAI client
+        current_world (World): the current world object
+    """
+    #get playthrough file path
     playthrough_name = input("Enter the name of the playthrough you would like to load: ")
     playthrough_file_path = str(os.getcwd()) + f'/src/playthroughs/{playthrough_name}.txt'
     while not os.path.exists(playthrough_file_path):
@@ -82,18 +90,21 @@ def load_game(client, current_world):
         if playthrough_name == "":
             return
         playthrough_file_path = str(os.getcwd()) + f'/src/playthroughs/{playthrough_name}.txt'
+    #read the playthrough file
     lines = None
     with open(playthrough_file_path, 'r') as file:
         lines = file.readlines()
     if lines is None:
         raise ValueError("No content found in playthrough file")
     objects = [json.loads(line) for line in lines]
+    #process objects
     json_locations = None
     json_characters = None
     json_items = None
     json_choices = None
     json_tropes = None
     json_themes = None
+    #for each object, add it to the world
     for obj in objects:
         if "characters" in obj:
             json_characters = obj["characters"]
@@ -125,8 +136,9 @@ def load_game(client, current_world):
                 for neighbour in other_location["neighbours"]:
                     location.add_neighbor(current_world.locations[neighbour])
 
+    #find the player character
     player = [character for character in current_world.characters.values() if character.playable][0]
-
+    #proceed to the game loop
     game_loop(player, current_world, client)
 
 

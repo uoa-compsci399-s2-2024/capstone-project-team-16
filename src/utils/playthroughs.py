@@ -27,6 +27,14 @@ def write_scene_and_choice(scene_str: str, choice_str: str) -> None:
 
 
 def save_playthrough_as_file(world: World, choices: tuple[str]) -> None:
+    """
+    Save the playthrough as a file
+
+    Parameters:
+        world (World): the world object
+        choices (tuple): the choices available to the player (won't be loaded, but useful for later maybe)
+    """
+    #get playthrough file path
     playthrough_name = str(input("Enter the name of your playthrough: "))
     playthrough_file_path = str(os.getcwd()) + f'/src/playthroughs/{playthrough_name}.txt'
     while os.path.exists(playthrough_file_path):
@@ -38,6 +46,7 @@ def save_playthrough_as_file(world: World, choices: tuple[str]) -> None:
             playthrough_file_path = str(os.getcwd()) + f'/src/playthroughs/{playthrough_name}.txt'
     playthrough_file_path = str(os.getcwd()) + f'/src/playthroughs/{playthrough_name}.txt'
 
+    #break down the world object into its components and write them to the file
     with open(playthrough_file_path, 'w') as file:
         file.write(create_json_from_characters(world.characters))
         file.write('\n')
