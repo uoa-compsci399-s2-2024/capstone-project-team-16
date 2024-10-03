@@ -20,7 +20,8 @@ class Location:
         new_id: int = None,
         characters: list[int] = None,
         items: list[int] = None,
-        neighbors: list[Self] = None
+        neighbors: list[Self] = None,
+        coords: tuple[int, int] = None
     ) -> None:
         """
         Initialises a Location instance.
@@ -38,7 +39,7 @@ class Location:
         self._items = items or []
         self._description = description
         self._neighbors = neighbors or []
-        self._coords = None
+        self._coords = coords
 
     def populate(self, num_characters: int, num_items: int, world: 'World', client: 'OpenAI') -> None:
         """Send prompt to LLM such as 'This is x location in x story with 

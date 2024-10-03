@@ -89,7 +89,7 @@ def create_json_from_locations(locations: dict) -> str:
                 "id": key,
                 "name": location.name,
                 "description": location.description,
-                "neighbours": [neighbour.name for neighbour in location.neighbors if isinstance(neighbour, Location)],
+                "neighbours": [neighbour.id_ for neighbour in location.neighbors if isinstance(neighbour, Location)],
                 "coords": location.coords,
                 "characters": location.characters,
                 "items": location.items
@@ -107,5 +107,5 @@ def create_location_from_json_save(location: dict) -> Location:
         coords=location['coords'],
         characters=location['characters'],
         items=location['items'],
-        id=location['id']
+        new_id=location['id']
     )

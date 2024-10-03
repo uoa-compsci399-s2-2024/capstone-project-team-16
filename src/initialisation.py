@@ -122,10 +122,10 @@ def load_game(client, current_world):
     for location in current_world.locations.values():
         for other_location in json_locations:
             if other_location["id"] == location.id_:
-                for neighbor in other_location["neighbors"]:
-                    location.add_neighbor(current_world.locations[neighbor])
+                for neighbour in other_location["neighbours"]:
+                    location.add_neighbor(current_world.locations[neighbour])
 
-    player = [character for character in current_world.characters if character.playable][0]
+    player = [character for character in current_world.characters.values() if character.playable][0]
 
     game_loop(player, current_world, client)
 

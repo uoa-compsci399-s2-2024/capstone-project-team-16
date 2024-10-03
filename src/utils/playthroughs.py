@@ -40,10 +40,15 @@ def save_playthrough_as_file(world: World, choices: tuple[str]) -> None:
 
     with open(playthrough_file_path, 'w') as file:
         file.write(create_json_from_characters(world.characters))
+        file.write('\n')
         file.write(create_json_from_item(world.items))
+        file.write('\n')
         file.write(create_json_from_choices(choices))
+        file.write('\n')
         file.write(create_json_from_locations(world.locations))
+        file.write('\n')
         file.write(create_json_from_tropes(world.tropes))
+        file.write('\n')
         file.write(json.dumps({"themes": world.theme}))
 
 
