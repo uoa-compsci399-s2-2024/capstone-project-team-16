@@ -5,6 +5,7 @@ import json
 import random
 from location import Location
 from world import World
+from utils.mappers import item_mapper, character_mapper
 
 
 def create_location_from_json(json_str: str, world: World, previous_location_id: int or None = None) -> list[Location]:
@@ -29,7 +30,18 @@ def create_location_from_json(json_str: str, world: World, previous_location_id:
     section = []
     # Creates a location and adds to the list
     for location in data:
-        section.append(Location(location['name'], location['description']))
+        new_location = Location(location['name'], location['description'])
+        characters = character_mapper.create_character_from_list(location['characters'])
+        items = item_mapper.create_item_from_list(location['items'])
+        for character in characters:
+            world.add_character(character)
+            new_location.add_character(character.id_)
+
+        for item in items:
+            world.add_item(item)
+            new_location.add_item(item.id_)
+
+        section.append(new_location)
 
     # Neighbour mapping
     # rules
@@ -71,3 +83,41 @@ def create_location_from_json(json_str: str, world: World, previous_location_id:
         random_location.add_neighbor(world.locations[previous_location_id])
 
     return section
+
+def create_json_from_locations(locations: dict) -> str:
+    """
+    Takes a list of locations as input, serializes it,
+    and converts it into a JSON string.
+
+    Parameters:
+        locations (list[Location]): The list of locations to be serialized into a JSON string.
+
+    Returns:
+        str: A JSON string representing the list of locations.
+    """
+    return json.dumps({
+        "locations": [
+            {
+                "id": key,
+                "name": location.name,
+                "description": location.description,
+                "neighbours": [neighbour.id_ for neighbour in location.neighbors if isinstance(neighbour, Location)],
+                "coords": location.coords,
+                "characters": location.characters,
+                "items": location.items
+            } for key, location in locations.items() if isinstance(location, Location)
+        ]
+    })
+
+def create_location_from_json_save(location: dict) -> Location:
+    """
+    Takes a JSON string as input, deserializes it, and converts it into a new instance of the Location class.
+    """
+    return Location(
+        name=location['name'],
+        description=location['description'],
+        coords=location['coords'],
+        characters=location['characters'],
+        items=location['items'],
+        new_id=location['id']
+    )

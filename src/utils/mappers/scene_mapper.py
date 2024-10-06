@@ -11,3 +11,18 @@ def create_scene_from_json(json_str: str) -> str:
     data = json.loads(json_str)["scene"]
 
     return data
+
+def create_json_from_scene(scene: str) -> str:
+    """
+    Takes a scene as input, serializes it, and
+    converts it into a JSON string.
+
+    Parameters:
+        scene (str): The scene to be serialized into a JSON string.
+
+    Returns:
+        str: A JSON string representing the scene.
+    """
+    return json.dumps({
+        "scene": scene
+    })

@@ -6,7 +6,7 @@ from utils.mappers import location_mapper
 from utils.structures import SectionStructure
 
 
-def move_character(new_location_id: int, args: list) -> None:
+def move_character(new_location_id: str, args: list) -> None:
     """This is an action to move a character from one location to another"""
     client = args[0]
     world_object = args[1]
@@ -15,9 +15,10 @@ def move_character(new_location_id: int, args: list) -> None:
 
     if new_location_id is None:
         new_location = None
-    elif new_location_id == -1:
+    elif new_location_id == "unknown":
         new_location = current_location
     else:
+        new_location_id = int(new_location_id)
         new_location = world_object.locations[new_location_id]
 
 
@@ -58,8 +59,74 @@ def move_character(new_location_id: int, args: list) -> None:
             print("DEBUG: REAL SORRY THIS IS AN ISSUE WITH FLOW ON LOCATION NOT CONNECTING "
                   "SO SORRY CANT MOVE LOCATIONS :(")
 
+def interact_with_item(item_to_interact_id: int, args:list) -> None:
+    """An action to have the player interact with an item"""
+    client = args[0]
+    world_object = args[1]
+    character_object = args[2]
+    current_location = args[3]
+    if item_to_interact_id is None:
+        item_to_interact = None
+    else:
+        item_to_interact = world_object.items[item_to_interact_id]
+        world_object.add_key_event(f"Player's character, {character_object.name},"
+            f"interacted with {item_to_interact} at {current_location}")
+            # note that this means in cases 
+            # where we both move and interact w item, we need to always process
+            # moving first - should be doable with structured outputs
 
-ACTIONS_DICT = {"new_location": move_character}
+def pick_up_item(item_to_pick_up_id: int, args: list) -> None:
+    """An action to have the player pick an item up and put it in their inventory"""
+    client = args[0]
+    world_object = args[1]
+    character_object = args[2]
+    current_location = args[3]
+    if item_to_pick_up_id is None:
+        item_to_pick_up = None
+    else:
+        item_to_pick_up = world_object.items[item_to_pick_up_id]
+        character_object.add_to_inventory(item_to_pick_up_id, 1)
+        current_location.remove_item(item_to_pick_up_id)
+        world_object.add_key_event(f"Player's character, {character_object.name},"
+            f"picked up {item_to_pick_up.name} at {current_location.name}")
+
+def put_down_item(item_to_put_down_id: int, args: list) -> None:
+    """An action to have the player put an item down and remove it from their inventory"""
+    client = args[0]
+    world_object = args[1]
+    character_object = args[2]
+    current_location = args[3]
+    if item_to_put_down_id is None:
+        item_to_put_down = None
+    else:
+        item_to_put_down = world_object.items[item_to_put_down_id]
+        character_object.remove_from_inventory(item_to_put_down_id, 1)
+        current_location.add_item(item_to_put_down_id)
+        world_object.add_key_event(f"Player's character, {character_object.name},"
+            f"put down {item_to_put_down.name} at {current_location.name}")
+
+def use_up_item_in_inventory(item_to_use_up_id: int, args: list) -> None:
+    """An action to have the player put an item down and remove it from their inventory"""
+    client = args[0]
+    world_object = args[1]
+    character_object = args[2]
+    current_location = args[3]
+    if item_to_use_up_id is None:
+        item_to_use_up = None
+    else:
+        item_to_use_up = world_object.items[item_to_use_up_id]
+        character_object.remove_from_inventory(item_to_use_up_id, 1)
+        world_object.add_key_event(f"Player's character, {character_object.name},"
+            f"used up {item_to_use_up.name} at {current_location.name}")
+
+AVAILABLE_ACTIONS = ["move location", "interact with item", "pick up item", "put down item", "use up item in inventory"]
+ACTIONS_DICT = {
+"new_location": move_character,
+"item_to_interact": interact_with_item,
+"item_to_pick_up_id":pick_up_item,
+"item_to_put_down_id":put_down_item,
+"item_to_use_up_id":use_up_item_in_inventory
+}
 
 
 def process_user_choice(actions: dict, args: list) -> None:

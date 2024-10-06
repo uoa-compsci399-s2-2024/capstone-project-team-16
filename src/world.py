@@ -15,7 +15,8 @@ class World:
         characters: dict = None,
         tropes: dict = None,
         theme: list[str] = None,
-        choices: list[str] = None
+        choices: list[str] = None,
+        key_events: list[str] = None
     ) -> None:
         """initialises a World instance"""
         self._locations = locations or {}
@@ -24,6 +25,7 @@ class World:
         self._tropes = tropes or {}
         self._theme = theme or []
         self._choices = choices or []
+        self._key_events = key_events or []
 
         """A list of JSON objects to pass to our 
         choices template for better choice generation"""
@@ -67,6 +69,10 @@ class World:
         """adds a theme to the world's themes"""
         self._theme.append(theme)
 
+    def add_key_event(self, event: str) -> None:
+        """adds a key event to the key events that have happened in the story so far"""
+        self._key_events.append(event)
+
     def remove_location(self, location_id: int) -> None:
         """remove a Location object from the world's locations by its unique ID"""
         if location_id in self._locations.keys():
@@ -92,6 +98,11 @@ class World:
         """remove a theme from the world's themes"""
         if theme in self._theme:
             self._theme.remove(theme)
+
+    def remove_key_events(self, event: str) -> None:
+        """remove a key event from the world's key events"""
+        if event in self._key_events:
+            self._key_events.remove(event)
 
     def set_choices(self, choices: list) -> None:
         """set the choices list which represents the
@@ -147,3 +158,8 @@ class World:
     def choices(self) -> list[str]:
         """Getter for choices attribute"""
         return self._choices
+
+    @property
+    def key_events(self) -> list[str]:
+        """Getter for key events attribute"""
+        return self._key_events

@@ -4,6 +4,7 @@ from typing import Self
 from utils.prompt import chat_with_gpt
 from utils.templates import character_template, item_template
 from utils.mappers import character_mapper, item_mapper
+from utils.structures import ItemsStructure, CharactersStructure
 
 
 
@@ -17,9 +18,11 @@ class Location:
         self,
         name: str,
         description: str,
+        new_id: int = None,
         characters: list[int] = None,
         items: list[int] = None,
-        neighbors: list[Self] = None
+        neighbors: list[Self] = None,
+        coords: tuple[int, int] = None
     ) -> None:
         """
         Initialises a Location instance.
@@ -31,13 +34,13 @@ class Location:
                 neighbors (list): list of Location objects this location connects to
 
         """
-        self._id_ = next(Location.id_iter)
+        self._id_ = next(Location.id_iter) if new_id is None else new_id
         self._name = name
         self._characters = characters or []
         self._items = items or []
         self._description = description
         self._neighbors = neighbors or []
-        self._coords = None
+        self._coords = coords
 
     def populate(self, num_characters: int, num_items: int, world: 'World', client: 'OpenAI') -> None:
         """Send prompt to LLM such as 'This is x location in x story with 
@@ -48,22 +51,28 @@ class Location:
         character_response = chat_with_gpt(
             client,
             "You are a knowledgeable chatbot that creates unique characters",
-            character_template(num_characters, "", world.tropes, world.themes[-1]),
-            False
+            character_template(num_characters, "", world.tropes, world.theme),
+            False,
+            CharactersStructure,
+            tokens=80
         )
         item_response = chat_with_gpt(
             client,
             "You are a knowledgeable chatbot that creates unique items",
-            item_template(num_items, world.tropes, world.themes[-1]),
-            False
+            item_template(num_items, world.tropes, world.theme),
+            False,
+            ItemsStructure,
+            tokens=80
         )
         characters = character_mapper.create_character_from_json(character_response)
         items = item_mapper.create_item_from_json(item_response)
         # Add Objects to internal lists
         for character in characters:
             self.add_character(character.id_)
+            world.add_character(character)
         for item in items:
             self.add_item(item.id_)
+            world.add_item(item)
 
     def add_neighbor(self, neighbor: Self) -> None:
         """Adds a Location object to the list of neighbors this Location has"""

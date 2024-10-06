@@ -29,3 +29,23 @@ def create_demo_choices_from_json(json_str: str) -> list:
     for choice in data:
         choices.append((choice['description'], choice['new_location']))
     return choices
+
+def create_json_from_choices(choices: tuple[str]) -> str:
+    """
+    Takes a list of choices as input, serializes it, and
+    converts it into a JSON string.
+
+    Parameters:
+        choices (list[str]): The list of choices to be serialized into a JSON string.
+
+    Returns:
+        str: A JSON string representing the list of choices.
+    """
+    return json.dumps({
+        "choices": [
+            {
+                "description": choice[0],
+                "actions": choice[1]
+            } for choice in choices
+        ]
+    })
