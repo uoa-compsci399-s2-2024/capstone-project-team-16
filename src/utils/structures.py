@@ -12,9 +12,11 @@ class SceneStructure(BaseModel):
 # Choice Structure
 class ActionStructure(BaseModel):
     """Structure for Action Generation"""
-    new_location: int or None
+    new_location: int or "unknown" or None
     item_to_interact: int or None
-
+    item_to_pick_up_id: int or None
+    item_to_put_down_id: int or None
+    item_to_use_up_id: int or None
 
 class ChoiceSingularStructure(BaseModel):
     """Structure for Choice Singular Generation"""
