@@ -43,6 +43,7 @@ def choice_selection(choices: list[tuple]) -> str:
 
 
 def display_initial_scene(client: OpenAI, location: Location, world: World) -> None:
+
     """Function to display the scene the player is in"""
     scene = chat_with_gpt(
         client=client,
@@ -129,6 +130,7 @@ def game_loop(player: Character, world: World, client: OpenAI) -> None:
             display_initial_scene(client, current_location, world)
         else:
             display_scene(client, current_location, world, player_choice[0])
+
 
         choices = chat_with_gpt(
             client=client,

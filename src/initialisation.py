@@ -105,7 +105,6 @@ def initialise_game(client):
 
 
     for location in mapped_locations:
-        #location.populate(NUM_CHARACTERS, NUM_ITEMS, current_world, client)
         current_world.add_location(location)
 
     print("DEBUG: FINISHED CREATING LOCATIONS")

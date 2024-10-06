@@ -22,7 +22,11 @@ def write_scene_and_choice(scene_str: str, choice_str: str) -> None:
 def save_playthrough_as_file() -> None:
     playthrough_name = str(input("Enter the name of your playthrough: "))
     playthrough_file_path = str(os.getcwd()) + f'/src/playthroughs/{playthrough_name}.txt'
-    
+
+    while os.path.exists(playthrough_file_path):
+        playthrough_name = str(input("That filename already exists. Please enter the name of your playthrough: "))
+        playthrough_file_path = str(os.getcwd()) + f'/src/playthroughs/{playthrough_name}.txt'
+
     with open(playthrough_file_path, 'x') as file:
         file.close()
     
