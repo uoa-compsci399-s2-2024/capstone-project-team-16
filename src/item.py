@@ -14,7 +14,8 @@ class Item:
         name: str,
         category: str,
         weight: float,
-        price: float = 1
+        price: float = 1,
+        id: int = None
     ) -> None:
         """
         Initialises an instance of the Item class.
@@ -25,7 +26,7 @@ class Item:
                 category (str): category of the item
                 price (float): price of the item
         """
-        self._id_ = next(Item.id_iter)
+        self._id_ = next(Item.id_iter) if id is None else id
         self._name = name
         self._weight = weight
         self._category = category

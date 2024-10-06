@@ -15,8 +15,10 @@ from utils.prompt import chat_with_gpt, SESSION_MESSAGES
 from utils.mappers import scene_mapper, choice_mapper
 from utils.playthroughs import create_temp_story_file, write_scene_and_choice, save_playthrough_as_file, wipe_temp_file
 from utils.structures import SceneStructure, ChoicesStructure
+from utils.playthroughs import show_background_data
 
-def choice_selection(choices: list[tuple]) -> str:
+
+def choice_selection(choices: list[tuple], world: World) -> str:
     """Function to get user input for the choice"""
 
     updated_choices = [choices[i][0] for i in range(len(choices))]
@@ -27,11 +29,19 @@ def choice_selection(choices: list[tuple]) -> str:
 
     while not selection:
         user_input = input("> ")
+        if user_input == "INFO":
+            show_background_data(world)
+            continue
+        if user_input.lower().strip() == "save":
+            #save this playthrough
+            save_playthrough_as_file(world, choices)
+            print("Playthrough saved")
+            print("Make a selection")
+            continue
         if not user_input.isdigit():
             print("Please enter a number")
             continue
-        else:
-            user_input = int(user_input)
+        user_input = int(user_input)
 
         if user_input <= len(choices) and user_input > 0:
             selection = choices[user_input - 1]
@@ -43,6 +53,7 @@ def choice_selection(choices: list[tuple]) -> str:
 
 
 def display_initial_scene(client: OpenAI, location: Location, world: World) -> None:
+
     """Function to display the scene the player is in"""
     scene = chat_with_gpt(
         client=client,
@@ -130,13 +141,14 @@ def game_loop(player: Character, world: World, client: OpenAI) -> None:
         else:
             display_scene(client, current_location, world, player_choice[0])
 
+
         choices = chat_with_gpt(
             client=client,
             system_message=choices_system_message(),
             user_message=flow_on_choices_template(
                 4, world.tropes, world.theme, world.key_events, [f"{neighbor.name}({neighbor.id_})" if neighbor is not None else None for neighbor
                 in current_location.neighbors], [world.characters[cid] for cid in current_location.characters],
-                [world.items[iid] for iid in current_location.items], AVAILABLE_ACTIONS),
+                [world.items[iid] for iid in current_location.items], AVAILABLE_ACTIONS, [world.items[iid] for iid in player.inventory.keys()]),
             context=True,
             tokens=500,
             temp=0.2,
@@ -145,9 +157,7 @@ def game_loop(player: Character, world: World, client: OpenAI) -> None:
         mapped_choices = choice_mapper.create_choices_from_json(choices)
 
         # Returns the tuple choice of (desc, id)
-        player_choice = choice_selection(mapped_choices)
+        player_choice = choice_selection(mapped_choices, world)
         SESSION_MESSAGES.append({"role": "user", "content": f"I choose to: {player_choice[0]}"})
 
         process_user_choice(player_choice[1], [client, world, player, current_location])
-        # create a fresh txt file for this playthrough, store it and wipe temp for repeated use
-        save_playthrough_as_file()
