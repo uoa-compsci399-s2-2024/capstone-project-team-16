@@ -26,6 +26,7 @@ def create_item_from_json(json_str: str) -> list[Item]:
         category=item['category']
     ) for item in data]
 
+
 def create_json_from_item(items: dict) -> str:
     """
     Takes a Item object as input, serializes it, and
@@ -63,3 +64,12 @@ def create_item_from_json_save(item: dict) -> Item:
         category=item['category'],
         id=item['id']
     )
+
+def create_item_from_list(items: list[dict]) -> list[Item]:
+    return [Item(
+        name=item['name'],
+        price=item['price'],
+        weight=item['weight'],
+        category=item['category']
+    ) for item in items]
+

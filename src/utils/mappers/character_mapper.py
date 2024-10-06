@@ -63,3 +63,10 @@ def create_character_from_json_save(character: dict) -> Character:
         inventory=character['inventory'],
         id=character['id']
     )
+
+def create_character_from_list(characters: list[dict]) -> list[Character]:
+    return [Character(
+        name=character['name'],
+        traits=character['traits']
+    ) for character in characters]
+
