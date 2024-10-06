@@ -2,7 +2,6 @@
 
 import itertools
 
-
 class Character:
     """A class defining a character object in an interactive story."""
 
@@ -14,7 +13,8 @@ class Character:
         traits: list[str],
         playable: bool = False,
         current_location: int = None,
-        inventory: dict = None
+        inventory: dict = None,
+        id: int = None
     ) -> None:
         """
         Initialises a Character instance.
@@ -27,7 +27,7 @@ class Character:
                 playable (boolean): whether the character is playable
         """
 
-        self._id_ = next(Character.id_iter)
+        self._id_ = next(Character.id_iter) if id is None else id
         self._name = name
         self._traits = traits
         self._current_location = current_location
