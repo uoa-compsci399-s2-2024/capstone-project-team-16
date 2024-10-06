@@ -52,6 +52,7 @@ def print_description() -> None:
     print("In this game, you will embark on a thrilling quest")
     print("filled with danger, mystery, and magic. Your choices")
     print("will determine the outcome of your adventure.")
+    print("NOTE: If you should wish to view the data of this playthrough then enter INFO.")
     print()
 
 def start_game() -> bool:

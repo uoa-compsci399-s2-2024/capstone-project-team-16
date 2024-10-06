@@ -64,3 +64,18 @@ def save_playthrough_as_file(world: World, choices: tuple[str]) -> None:
 def wipe_temp_file() -> None:
     with open(temp_file_path, 'w') as file:
         file.close()
+
+
+def show_background_data(curr_world: World):
+    print("----------")
+    print("Locations:")
+    print(curr_world.locations)
+    print("Items:")
+    print(curr_world.items)
+    print("Characters:")
+    print(curr_world.characters)
+    print("Tropes")
+    print(curr_world.tropes)
+    print("Themes:")
+    print(curr_world.theme)
+    print("----------")
