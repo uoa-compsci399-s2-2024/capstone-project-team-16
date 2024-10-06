@@ -25,3 +25,11 @@ def create_item_from_json(json_str: str) -> list[Item]:
         weight=item['weight'],
         category=item['category']
     ) for item in data]
+
+def create_item_from_list(items: list[dict]) -> list[Item]:
+    return [Item(
+        name=item['name'],
+        price=item['price'],
+        weight=item['weight'],
+        category=item['category']
+    ) for item in items]
