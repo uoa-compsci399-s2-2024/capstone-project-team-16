@@ -200,7 +200,7 @@ ACTIONS_DICT = {
 "item_to_pick_up_id":pick_up_item,
 "item_to_put_down_id":put_down_item,
 "item_to_use_up_id":use_up_item_in_inventory,
-"talk_to_character":talk_to_character
+"character_to_talk_to_id":talk_to_character
 }
 
 def process_user_choice(actions: dict, args: list) -> None:
