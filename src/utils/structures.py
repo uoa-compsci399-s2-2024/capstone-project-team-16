@@ -17,6 +17,8 @@ class ActionStructure(BaseModel):
     item_to_pick_up_id: int or None
     item_to_put_down_id: int or None
     item_to_use_up_id: int or None
+    character_id: int or None
+
 
 class ChoiceSingularStructure(BaseModel):
     """Structure for Choice Singular Generation"""
@@ -57,3 +59,20 @@ class LocationStructure(BaseModel):
 class SectionStructure(BaseModel):
     """Structure for Section Location Generation"""
     locations: list[LocationStructure]
+
+
+class DismissiveDialogStructure(BaseModel):
+    """Structure for Dismissive Dialog from an NPC"""
+    dialog: str
+
+
+class DialogResponseStructure(BaseModel):
+    """Structure for Dialog Responses for a talkative NPC"""
+    player_response: str
+    npc_comment: str
+
+
+class TalkativeDialogStructure(BaseModel):
+    """Structure for Talkative Dialog from an NPC"""
+    dialog: str
+    responses: list[DialogResponseStructure]

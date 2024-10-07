@@ -36,6 +36,7 @@ class Character:
         else:
             self._inventory = inventory
         self._playable = playable
+        self._conversation_history = []
 
     def add_to_inventory(
         self,
@@ -66,6 +67,10 @@ class Character:
         """Moves character to new location."""
 
         self.current_location = new_location
+
+    def add_to_conversation_history(self, conversation: list) -> None:
+        """Adds a conversation to the conversation history."""
+        self._conversation_history.append(conversation)
 
     # base functions
     def __str__(self) -> str:
@@ -141,7 +146,18 @@ class Character:
     def inventory(self) -> dict:
         """Getter for inventory attribute"""
         return self._inventory
+
     @inventory.setter
     def inventory(self, inventory: dict) -> None:
         """Setter for inventory attribute"""
         self._inventory = inventory
+
+    @property
+    def conversation_history(self) -> list:
+        """Getter for conversation history attribute"""
+        return self._conversation_history
+
+    @conversation_history.setter
+    def conversation_history(self, conversation_history: list) -> None:
+        """Setter for conversation history attribute"""
+        self._conversation_history = conversation_history

@@ -41,6 +41,13 @@ def scene_system_message() -> str:
                         #"and make the scene readable and written in a game-like style")
     return system_message
 
+def dialog_system_message() -> str:
+    system_message = ("You are a dialog creator for a role playing game. Create fitting dialog that"
+                      "characters will talk to the player with. Only create small talk and "
+                      "background information of that character. Do not have any meaningful dialog "
+                      "that would affect story. The dialog should fit within a theme and setting")
+    return system_message
+
 
 def character_template(quantity: int, type_of_char: str, tropes: list, theme: str) -> str:
     """Template for generating characters"""
@@ -139,4 +146,31 @@ def flow_scene_template(location_name: str, location_description: str, items: li
                     f"are: {characters} Using this information generate text description "
                     "for the next scene in the story. The scene should not be more than"
                     " 100 words in length.")
+    return user_message
+
+
+def dismissive_dialog_template(character_name: str, character_traits: list,
+                               playable_character_name: str, theme: str) -> str:
+    """Template for generating dismissive dialog."""
+    user_message = (f"You are to create dialog from the character {character_name}, they "
+                    f"have the following personality traits: {character_traits}. You should keep "
+                    f"with these traits when generating this dialog along with the general themes "
+                    f"of {theme}. For this dialog you are to be dismissive. The character is "
+                    f"talking to another person with the name {playable_character_name}. "
+                    f"Do NOT invite further conversation, Be dismissive of the player trying to "
+                    f"talk to you. Keep the dialog short and below 25 words.")
+    return user_message
+
+
+def talkative_dialog_template(character_name: str, character_traits: list,
+                               playable_character_name: str, theme: str) -> str:
+    """Template for generating talkative dialog."""
+    user_message = (f"You are to create dialog from the character {character_name}, they "
+                    f"have the following personality traits: {character_traits}. You should keep "
+                    f"with these traits when generating this dialog along with the general themes "
+                    f"of {theme}. The player is talking to a character named {playable_character_name}."
+                    f"The character should have some initial dialog, followed be player "
+                    f"responses/questions which the npc should have reactionary comments/answers "
+                    f"to. Keep each dialog option short and below 50 words. Keep the talk vague "
+                    f"do not mention any place names")
     return user_message
