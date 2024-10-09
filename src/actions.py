@@ -133,7 +133,11 @@ def talk_to_character(character_id: int, args: list) -> None:
         # NPC is talkative and wants to talk to the player
         dialog_raw = chat_with_gpt(client,
                                    dialog_system_message(),
-                                   talkative_dialog_template(),
+                                   talkative_dialog_template(
+                                       world_object.characters[character_id].name,
+                                       world_object.characters[character_id].traits,
+                                       character_object_player.name,
+                                       world_object.theme),
                                    False,
                                    tokens=500,
                                    structure=TalkativeDialogStructure)
