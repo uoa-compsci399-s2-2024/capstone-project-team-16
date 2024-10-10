@@ -29,7 +29,7 @@ def choice_selection(choices: list[tuple], world: World) -> str:
 
     while not selection:
         user_input = input("> ")
-        if user_input == "INFO":
+        if user_input.strip() == "INFO":
             show_background_data(world)
             continue
         if user_input.lower().strip() == "save":
