@@ -17,7 +17,7 @@ class ActionStructure(BaseModel):
     item_to_pick_up_id: int or None
     item_to_put_down_id: int or None
     item_to_use_up_id: int or None
-    character_id: int or None
+    character_to_talk_to_id: int or None
 
 
 class ChoiceSingularStructure(BaseModel):

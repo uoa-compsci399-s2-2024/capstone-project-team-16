@@ -133,7 +133,11 @@ def talk_to_character(character_id: int, args: list) -> None:
         # NPC is talkative and wants to talk to the player
         dialog_raw = chat_with_gpt(client,
                                    dialog_system_message(),
-                                   talkative_dialog_template(),
+                                   talkative_dialog_template(
+                                       world_object.characters[character_id].name,
+                                       world_object.characters[character_id].traits,
+                                       character_object_player.name,
+                                       world_object.theme),
                                    False,
                                    tokens=500,
                                    structure=TalkativeDialogStructure)
@@ -200,7 +204,7 @@ ACTIONS_DICT = {
 "item_to_pick_up_id":pick_up_item,
 "item_to_put_down_id":put_down_item,
 "item_to_use_up_id":use_up_item_in_inventory,
-"talk_to_character":talk_to_character
+"character_to_talk_to_id":talk_to_character
 }
 
 def process_user_choice(actions: dict, args: list) -> None:
