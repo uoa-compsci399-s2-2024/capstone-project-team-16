@@ -96,6 +96,8 @@ def flow_on_choices_template(quantity: int, tropes: list, theme: str, key_events
     """Template for generating subsequent story choices"""
     user_message = (f"Generate {quantity} choices our player can take that make sense for the current pacing of the "
                     f"story. The actions in the choices may ONLY include one or more of the following actions: {actions}."
+                    f"action_performed must be exactly one of the actions in {actions}. And it "
+                    f"must be consistent with the action description given"
                     f"No other actions can be available to the player if they are not in that list."
                     f"The choices must be consistent with the current pacing of the story and can speed it up "
                     f"slightly but not too much. Make sure the choices are consistent with the tropes of {tropes}, "

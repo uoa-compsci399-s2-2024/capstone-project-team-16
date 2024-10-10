@@ -1,6 +1,7 @@
 """This file keeps BaseModel objects to pass to an LLM to force a specific output"""
 
-from pydantic import BaseModel
+from pydantic import BaseModel, model_validator
+from typing import Union, Optional, Literal
 
 
 # Scene Structure
@@ -12,17 +13,28 @@ class SceneStructure(BaseModel):
 # Choice Structure
 class ActionStructure(BaseModel):
     """Structure for Action Generation"""
-    new_location: int or "unknown" or None
-    item_to_interact: int or None
-    item_to_pick_up_id: int or None
-    item_to_put_down_id: int or None
-    item_to_use_up_id: int or None
-    character_to_talk_to_id: int or None
+    new_location: Union[int, Literal["Unknown"], None]
+    item_to_interact: Optional[int]
+    item_to_pick_up_id: Optional[int]
+    item_to_put_down_id: Optional[int]
+    item_to_use_up_id: Optional[int]
+    character_to_talk_to_id: Optional[int]
+
+    @model_validator(mode='before')
+    def one_valid_id(cls, values):
+        """Validator Function to check at least one of the parameters has a value"""
+        # Values is a dictionary of all the values present in the structures this is default
+        # passed in Pydantic
+        # This check checks at least one value in the structure is not None
+        if not any(value is not None for value in values.values()):
+            raise ValueError("There is no valid id present in the response")
+        return values
 
 
 class ChoiceSingularStructure(BaseModel):
     """Structure for Choice Singular Generation"""
     description: str
+    action_performed: str
     actions: ActionStructure
 
 

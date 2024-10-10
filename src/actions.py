@@ -198,6 +198,17 @@ def talk_to_character(character_id: int, args: list) -> None:
 
 AVAILABLE_ACTIONS = ["move location", "interact with item", "pick up item", "put down item", "use up item in inventory",
                      "talk to character"]
+
+ACTION_TO_VALUE_DICT = {
+"move location": "new_location",
+"interact with item": "item_to_interact",
+"pick up item": "item_to_pick_up_id",
+"put down item": "item_to_put_down_id",
+"use up item in inventory": "item_to_use_up_id",
+"talk to character": "character_to_talk_to_id"
+}
+
+
 ACTIONS_DICT = {
 "new_location": move_character,
 "item_to_interact": interact_with_item,
@@ -207,7 +218,7 @@ ACTIONS_DICT = {
 "character_to_talk_to_id":talk_to_character
 }
 
-def process_user_choice(actions: dict, args: list) -> None:
+def process_user_choice(actions: dict, args: list, action_performed: str) -> None:
     """Function to process the choices the user makes using our in-built action functions.
     It goes through the actions dictionary and, for each action present, calls its relevant function.
 
@@ -234,9 +245,19 @@ def process_user_choice(actions: dict, args: list) -> None:
 
             ACTIONS_DICT[action]([new_location_id, world, character])"""
 
-    for action in actions.keys():
-        if action in ACTIONS_DICT:
-            ACTIONS_DICT[action](actions[action], args)
-        else:
-            print("ACTION NOT FOUND")
-            print(action)
+    if action_performed in AVAILABLE_ACTIONS:
+        value_to_use = ACTION_TO_VALUE_DICT[action_performed]
+        ACTIONS_DICT[value_to_use](actions[value_to_use], args)
+    else:
+        print("ACTION NOT FOUND")
+        print(action_performed)
+
+    # As far as I can tell our actions don;t actually say which action is being performed as it
+    # lists all of them so this change gives back what type of action it is and removes the
+    # inconsistency with an actions description and what actually executed
+    #for action in actions.keys():
+    #    if action in ACTIONS_DICT:
+    #        ACTIONS_DICT[action](actions[action], args)
+    #    else:
+    #        print("ACTION NOT FOUND")
+    #        print(action)

@@ -19,7 +19,7 @@ def create_choices_from_json(json_str: str) -> list:
     json_str = json_str.strip('```json').strip('```').strip()
     data = json.loads(json_str)["choices"]
 
-    return [(choice['description'], choice['actions']) for choice in data]
+    return [(choice['description'], choice['actions'], choice['action_performed']) for choice in data]
 
 def create_demo_choices_from_json(json_str: str) -> list:
     json_str = json_str.strip('```json').strip('```').strip()
