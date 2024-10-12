@@ -46,5 +46,4 @@ def chat_with_gpt(client: OpenAI, system_message: str, user_message: str,
             temperature=temp,
             response_format=structure
         )
-
     return completion.choices[0].message.content

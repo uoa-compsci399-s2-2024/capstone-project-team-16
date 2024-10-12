@@ -8,6 +8,7 @@ from utils.narrative_elements import get_random_tropes, get_random_theme, read_c
 from game import game_loop
 import json
 from character import Character
+import utils.prompt as prompt
 
 # number of characters and items to populate each location with
 NUM_CHARACTERS = 1
@@ -132,6 +133,8 @@ def load_game(client, current_world):
         if "choices" in obj:
             json_choices = obj["choices"]
             current_world.set_choices(json_choices)
+        if "session_messages" in obj:
+            prompt.SESSION_MESSAGES.extend(obj["session_messages"])
 
     #join locations together
     for location in current_world.locations.values():
