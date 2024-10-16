@@ -1,4 +1,5 @@
 """This is a file of all possible actions for the game"""
+import openai
 
 from utils.prompt import chat_with_gpt
 from utils.templates import (location_template, location_system_message, dialog_system_message,
@@ -30,14 +31,19 @@ def move_character(new_location_id: str, args: list) -> None:
         new_location.add_character(character_object.id_)
     else:
         # The new location is not known and as such needs to generate a new sector of the map
-        new_locations = chat_with_gpt(client,
-                                      location_system_message(),
-                                      location_template(5, current_location.name,
-                                                        list(world_object.tropes.values()),
-                                                        world_object.theme),
-                                      False,
-                                      tokens=500,
-                                      structure=SectionStructure)
+        new_locations = None
+        while not new_locations:
+            try:
+                new_locations = chat_with_gpt(client,
+                                              location_system_message(),
+                                              location_template(5, current_location.name,
+                                                                list(world_object.tropes.values()),
+                                                                world_object.theme),
+                                              False,
+                                              tokens=500,
+                                              structure=SectionStructure)
+            except openai.LengthFinishReasonError:
+                print("Token Count Error, Not provided enough tokens")
         # Map the new Locations
         mapped_new_locations = location_mapper.create_location_from_json(
             previous_location=current_location.id_, json_str=new_locations, world=world_object)
@@ -131,16 +137,22 @@ def talk_to_character(character_id: int, args: list) -> None:
     talk_chance = random.randint(1, 10)
     if talk_chance <= 6:
         # NPC is talkative and wants to talk to the player
-        dialog_raw = chat_with_gpt(client,
-                                   dialog_system_message(),
-                                   talkative_dialog_template(
-                                       world_object.characters[character_id].name,
-                                       world_object.characters[character_id].traits,
-                                       character_object_player.name,
-                                       world_object.theme),
-                                   False,
-                                   tokens=500,
-                                   structure=TalkativeDialogStructure)
+        dialog_raw = None
+        while not dialog_raw:
+            try:
+                dialog_raw = chat_with_gpt(client,
+                                           dialog_system_message(),
+                                           talkative_dialog_template(
+                                               world_object.characters[character_id].name,
+                                               world_object.characters[character_id].traits,
+                                               character_object_player.name,
+                                               world_object.theme),
+                                           False,
+                                           tokens=500,
+                                           structure=TalkativeDialogStructure)
+            except openai.LengthFinishReasonError:
+                print("Token Count Error, Not provided enough tokens")
+
         dialog_text = dialog_mapper.talkative_dialog_mapper(dialog_raw)
         # End Conversation Trigger
         end_conversation = False
@@ -179,16 +191,22 @@ def talk_to_character(character_id: int, args: list) -> None:
                 print("Invalid number")
     else:
         # NPC is not talkative on will only offer one dialog to the player
-        dialog_raw = chat_with_gpt(client,
-                                   dialog_system_message(),
-                                   dismissive_dialog_template(
-                                       world_object.characters[character_id].name,
-                                       world_object.characters[character_id].traits,
-                                       character_object_player.name,
-                                       world_object.theme),
-                                   False,
-                                   tokens=500,
-                                   structure=DismissiveDialogStructure)
+        dialog_raw = None
+        while not dialog_raw:
+            try:
+                dialog_raw = chat_with_gpt(client,
+                                           dialog_system_message(),
+                                           dismissive_dialog_template(
+                                               world_object.characters[character_id].name,
+                                               world_object.characters[character_id].traits,
+                                               character_object_player.name,
+                                               world_object.theme),
+                                           False,
+                                           tokens=500,
+                                           structure=DismissiveDialogStructure)
+            except openai.LengthFinishReasonError:
+                print("Token Count Error, Not provided enough tokens")
+
         # Map the Dialog
         dialog_text = dialog_mapper.dismissive_dialog_mapper(dialog_raw)
         # Add the conversation to the characters conversation history

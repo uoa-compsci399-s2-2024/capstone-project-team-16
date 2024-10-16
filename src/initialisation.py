@@ -1,5 +1,8 @@
 """Module for initialising the game"""
 import os
+
+import openai
+
 from utils import templates, prompt, structures
 from utils.mappers import character_mapper, location_mapper, item_mapper
 from world import World
@@ -159,15 +162,20 @@ def create_new_game(plot_tropes_path, themes_path, current_world, client):
 
     print("DEBUG: CREATING LOCATIONS")
     # Construct prompt and generate the locations using the tropes and theme
-    locations = prompt.chat_with_gpt(
-        client,
-        templates.location_system_message(),
-        templates.location_template(5, tropes, theme, NUM_ITEMS, NUM_CHARACTERS),
-        False,
-        tokens=700,
-        temp=0.5,
-        structure=structures.SectionStructure
-    )
+    locations = None
+    while not locations:
+        try:
+            locations = prompt.chat_with_gpt(
+                client,
+                templates.location_system_message(),
+                templates.location_template(5, tropes, theme, NUM_ITEMS, NUM_CHARACTERS),
+                False,
+                tokens=700,
+                temp=0.5,
+                structure=structures.SectionStructure
+            )
+        except openai.LengthFinishReasonError:
+            print("Token Count Error, Not provided enough tokens")
 
 
     # add the initial JSON objects to their world.py lists

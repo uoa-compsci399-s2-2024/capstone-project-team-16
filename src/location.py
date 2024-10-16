@@ -1,8 +1,11 @@
 """Location class"""
 import itertools
 from typing import Self
+
+import openai
+
 from utils.prompt import chat_with_gpt
-from utils.templates import character_template, item_template
+from utils.templates import character_template, item_template, character_system_message, item_system_message
 from utils.mappers import character_mapper, item_mapper
 from utils.structures import ItemsStructure, CharactersStructure
 
@@ -48,22 +51,34 @@ class Location:
         Once characters generated, add them (or their id numbers) to self.characters
         list. If needed also do this with items"""
 
-        character_response = chat_with_gpt(
-            client,
-            "You are a knowledgeable chatbot that creates unique characters",
-            character_template(num_characters, "", world.tropes, world.theme),
-            False,
-            CharactersStructure,
-            tokens=80
-        )
-        item_response = chat_with_gpt(
-            client,
-            "You are a knowledgeable chatbot that creates unique items",
-            item_template(num_items, world.tropes, world.theme),
-            False,
-            ItemsStructure,
-            tokens=80
-        )
+        character_response = None
+        while not character_response:
+            try:
+                character_response = chat_with_gpt(
+                    client,
+                    character_system_message(),
+                    character_template(num_characters, "", world.tropes, world.theme),
+                    False,
+                    CharactersStructure,
+                    tokens=80
+                )
+            except openai.LengthFinishReasonError:
+                print("Token Count Error, Not provided enough tokens")
+
+        item_response = None
+        while not item_response:
+            try:
+                item_response = chat_with_gpt(
+                    client,
+                    item_system_message(),
+                    item_template(num_items, world.tropes, world.theme),
+                    False,
+                    ItemsStructure,
+                    tokens=80
+                )
+            except openai.LengthFinishReasonError:
+                print("Token Count Error, Not provided enough tokens")
+
         characters = character_mapper.create_character_from_json(character_response)
         items = item_mapper.create_item_from_json(item_response)
         # Add Objects to internal lists
