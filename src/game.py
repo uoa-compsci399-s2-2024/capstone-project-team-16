@@ -176,8 +176,9 @@ def game_loop(player: Character, world: World, client: OpenAI) -> None:
             except openai.LengthFinishReasonError:
                 print("Token Count Error, Not provided enough tokens... increasing token count and retrying")
                 tokens += 100
-            except ValueError:
+            except ValueError as e:
                 print("Response violated condition of at least one parameter...retrying")
+                print(e)
 
 
         mapped_choices = choice_mapper.create_choices_from_json(choices)
