@@ -12,14 +12,14 @@ from src.world import World
 
 @pytest.fixture
 def jsonstr_1():
-    with open("tests/test_json_files/location_JSON_1.json") as json_file:
+    with open("tests/test_json_files/location_JSON_1.json", 'r') as json_file:
         location_response = json.load(json_file)
     json_file.close()
     return location_response
 
 @pytest.fixture
 def jsonstr_2():
-    with open("tests/test_json_files/location_JSON_2.json") as json_file:
+    with open("tests/test_json_files/location_JSON_2.json", 'r') as json_file:
         location_response = json.load(json_file)
     json_file.close()
     return location_response
