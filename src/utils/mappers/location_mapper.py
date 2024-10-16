@@ -15,7 +15,7 @@ def create_location_from_json(json_str: str, world: World, previous_location_id:
 
     Parameters:
         json_str (str): The JSON string to be deserialized into a Location object.
-        previous_location (Optional[Location]|None): The previous Location object.
+        previous_location_id (Optional[int]|None): The previous Location object.
         world (World): the World Object
     Returns:
         list[Location]: A list of new instances of the Location class.
