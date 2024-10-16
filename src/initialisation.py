@@ -160,7 +160,6 @@ def create_new_game(plot_tropes_path, themes_path, current_world, client):
     current_world.add_theme(theme)
 
 
-    print("DEBUG: CREATING LOCATIONS")
     # Construct prompt and generate the locations using the tropes and theme
     locations = None
     while not locations:
@@ -190,7 +189,6 @@ def create_new_game(plot_tropes_path, themes_path, current_world, client):
     for location in mapped_locations:
         current_world.add_location(location)
 
-    print("DEBUG: FINISHED CREATING LOCATIONS")
 
     # Easy Way to create a Playable Character FOR DEMO
     player = Character(input("Input your character's name:\n> "), [], playable=True)

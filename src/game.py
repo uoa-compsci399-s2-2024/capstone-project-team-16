@@ -176,11 +176,6 @@ def game_loop(player: Character, world: World, client: OpenAI) -> None:
 
         mapped_choices = choice_mapper.create_choices_from_json(choices)
 
-        #BIG DEBUG INFO BLOCk
-        for choice in mapped_choices:
-            # THE way a choice is laid out is a tuple in the form of (description, dict, action_performed)
-            print(f"DEBUG CHOICE INFO: {choice}")
-        #------ END DEBUG
 
         # Returns the tuple choice of (desc, id)
         player_choice = choice_selection(mapped_choices, world)

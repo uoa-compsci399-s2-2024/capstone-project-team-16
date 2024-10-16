@@ -63,8 +63,7 @@ def move_character(new_location_id: str, args: list) -> None:
             current_location.remove_character(character_object.id_)
             new_location.add_character(character_object.id_)
         else:
-            print("DEBUG: REAL SORRY THIS IS AN ISSUE WITH FLOW ON LOCATION NOT CONNECTING "
-                  "SO SORRY CANT MOVE LOCATIONS :(")
+            print("API response involved an invalid location ID")
 
 
 def interact_with_item(item_to_interact_id: int, args: list) -> None:
