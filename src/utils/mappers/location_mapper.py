@@ -23,9 +23,6 @@ def create_location_from_json(json_str: str, world: World, previous_location_id:
     json_str = json_str.strip('```json').strip('```').strip()
     data = json.loads(json_str)["locations"]
 
-    with open('location_JSON_2.json', 'w') as file:
-        json.dump(json_str, file)
-    file.close()
 
     # There probably is a better way of doing this and im just stuck in my own head with how I want
     # locations to work
