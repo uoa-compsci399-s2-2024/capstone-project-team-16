@@ -4,10 +4,10 @@ from typing import Self
 
 import openai
 
-from utils.prompt import chat_with_gpt
-from utils.templates import character_template, item_template, character_system_message, item_system_message
-from utils.mappers import character_mapper, item_mapper
-from utils.structures import ItemsStructure, CharactersStructure
+from src.utils.prompt import chat_with_gpt
+from src.utils.templates import character_template, item_template, character_system_message, item_system_message
+from src.utils.mappers import character_mapper, item_mapper
+from src.utils.structures import ItemsStructure, CharactersStructure
 
 
 
