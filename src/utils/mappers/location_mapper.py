@@ -23,6 +23,10 @@ def create_location_from_json(json_str: str, world: World, previous_location_id:
     json_str = json_str.strip('```json').strip('```').strip()
     data = json.loads(json_str)["locations"]
 
+    with open('location_JSON_2.json', 'w') as file:
+        json.dump(json_str, file)
+    file.close()
+
     # There probably is a better way of doing this and im just stuck in my own head with how I want
     # locations to work
 
@@ -77,7 +81,7 @@ def create_location_from_json(json_str: str, world: World, previous_location_id:
     if previous_location_id is not None:
         random_location = random.choice(section)
         # Remove the None from neighbours of the previous location
-        world.world.locations[previous_location_id].remove_neighbor(None)
+        world.locations[previous_location_id].remove_neighbor(None)
         # Create the replacement edge to the new sector
         world.locations[previous_location_id].add_neighbor(random_location)
         random_location.add_neighbor(world.locations[previous_location_id])
