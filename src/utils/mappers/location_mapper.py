@@ -3,9 +3,9 @@ This is a JSON to object mapper for Locations  it turns a JSON string to a Chara
 """
 import json
 import random
-from location import Location
-from world import World
-from utils.mappers import item_mapper, character_mapper
+from src.location import Location
+from src.world import World
+from src.utils.mappers import item_mapper, character_mapper
 
 
 def create_location_from_json(json_str: str, world: World, previous_location_id: int or None = None) -> list[Location]:
