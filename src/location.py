@@ -52,6 +52,7 @@ class Location:
         list. If needed also do this with items"""
 
         character_response = None
+        tokens = 80
         while not character_response:
             try:
                 character_response = chat_with_gpt(
@@ -60,12 +61,14 @@ class Location:
                     character_template(num_characters, "", world.tropes, world.theme),
                     False,
                     CharactersStructure,
-                    tokens=80
+                    tokens=tokens
                 )
             except openai.LengthFinishReasonError:
-                print("Token Count Error, Not provided enough tokens")
+                print("Token Count Error, Not provided enough tokens... increasing token count and retrying")
+                tokens += 80
 
         item_response = None
+        tokens = 80
         while not item_response:
             try:
                 item_response = chat_with_gpt(
@@ -74,10 +77,11 @@ class Location:
                     item_template(num_items, world.tropes, world.theme),
                     False,
                     ItemsStructure,
-                    tokens=80
+                    tokens=tokens
                 )
             except openai.LengthFinishReasonError:
-                print("Token Count Error, Not provided enough tokens")
+                print("Token Count Error, Not provided enough tokens... increasing token count and retrying")
+                tokens += 80
 
         characters = character_mapper.create_character_from_json(character_response)
         items = item_mapper.create_item_from_json(item_response)

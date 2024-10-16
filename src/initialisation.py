@@ -162,6 +162,7 @@ def create_new_game(plot_tropes_path, themes_path, current_world, client):
 
     # Construct prompt and generate the locations using the tropes and theme
     locations = None
+    tokens = 700
     while not locations:
         try:
             locations = prompt.chat_with_gpt(
@@ -169,12 +170,13 @@ def create_new_game(plot_tropes_path, themes_path, current_world, client):
                 templates.location_system_message(),
                 templates.location_template(5, tropes, theme, NUM_ITEMS, NUM_CHARACTERS),
                 False,
-                tokens=700,
+                tokens=tokens,
                 temp=0.5,
                 structure=structures.SectionStructure
             )
         except openai.LengthFinishReasonError:
-            print("Token Count Error, Not provided enough tokens")
+            print("Token Count Error, Not provided enough tokens... increasing token count and retrying")
+            tokens += 100
 
 
     # add the initial JSON objects to their world.py lists

@@ -32,6 +32,7 @@ def move_character(new_location_id: str, args: list) -> None:
     else:
         # The new location is not known and as such needs to generate a new sector of the map
         new_locations = None
+        tokens = 500
         while not new_locations:
             try:
                 new_locations = chat_with_gpt(client,
@@ -40,13 +41,14 @@ def move_character(new_location_id: str, args: list) -> None:
                                                                 list(world_object.tropes.values()),
                                                                 world_object.theme),
                                               False,
-                                              tokens=500,
+                                              tokens=tokens,
                                               structure=SectionStructure)
             except openai.LengthFinishReasonError:
-                print("Token Count Error, Not provided enough tokens")
+                print("Token Count Error, Not provided enough tokens... increasing token count and retrying")
+                tokens += 100
+
         # Map the new Locations
-        mapped_new_locations = location_mapper.create_location_from_json(
-            previous_location=current_location.id_, json_str=new_locations, world=world_object)
+        mapped_new_locations = location_mapper.create_location_from_json(previous_location_id=current_location.id_, json_str=new_locations, world=world_object)
 
         # Add the new locations to the locations within the world
         for mapped_location in mapped_new_locations:
@@ -137,6 +139,7 @@ def talk_to_character(character_id: int, args: list) -> None:
     if talk_chance <= 6:
         # NPC is talkative and wants to talk to the player
         dialog_raw = None
+        tokens = 500
         while not dialog_raw:
             try:
                 dialog_raw = chat_with_gpt(client,
@@ -147,10 +150,11 @@ def talk_to_character(character_id: int, args: list) -> None:
                                                character_object_player.name,
                                                world_object.theme),
                                            False,
-                                           tokens=500,
+                                           tokens=tokens,
                                            structure=TalkativeDialogStructure)
             except openai.LengthFinishReasonError:
-                print("Token Count Error, Not provided enough tokens")
+                print("Token Count Error, Not provided enough tokens... increasing token count and retrying")
+                tokens += 100
 
         dialog_text = dialog_mapper.talkative_dialog_mapper(dialog_raw)
         # End Conversation Trigger
@@ -191,6 +195,7 @@ def talk_to_character(character_id: int, args: list) -> None:
     else:
         # NPC is not talkative on will only offer one dialog to the player
         dialog_raw = None
+        tokens = 500
         while not dialog_raw:
             try:
                 dialog_raw = chat_with_gpt(client,
@@ -201,10 +206,11 @@ def talk_to_character(character_id: int, args: list) -> None:
                                                character_object_player.name,
                                                world_object.theme),
                                            False,
-                                           tokens=500,
+                                           tokens=tokens,
                                            structure=DismissiveDialogStructure)
             except openai.LengthFinishReasonError:
-                print("Token Count Error, Not provided enough tokens")
+                print("Token Count Error, Not provided enough tokens... increasing token count and retrying")
+                tokens += 100
 
         # Map the Dialog
         dialog_text = dialog_mapper.dismissive_dialog_mapper(dialog_raw)
