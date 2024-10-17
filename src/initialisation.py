@@ -7,7 +7,10 @@ from world import World
 from utils.narrative_elements import get_random_tropes, get_random_theme, read_csv_file, create_tropes
 from game import game_loop
 import json
+import itertools
+from location import Location
 from character import Character
+from item import Item
 
 # number of characters and items to populate each location with
 NUM_CHARACTERS = 1
@@ -108,6 +111,7 @@ def load_game(client, current_world):
     json_choices = None
     json_tropes = None
     json_themes = None
+    json_session_messages = None
     #for each object, add it to the world
     for obj in objects:
         if "characters" in obj:
@@ -132,7 +136,16 @@ def load_game(client, current_world):
         if "choices" in obj:
             json_choices = obj["choices"]
             current_world.set_choices(json_choices)
+        if "session_messages" in obj:
+            json_session_messages = obj["session_messages"]
+            prompt.add_session_messages(json_session_messages)
 
+    #get max ids
+    max_ids = {"location": max([location.id_ for location in current_world.locations.values()]),
+               "character": max([character.id_ for character in current_world.characters.values()]),
+               "item": max([item.id_ for item in current_world.items.values()])}
+    #initialize the ID iterators
+    init_itertools(False, max_ids)
     #join locations together
     for location in current_world.locations.values():
         for other_location in json_locations:
@@ -155,6 +168,8 @@ def create_new_game(plot_tropes_path, themes_path, current_world, client):
     # Choose the theme
     theme = get_random_theme(themes_path)
     current_world.add_theme(theme)
+    # Initialize the ID iterators
+    init_itertools()
 
 
     print("DEBUG: CREATING LOCATIONS")
@@ -193,3 +208,13 @@ def create_new_game(plot_tropes_path, themes_path, current_world, client):
     (current_world.locations[0]).add_character(player.id_)
 
     game_loop(player, current_world, client)
+
+def init_itertools(new=True, ids=None):
+    if new:
+        Location.id_iter = itertools.count()
+        Character.id_iter = itertools.count()
+        Item.id_iter = itertools.count()
+    else:
+        Location.id_iter = itertools.count(start=ids["location"])
+        Character.id_iter = itertools.count(start=ids["character"])
+        Item.id_iter = itertools.count(start=ids["item"])
