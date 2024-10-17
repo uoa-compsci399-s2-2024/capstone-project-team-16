@@ -1,5 +1,9 @@
 # Chatbots as Interactive Storytellers
 
+## Project management tool
+
+https://aistoryteller-399.atlassian.net/jira/software/projects/SOUR/boards/2/timeline
+
 ## Contributors
 
 - Hadas Livne
@@ -40,3 +44,6 @@ To start the program, simply execute:
 
 - A dynamic, ever-changing storyteller program is rapidly taking shape!
 
+## Future Plan
+
+The future plan for this project would be to implement a GUI, making the experience more interactive and enjoyable, which is one of the purposes of this project.
