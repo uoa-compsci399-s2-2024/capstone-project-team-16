@@ -3,43 +3,45 @@
 
 def character_system_message() -> str:
     system_message = ("You are an imaginative game character generator. Create diverse and intriguing "
-                            "characters for a role-playing game. Consider different attributes, such as "
-                            "traits, motivations and friendliness. Make sure the characters "
-                            "fit within a theme. Aim for creativity and originality!")
+                      "characters for a role-playing game. Consider different attributes, such as "
+                      "traits, motivations and friendliness. Make sure the characters "
+                      "fit within a theme. Aim for creativity and originality!")
     return system_message
 
 
 def item_system_message() -> str:
     system_message = ("You are an imaginative game item generator. Create diverse and intriguing items "
-                       "for a role-playing game. Consider different categories, such as "
-                       "weapons, armor, potions, and artifacts. Make sure the items are balanced "
-                       "for gameplay and fit within a theme. Aim for creativity and originality!")
+                      "for a role-playing game. Consider different categories, such as "
+                      "weapons, armor, potions, and artifacts. Make sure the items are balanced "
+                      "for gameplay and fit within a theme. Aim for creativity and originality!")
     return system_message
 
 
 def location_system_message() -> str:
     system_message = ("You are an imaginative game location generator. Create diverse and intriguing"
-                           "locations for a role-playing game. Consider different attributes, such as "
-                            "where it is, the items there and the characters there. Make sure the locations "
-                           "are consistent and fit within a theme. Aim for creativity and originality!")
+                      "locations for a role-playing game. Consider different attributes, such as "
+                      "where it is, the items there and the characters there. Make sure the locations "
+                      "are consistent and fit within a theme. Aim for creativity and originality!")
     return system_message
 
 
 def choices_system_message() -> str:
     system_message = ("You are a choice generator for a role playing game. Create engaging and meaningful "
-                          "choices for the player. Promote exploration of the storyline. Focus on creativity "
-                          "and depth to enhance player engagement and immersion, but keep the choices concise"
-                          "and readable for a game-like experience.")
+                      "choices for the player. Promote exploration of the storyline. Focus on creativity "
+                      "and depth to enhance player engagement and immersion, but keep the choices concise"
+                      "and readable for a game-like experience.")
     return system_message
 
 
 def scene_system_message() -> str:
-    system_message = ("You are a scene generator for a choose-your-path role playing game. Create immersive scenes that set the "
-                        "stage for player decisions, including vivid descriptions of the setting, atmosphere, "
-                        "and key elements. Blend in prior items and characters into the scene if it makes sense. "
-                        "Focus on creativity and depth to enhance player immersion and storytelling.")#" Make use of whitespace"
-                        #"and make the scene readable and written in a game-like style")
+    system_message = (
+        "You are a scene generator for a choose-your-path role playing game. Create immersive scenes that set the "
+        "stage for player decisions, including vivid descriptions of the setting, atmosphere, "
+        "and key elements. Blend in prior items and characters into the scene if it makes sense. "
+        "Focus on creativity and depth to enhance player immersion and storytelling.")  # " Make use of whitespace"
+    # "and make the scene readable and written in a game-like style")
     return system_message
+
 
 def dialog_system_message() -> str:
     system_message = ("You are a dialog creator for a role playing game. Create fitting dialog that"
@@ -80,7 +82,6 @@ def location_template(quantity: int, tropes: list, theme: str, num_items: int, n
     return user_message
 
 
-
 def initial_choices_template(quantity: int, tropes: list, theme: str) -> str:
     """Template for generating initial story choices"""
     user_message = (f"Generate {quantity} choices our player can take that make sense for the beginning of a story. "
@@ -90,7 +91,7 @@ def initial_choices_template(quantity: int, tropes: list, theme: str) -> str:
     return user_message
 
 
-def flow_on_choices_template(quantity: int, tropes: list, theme: str, key_events:list,
+def flow_on_choices_template(quantity: int, tropes: list, theme: str, key_events: list,
                              json_locations: list, json_characters: list,
                              json_items: list, actions: list, character_inventory) -> str:
     """Template for generating subsequent story choices"""
@@ -112,6 +113,7 @@ def flow_on_choices_template(quantity: int, tropes: list, theme: str, key_events
                     "or None if you are not interacting with an item.")
     return user_message
 
+
 def demo_choices_movement_template(list_of_neighbours: list):
     """Template for generating a choices for movement options in the demo"""
     user_message = ("You are to generate movement choices for the user. The locations connected to "
@@ -127,23 +129,43 @@ def demo_choices_movement_template(list_of_neighbours: list):
 
 
 def initial_scene_template(location_name: str, location_description: str, items: list,
-                   characters: list) -> str:
+                           characters: list, first_beat: str, first_beat_descr: str) -> str:
     """Template for generating a scene to begin the game"""
     user_message = ("You are to create a scene using the following information and output a JSON "
                     f"dictionary. The location is {location_name}, {location_description}. "
-                    f"The items in this location are: {items} The Characters in this location "
-                    f"are: {characters} Using this information generate text description "
+                    f"The items in this location are: {items}. The Characters in this location "
+                    f"are: {characters}. This scene is the first story beat {first_beat}, which is "
+                    f"{first_beat_descr}. Using this information generate text description "
                     "for a scene for the player to interact with. The scene should not be more than"
                     " 100 words in length.")
     return user_message
 
-def flow_scene_template(location_name: str, location_description: str, items: list,
-                   characters: list, most_recent_choice: str, key_events: list[str]) -> str:
+
+def flow_scene_template(location_name: str, location_description: str, items: list, characters: list,
+                        most_recent_choice: str, key_events: list[str], curr_beat: str, curr_beat_descr: str) -> str:
     """Template for generating a scene after the user makes a choice"""
     user_message = ("You are to create a scene using the following information and output a JSON "
                     f"dictionary. The user has just chosen to do {most_recent_choice}."
                     f"The key events that have happened so far are {key_events}."
-                    f"The location is {location_name}, {location_description}. "
+                    "This scene follows on from the previous scene without moving to the next story beat. "
+                    f"The most recent story beat was {curr_beat}, which is described as {curr_beat_descr}, this scene "
+                    f"should continue to adhere to elements of that beat. The location is {location_name}, "
+                    f"{location_description}. The items in this location are: {items} The Characters in this "
+                    f"location are: {characters} Using this information generate text description "
+                    "for the next scene in the story. The scene should not be more than"
+                    " 100 words in length.")
+    return user_message
+
+
+def flow_scene_template_new_beat(location_name: str, location_description: str, items: list,
+                                 characters: list, most_recent_choice: str, key_events: list[str],
+                                 curr_beat: str, curr_beat_descr: str) -> str:
+    """Template for generating a scene after the user makes a choice where the story beat changes"""
+    user_message = ("You are to create a scene using the following information and output a JSON "
+                    f"dictionary. The user has just chosen to do {most_recent_choice}."
+                    f"The key events that have happened so far are {key_events}."
+                    f"This scene is the beginning of a new story beat, {curr_beat}, which is described as "
+                    f"{curr_beat_descr}. The location is {location_name}, {location_description}. "
                     f"The items in this location are: {items} The Characters in this location "
                     f"are: {characters} Using this information generate text description "
                     "for the next scene in the story. The scene should not be more than"
@@ -165,7 +187,7 @@ def dismissive_dialog_template(character_name: str, character_traits: list,
 
 
 def talkative_dialog_template(character_name: str, character_traits: list,
-                               playable_character_name: str, theme: str) -> str:
+                              playable_character_name: str, theme: str) -> str:
     """Template for generating talkative dialog."""
     user_message = (f"You are to create dialog from the character {character_name}, they "
                     f"have the following personality traits: {character_traits}. You should keep "
