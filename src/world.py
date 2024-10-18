@@ -116,9 +116,6 @@ class World:
         we can repopulate it at the next set of choices"""
         self._choices = []
 
-    def set_curr_story_beat(self, story_beat: int) -> None:
-        self._curr_story_beat = story_beat
-
     @property
     def locations(self) -> dict:
         """Getter for locations attribute"""
@@ -173,3 +170,7 @@ class World:
     def curr_story_beat(self) -> int:
         """Getter for current story beat attribute"""
         return self._curr_story_beat
+
+    @curr_story_beat.setter
+    def curr_story_beat(self, story_beat: int) -> None:
+        self._curr_story_beat = story_beat

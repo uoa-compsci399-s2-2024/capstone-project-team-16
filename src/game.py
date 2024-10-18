@@ -182,10 +182,12 @@ def game_loop(player: Character, world: World, client: OpenAI) -> None:
         else:
             new_beat, last_beat = change_beat(world.curr_story_beat)
             if last_beat:
+                world.curr_story_beat = new_beat
                 display_scene_new_beat(client, current_location, world, player_choice[0])
                 game_over = True
                 continue
             elif new_beat:
+                world.curr_story_beat = new_beat
                 display_scene_new_beat(client, current_location, world, player_choice[0])
             else:
                 display_scene(client, current_location, world, player_choice[0])
