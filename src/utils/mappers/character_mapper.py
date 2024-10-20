@@ -2,7 +2,7 @@
 This is a JSON to object mapper for Characters it turns a JSON string to a Character Object
 """
 import json
-from character import Character
+from src.character import Character
 
 
 def create_character_from_json(json_str: str) -> list[Character]:

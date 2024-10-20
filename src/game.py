@@ -2,6 +2,8 @@
 
 # This is just for readability's sake
 import textwrap
+
+import openai
 from openai import OpenAI
 import pandas as pd
 import networkx as nx
@@ -55,7 +57,11 @@ def choice_selection(choices: list[tuple], world: World) -> str:
 
 def display_initial_scene(client: OpenAI, location: Location, world: World) -> None:
     """Function to display the scene the player is in"""
-    scene = chat_with_gpt(
+    scene = None
+    tokens = 500
+    while not scene:
+        try:
+            scene = chat_with_gpt(
         client=client,
         system_message=scene_system_message(),
         user_message=initial_scene_template(location.name,
@@ -65,10 +71,9 @@ def display_initial_scene(client: OpenAI, location: Location, world: World) -> N
                                              (world.characters[character_id]).playable is not True],
                                             list(BEATS.keys())[world.curr_story_beat],
                                             list(BEATS.values())[world.curr_story_beat]),
-        context=True,
-        tokens=500,
-        structure=SceneStructure
-    )
+        except openai.LengthFinishReasonError:
+            print("Token Count Error, Not provided enough tokens... increasing token count and retrying")
+            tokens += 500
 
     mapped_scene = scene_mapper.create_scene_from_json(scene)
     mapped_scene = mapped_scene.split(". ")
@@ -80,7 +85,11 @@ def display_initial_scene(client: OpenAI, location: Location, world: World) -> N
 
 def display_scene(client: OpenAI, location: Location, world: World, most_recent_choice: str) -> None:
     """Function to display the scene the player is in"""
-    scene = chat_with_gpt(
+    scene = None
+    tokens = 500
+    while not scene:
+        try:
+            scene = chat_with_gpt(
         client=client,
         system_message=scene_system_message(),
         user_message=flow_scene_template(location.name,
@@ -93,9 +102,12 @@ def display_scene(client: OpenAI, location: Location, world: World, most_recent_
                                          list(BEATS.keys())[world.curr_story_beat],
                                          list(BEATS.values())[world.curr_story_beat]),
         context=True,
-        tokens=500,
+        tokens=tokens,
         structure=SceneStructure
     )
+        except openai.LengthFinishReasonError:
+            print("Token Count Error, Not provided enough tokens... increasing token count and retrying")
+            tokens+=100
 
     mapped_scene = scene_mapper.create_scene_from_json(scene)
     mapped_scene = mapped_scene.split(". ")
@@ -191,28 +203,39 @@ def game_loop(player: Character, world: World, client: OpenAI) -> None:
                 display_scene_new_beat(client, current_location, world, player_choice[0])
             else:
                 display_scene(client, current_location, world, player_choice[0])
+            display_scene(client, current_location, world, player_choice[0])
 
-        choices = chat_with_gpt(
-            client=client,
-            system_message=choices_system_message(),
-            user_message=flow_on_choices_template(
-                4, world.tropes, world.theme, world.key_events,
-                [f"{neighbor.name}({neighbor.id_})" if neighbor is not None else None for neighbor
-                 in current_location.neighbors], [world.characters[cid] for cid in current_location.characters],
-                [world.items[iid] for iid in current_location.items], AVAILABLE_ACTIONS,
-                [world.items[iid] for iid in player.inventory.keys()]),
-            context=True,
-            tokens=500,
-            temp=0.2,
-            structure=ChoicesStructure
-        )
+        choices = None
+        tokens = 500
+        while not choices:
+            try:
+                choices = chat_with_gpt(
+                    client=client,
+                    system_message=choices_system_message(),
+                    user_message=flow_on_choices_template(
+                        4, world.tropes, world.theme, world.key_events, [f"{neighbor.name}({neighbor.id_})" if neighbor is not None else None for neighbor
+                        in current_location.neighbors], [world.characters[cid] for cid in current_location.characters],
+                        [world.items[iid] for iid in current_location.items], AVAILABLE_ACTIONS, [world.items[iid] for iid in player.inventory.keys()]),
+                    context=True,
+                    tokens=tokens,
+                    temp=0.2,
+                    structure=ChoicesStructure
+                )
+            except openai.LengthFinishReasonError:
+                print("Token Count Error, Not provided enough tokens... increasing token count and retrying")
+                tokens += 100
+            except ValueError as e:
+                print("Response violated condition of at least one parameter...retrying")
+                print(e)
+
+
         mapped_choices = choice_mapper.create_choices_from_json(choices)
-
-        # BIG DEBUG INFO BLOCk
+              # BIG DEBUG INFO BLOCk
         for choice in mapped_choices:
             # THE way a choice is laid out is a tuple in the form of (description, dict, action_performed)
             print(f"DEBUG CHOICE INFO: {choice}")
         # ------ END DEBUG
+
 
         # Returns the tuple choice of (desc, id)
         player_choice = choice_selection(mapped_choices, world)
