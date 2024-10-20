@@ -62,15 +62,18 @@ def display_initial_scene(client: OpenAI, location: Location, world: World) -> N
     while not scene:
         try:
             scene = chat_with_gpt(
-        client=client,
-        system_message=scene_system_message(),
-        user_message=initial_scene_template(location.name,
+                                client=client,
+                                system_message=scene_system_message(),
+                                user_message=initial_scene_template(location.name,
                                             location.description,
                                             [world.items[item_id] for item_id in location.items],
                                             [world.characters[character_id] for character_id in location.characters if
                                              (world.characters[character_id]).playable is not True],
                                             list(BEATS.keys())[world.curr_story_beat],
                                             list(BEATS.values())[world.curr_story_beat]),
+                                context=True,
+                                tokens=tokens,
+                                structure=SceneStructure)
         except openai.LengthFinishReasonError:
             print("Token Count Error, Not provided enough tokens... increasing token count and retrying")
             tokens += 500
