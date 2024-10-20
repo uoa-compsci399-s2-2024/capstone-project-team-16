@@ -6,7 +6,7 @@ from src.trope import Trope
 
 
 class World:
-    """A class for keeping track of all of the
+    """A class for keeping track of all the
     current game's objects and their instances."""
     def __init__(
         self,
@@ -16,7 +16,8 @@ class World:
         tropes: dict = None,
         theme: list[str] = None,
         choices: list[str] = None,
-        key_events: list[str] = None
+        key_events: list[str] = None,
+        curr_story_beat: int = 0,
     ) -> None:
         """initialises a World instance"""
         self._locations = locations or {}
@@ -26,6 +27,7 @@ class World:
         self._theme = theme or []
         self._choices = choices or []
         self._key_events = key_events or []
+        self._curr_story_beat = curr_story_beat or 0
 
         """A list of JSON objects to pass to our 
         choices template for better choice generation"""
@@ -150,7 +152,7 @@ class World:
         return self._tropes
 
     @property
-    def theme(self) -> str:
+    def theme(self) -> list:
         """Getter for theme attribute"""
         return self._theme
 
@@ -163,3 +165,12 @@ class World:
     def key_events(self) -> list[str]:
         """Getter for key events attribute"""
         return self._key_events
+
+    @property
+    def curr_story_beat(self) -> int:
+        """Getter for current story beat attribute"""
+        return self._curr_story_beat
+
+    @curr_story_beat.setter
+    def curr_story_beat(self, story_beat: int) -> None:
+        self._curr_story_beat = story_beat
