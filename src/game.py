@@ -12,12 +12,14 @@ from actions import process_user_choice, AVAILABLE_ACTIONS
 from character import Character
 from location import Location
 from world import World
-from utils.templates import flow_on_choices_template, initial_scene_template, flow_scene_template, scene_system_message, choices_system_message
+from utils.templates import (flow_on_choices_template, initial_scene_template, flow_scene_template,
+                             scene_system_message, choices_system_message, flow_scene_template_new_beat)
 from utils.prompt import chat_with_gpt, SESSION_MESSAGES
 from utils.mappers import scene_mapper, choice_mapper
 from utils.playthroughs import create_temp_story_file, write_scene_and_choice, save_playthrough_as_file, wipe_temp_file
 from utils.structures import SceneStructure, ChoicesStructure
 from utils.playthroughs import show_background_data
+from utils.story_beats import BEATS, change_beat
 
 
 def choice_selection(choices: list[tuple], world: World) -> str:
@@ -35,7 +37,7 @@ def choice_selection(choices: list[tuple], world: World) -> str:
             show_background_data(world)
             continue
         if user_input.lower().strip() == "save":
-            #save this playthrough
+            # save this playthrough
             save_playthrough_as_file(world, choices)
             print("Playthrough saved")
             print("Make a selection")
@@ -45,32 +47,33 @@ def choice_selection(choices: list[tuple], world: World) -> str:
             continue
         user_input = int(user_input)
 
-        if user_input <= len(choices) and user_input > 0:
+        if len(choices) >= user_input > 0:
             selection = choices[user_input - 1]
         else:
             print("Invalid number")
-
 
     return selection
 
 
 def display_initial_scene(client: OpenAI, location: Location, world: World) -> None:
-
     """Function to display the scene the player is in"""
     scene = None
     tokens = 500
     while not scene:
         try:
             scene = chat_with_gpt(
-                client=client,
-                system_message=scene_system_message(),
-                user_message=initial_scene_template(location.name, location.description,
+                                client=client,
+                                system_message=scene_system_message(),
+                                user_message=initial_scene_template(location.name,
+                                            location.description,
                                             [world.items[item_id] for item_id in location.items],
-                                            [world.characters[character_id] for character_id in location.characters if (world.characters[character_id]).playable is not True]),
-                context=True,
-                tokens=tokens,
-                structure= SceneStructure
-            )
+                                            [world.characters[character_id] for character_id in location.characters if
+                                             (world.characters[character_id]).playable is not True],
+                                            list(BEATS.keys())[world.curr_story_beat],
+                                            list(BEATS.values())[world.curr_story_beat]),
+                                context=True,
+                                tokens=tokens,
+                                structure=SceneStructure)
         except openai.LengthFinishReasonError:
             print("Token Count Error, Not provided enough tokens... increasing token count and retrying")
             tokens += 500
@@ -82,6 +85,7 @@ def display_initial_scene(client: OpenAI, location: Location, world: World) -> N
         print(f"{textwrap.fill(para, 100)}.\n")
     print()
 
+
 def display_scene(client: OpenAI, location: Location, world: World, most_recent_choice: str) -> None:
     """Function to display the scene the player is in"""
     scene = None
@@ -89,17 +93,21 @@ def display_scene(client: OpenAI, location: Location, world: World, most_recent_
     while not scene:
         try:
             scene = chat_with_gpt(
-                client=client,
-                system_message=scene_system_message(),
-                user_message=flow_scene_template(location.name, location.description,
-                                            [world.items[item_id] for item_id in location.items],
-                                            [world.characters[character_id] for character_id in location.characters if (world.characters[character_id]).playable is not True],
-                                            most_recent_choice,
-                                            world.key_events),
-                context=True,
-                tokens=tokens,
-                structure= SceneStructure
-            )
+        client=client,
+        system_message=scene_system_message(),
+        user_message=flow_scene_template(location.name,
+                                         location.description,
+                                         [world.items[item_id] for item_id in location.items],
+                                         [world.characters[character_id] for character_id in location.characters if
+                                          (world.characters[character_id]).playable is not True],
+                                         most_recent_choice,
+                                         world.key_events,
+                                         list(BEATS.keys())[world.curr_story_beat],
+                                         list(BEATS.values())[world.curr_story_beat]),
+        context=True,
+        tokens=tokens,
+        structure=SceneStructure
+    )
         except openai.LengthFinishReasonError:
             print("Token Count Error, Not provided enough tokens... increasing token count and retrying")
             tokens+=100
@@ -110,7 +118,36 @@ def display_scene(client: OpenAI, location: Location, world: World, most_recent_
     for para in mapped_scene:
         print(f"{textwrap.fill(para, 100)}.\n")
     print()
-  
+
+
+def display_scene_new_beat(client: OpenAI, location: Location, world: World, most_recent_choice: str) -> None:
+    """Function to display the scene the player is in"""
+    scene = chat_with_gpt(
+        client=client,
+        system_message=scene_system_message(),
+        user_message=flow_scene_template_new_beat(location.name,
+                                                  location.description,
+                                                  [world.items[item_id] for item_id in location.items],
+                                                  [world.characters[character_id] for character_id in
+                                                   location.characters if
+                                                   (world.characters[character_id]).playable is not True],
+                                                  most_recent_choice,
+                                                  world.key_events,
+                                                  list(BEATS.keys())[world.curr_story_beat],
+                                                  list(BEATS.values())[world.curr_story_beat]),
+        context=True,
+        tokens=500,
+        structure=SceneStructure
+    )
+
+    mapped_scene = scene_mapper.create_scene_from_json(scene)
+    mapped_scene = mapped_scene.split(". ")
+    print()
+    for para in mapped_scene:
+        print(f"{textwrap.fill(para, 100)}.\n")
+    print()
+
+
 def visualise_locations(locations: list[Location], style="graphic") -> None:
     """Function to visualise the locations in the game
     Args:
@@ -120,10 +157,12 @@ def visualise_locations(locations: list[Location], style="graphic") -> None:
     if style == "graphic":
         # Create a graph from the locations
         edge_list = pd.concat(
-            [pd.DataFrame([[location.name, neighbor.name]], columns=["Loc1", "Loc2"]) for location in locations for neighbor in location.neighbors], ignore_index=True)
+            [pd.DataFrame([[location.name, neighbor.name]], columns=["Loc1", "Loc2"]) for location in locations for
+             neighbor in location.neighbors], ignore_index=True)
         graph = nx.from_pandas_edgelist(edge_list, "Loc1", "Loc2")
         # get the old positions of the nodes
-        old_pos = {location.name: (location.coords[0], location.coords[1]) for location in locations if location.coords is not None}
+        old_pos = {location.name: (location.coords[0], location.coords[1]) for location in locations if
+                   location.coords is not None}
         pos = None
         if old_pos == {}:
             pos = nx.spring_layout(graph)
@@ -139,9 +178,10 @@ def visualise_locations(locations: list[Location], style="graphic") -> None:
     elif style == "text":
         print('not implemented yet')
 
+
 def game_loop(player: Character, world: World, client: OpenAI) -> None:
     """The main game loop, defines what happens after every user choice"""
-        # create the temp file to store the story
+    # create the temp file to store the story
     create_temp_story_file()
     wipe_temp_file()
     game_over = False
@@ -155,6 +195,17 @@ def game_loop(player: Character, world: World, client: OpenAI) -> None:
         if player_choice is None:
             display_initial_scene(client, current_location, world)
         else:
+            new_beat, last_beat = change_beat(world.curr_story_beat)
+            if last_beat:
+                world.curr_story_beat = new_beat
+                display_scene_new_beat(client, current_location, world, player_choice[0])
+                game_over = True
+                continue
+            elif new_beat:
+                world.curr_story_beat = new_beat
+                display_scene_new_beat(client, current_location, world, player_choice[0])
+            else:
+                display_scene(client, current_location, world, player_choice[0])
             display_scene(client, current_location, world, player_choice[0])
 
         choices = None
@@ -182,6 +233,11 @@ def game_loop(player: Character, world: World, client: OpenAI) -> None:
 
 
         mapped_choices = choice_mapper.create_choices_from_json(choices)
+              # BIG DEBUG INFO BLOCk
+        for choice in mapped_choices:
+            # THE way a choice is laid out is a tuple in the form of (description, dict, action_performed)
+            print(f"DEBUG CHOICE INFO: {choice}")
+        # ------ END DEBUG
 
 
         # Returns the tuple choice of (desc, id)
