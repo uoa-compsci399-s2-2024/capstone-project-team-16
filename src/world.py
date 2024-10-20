@@ -27,7 +27,7 @@ class World:
         self._theme = theme or []
         self._choices = choices or []
         self._key_events = key_events or []
-        self._curr_story_beat = curr_story_beat or None
+        self._curr_story_beat = curr_story_beat or 0
 
         """A list of JSON objects to pass to our 
         choices template for better choice generation"""
