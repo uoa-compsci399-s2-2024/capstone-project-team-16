@@ -206,7 +206,7 @@ def game_loop(player: Character, world: World, client: OpenAI) -> None:
                 display_scene_new_beat(client, current_location, world, player_choice[0])
             else:
                 display_scene(client, current_location, world, player_choice[0])
-            display_scene(client, current_location, world, player_choice[0])
+
 
         choices = None
         tokens = 500
