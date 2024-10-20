@@ -137,8 +137,11 @@ def load_game(client, current_world):
             json_choices = obj["choices"]
             current_world.set_choices(json_choices)
         if "session_messages" in obj:
-            json_session_messages = obj["session_messages"]
-            prompt.add_session_messages(json_session_messages)
+            prompt.add_session_messages(obj["session_messages"])
+        if "key_events" in obj:
+            [current_world.add_key_event(event) for event in obj['key_events']]
+        if "choices" in obj:
+            current_world.set_choices(obj["choices"])
 
     #get max ids
     max_ids = {"location": max([location.id_ for location in current_world.locations.values()]),

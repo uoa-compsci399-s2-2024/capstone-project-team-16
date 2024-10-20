@@ -62,6 +62,10 @@ def save_playthrough_as_file(world: World, choices: tuple[str]) -> None:
         file.write(json.dumps({"themes": world.theme}))
         file.write('\n')
         file.write(json.dumps({"session_messages": get_session_messages()}))
+        file.write('\n')
+        file.write(json.dumps({"key_events": world.key_events}))
+        file.write('\n')
+        file.write(json.dumps({"choices": world.choices}))
 
 
 def wipe_temp_file() -> None:
