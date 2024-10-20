@@ -206,7 +206,7 @@ def game_loop(player: Character, world: World, client: OpenAI) -> None:
                 display_scene_new_beat(client, current_location, world, player_choice[0])
             else:
                 display_scene(client, current_location, world, player_choice[0])
-            display_scene(client, current_location, world, player_choice[0])
+
 
         choices = None
         tokens = 500
@@ -216,9 +216,13 @@ def game_loop(player: Character, world: World, client: OpenAI) -> None:
                     client=client,
                     system_message=choices_system_message(),
                     user_message=flow_on_choices_template(
-                        4, world.tropes, world.theme, world.key_events, [f"{neighbor.name}({neighbor.id_})" if neighbor is not None else None for neighbor
-                        in current_location.neighbors], [world.characters[cid] for cid in current_location.characters],
-                        [world.items[iid] for iid in current_location.items], AVAILABLE_ACTIONS, [world.items[iid] for iid in player.inventory.keys()]),
+                        4, world.tropes, world.theme, world.key_events,
+                        [f"{neighbor.name}({neighbor.id_})" if neighbor is not None else None for neighbor
+                        in current_location.neighbors],
+                        [world.characters[cid] for cid in current_location.characters if (world.characters[cid]).playable is not True],
+                        [world.items[iid] for iid in current_location.items],
+                        AVAILABLE_ACTIONS,
+                        [world.items[iid] for iid in player.inventory.keys()]),
                     context=True,
                     tokens=tokens,
                     temp=0.2,
@@ -228,16 +232,12 @@ def game_loop(player: Character, world: World, client: OpenAI) -> None:
                 print("Token Count Error, Not provided enough tokens... increasing token count and retrying")
                 tokens += 100
             except ValueError as e:
-                print("Response violated condition of at least one parameter...retrying")
-                print(e)
+                pass
+                # print("Response violated condition of at least one parameter...retrying")
+                # print(e)
 
 
         mapped_choices = choice_mapper.create_choices_from_json(choices)
-              # BIG DEBUG INFO BLOCk
-        for choice in mapped_choices:
-            # THE way a choice is laid out is a tuple in the form of (description, dict, action_performed)
-            print(f"DEBUG CHOICE INFO: {choice}")
-        # ------ END DEBUG
 
 
         # Returns the tuple choice of (desc, id)
