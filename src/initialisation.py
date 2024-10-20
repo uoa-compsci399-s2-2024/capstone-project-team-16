@@ -63,12 +63,24 @@ def start_game() -> bool:
     user_input = input("> Press enter to start game... ")
     return True
 
+def setup_save_folder() -> None:
+    '''Checks if save folder exists, if not creates it'''
+    saved_games_folder = os.path.join(os.environ["USERPROFILE"], "Saved Games")
+    game_folder = os.path.join(saved_games_folder, "CAPSTONE") #need to change "CAPSTONE" to the name of our game
+
+    if not os.path.exists(game_folder):
+        os.makedirs(game_folder)
+        print("DEBUG: SAVE FOLDER CREATED")
+    else:
+        print("DEBUG: SAVE FOLDER ALREADY EXISTS")
+
 
 def initialise_game(client):
     """Initialises the tropes, themes,
     characters, locations and items
     for the game."""
 
+    setup_save_folder()
     plot_tropes_path = str(os.getcwd()) + '/src/story/plot_tropes.csv'
     protagonist_tropes_path = os.path.join(os.path.dirname(os.getcwd()), 'src/story/protagonist_tropes.csv')
     antagonist_tropes_path = os.path.join(os.path.dirname(os.getcwd()), 'src/story/antagonist_tropes.csv')
