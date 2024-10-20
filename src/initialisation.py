@@ -64,7 +64,7 @@ def start_game() -> bool:
 def setup_save_folder() -> None:
     '''Checks if save folder exists, if not creates it'''
     saved_games_folder = os.path.join(os.environ["USERPROFILE"], "Saved Games")
-    game_folder = os.path.join(saved_games_folder, "CAPSTONE") #need to change "CAPSTONE" to the name of our game
+    game_folder = os.path.join(saved_games_folder, "Adventure's Call")
 
     if not os.path.exists(game_folder):
         os.makedirs(game_folder)
