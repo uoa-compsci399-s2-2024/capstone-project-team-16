@@ -2,10 +2,15 @@ import os
 from openai import OpenAI
 from dotenv import load_dotenv
 import pytest
-from src.utils import prompt, templates, structures
-from src.utils.mappers import location_mapper
-from src.location import Location
-from src.world import World
+
+import sys
+
+sys.path.append(os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'src')))
+
+from utils import prompt, templates, structures
+from utils.mappers import location_mapper
+from location import Location
+from world import World
 
 @pytest.fixture
 def client():

@@ -2,12 +2,16 @@ import itertools
 import json
 import pytest
 import random
+import sys
+import os
+sys.path.append(os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'src')))
 
-from src.character import Character
-from src.item import Item
-from src.location import Location
-from src.utils.mappers.location_mapper import create_location_from_json
-from src.world import World
+
+from character import Character
+from item import Item
+from location import Location
+from utils.mappers.location_mapper import create_location_from_json
+from world import World
 
 
 @pytest.fixture

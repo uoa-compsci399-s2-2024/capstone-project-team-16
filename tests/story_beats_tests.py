@@ -1,5 +1,8 @@
 import unittest
-from src.utils.story_beats import *
+import sys
+import os
+sys.path.append(os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'src')))
+from utils.story_beats import *
 
 
 class TestStoryBeats(unittest.TestCase):

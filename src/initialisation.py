@@ -80,8 +80,8 @@ def initialise_game(client):
 
     setup_save_folder()
     plot_tropes_path = str(os.getcwd()) + '/src/story/plot_tropes.csv'
-    protagonist_tropes_path = os.path.join(os.path.dirname(os.getcwd()), 'src/story/protagonist_tropes.csv')
-    antagonist_tropes_path = os.path.join(os.path.dirname(os.getcwd()), 'src/story/antagonist_tropes.csv')
+    protagonist_tropes_path = str(os.getcwd()) + '/src/story/protagonist_tropes.csv'
+    antagonist_tropes_path = str(os.getcwd()) + '/src/story/antagonist_tropes.csv'
     themes_path = str(os.getcwd()) + '/src/story/themes.txt'
 
     current_world = World()
