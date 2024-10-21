@@ -38,6 +38,11 @@ def choice_selection(choices: list[tuple], world: World) -> str:
             print("Playthrough saved")
             print("Make a selection")
             continue
+        if user_input.lower().strip() == "map":
+            #show the location map
+            visualise_locations([world.locations[location_id] for location_id in world.locations], style="graphic")
+            print("Make a selection")
+            continue
         if not user_input.isdigit():
             print("Please enter a number")
             continue
