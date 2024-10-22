@@ -2,9 +2,15 @@ import os
 from openai import OpenAI
 from dotenv import load_dotenv
 import pytest
-from src.utils import prompt, templates
-from src.utils.mappers import location_mapper
-from src.location import Location
+
+import sys
+
+sys.path.append(os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'src')))
+
+from utils import prompt, templates, structures
+from utils.mappers import location_mapper
+from location import Location
+from world import World
 
 @pytest.fixture
 def client():
@@ -14,6 +20,11 @@ def client():
     # initialise client
     client = OpenAI(api_key=openai_api_key)
     return client
+
+@pytest.fixture
+def world():
+    world = World()
+    return world
 
 
 @pytest.fixture
@@ -26,28 +37,20 @@ def theme():
     return "Fantasy"
 
 
-def test_location_generation_init(client, tropes, theme):
+def test_location_generation_init(client, tropes, theme, world):
+    """These tests check that the structured output is followed"""
     locations = prompt.chat_with_gpt(
         client,
-        "You are a knowledgeable chatbot that creates unique locations",
-        templates.initial_location_template(5, tropes, theme),
+        templates.location_system_message(),
+        templates.location_template(5, tropes, theme, 1, 1),
         False,
-        tokens=500,
-        temp=2
+        tokens=700,
+        temp=1,
+        structure=structures.SectionStructure
     )
 
-    print(locations)
-
-    mapped_locations = location_mapper.create_location_from_json(json_str=locations, world=world)
-
-    print(mapped_locations)
-
-    for location in mapped_locations:
-        print(location)
-    # Tests
-
-    assert isinstance(locations, str)
-    assert isinstance(mapped_locations, list)
-    assert len(mapped_locations) == 5
-    for location in mapped_locations:
-        assert isinstance(location, Location)
+    # asserts that the keys exist in the json
+    assert '"name":' in locations
+    assert '"description":' in locations
+    assert '"items":' in locations
+    assert '"characters":' in locations

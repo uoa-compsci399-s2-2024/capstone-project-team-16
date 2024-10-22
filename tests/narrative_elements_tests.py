@@ -1,5 +1,8 @@
 import unittest
-from src.utils.narrative_elements import *
+import sys
+import os
+sys.path.append(os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'src')))
+from utils.narrative_elements import *
 
 THEMES_FILE = os.path.join(os.path.dirname(os.getcwd()), 'src/story/themes.txt')
 PLOT_TROPE_FILE = os.path.join(os.path.dirname(os.getcwd()), 'src/story/plot_tropes.csv')

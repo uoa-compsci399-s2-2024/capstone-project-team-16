@@ -9,6 +9,7 @@ from src.utils.mappers.location_mapper import create_json_from_locations
 from src.utils.mappers.trope_mapper import create_json_from_tropes
 from src.utils.prompt import get_session_messages
 
+
 temp_file_path = str(os.getcwd()) + '/src/story/temp_story_store.txt'
 
 

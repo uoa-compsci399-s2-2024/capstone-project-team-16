@@ -3,7 +3,7 @@ This is a json to object Mapper for tropes, saving a trope for the game to use
 """
 
 import json
-from src.trope import Trope
+from trope import Trope
 
 
 def create_trope_from_json(json_str: str) -> list:

@@ -1,11 +1,14 @@
 import os
 from dotenv import load_dotenv
 from openai import OpenAI
+import sys
+sys.path.append(os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'src')))
 
-from src.utils.mappers import dialog_mapper
-from src.utils import prompt
-from src.utils.structures import DismissiveDialogStructure, TalkativeDialogStructure
-from src.utils.templates import dialog_system_message, dismissive_dialog_template, talkative_dialog_template
+
+from utils.mappers import dialog_mapper
+from utils import prompt
+from utils.structures import DismissiveDialogStructure, TalkativeDialogStructure
+from utils.templates import dialog_system_message, dismissive_dialog_template, talkative_dialog_template
 
 
 load_dotenv()

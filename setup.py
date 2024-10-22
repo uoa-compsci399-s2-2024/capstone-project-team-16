@@ -1,5 +1,6 @@
 import os
 import subprocess
+import sys
 
 '''Run this from cmd, will build an excutable file. Note that filepaths 
     need to be changed for all data files. Will also need pyinstaller installed'''
@@ -9,7 +10,7 @@ def build_executable():
 
 
     command = [
-        'py',
+        sys.executable,
         "-m",
         "PyInstaller",
         "--onefile",
