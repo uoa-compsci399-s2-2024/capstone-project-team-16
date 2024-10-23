@@ -102,14 +102,28 @@ def load_game(client, current_world):
         current_world (World): the current world object
     """
     # get playthrough file path
+
+    saved_games_folder = os.path.join(os.environ["USERPROFILE"], "Saved Games")
+    game_folder = os.path.join(saved_games_folder, "Adventure's Call")
+
+    saved_games = [f for f in os.listdir(game_folder) if os.path.isfile(os.path.join(game_folder, f))]
+
+    if not saved_games:
+        print("No save files exist.")
+        initialise_game(client)
+        return
+    
+    for saved_game in saved_games:
+        print(saved_game)
+
     playthrough_name = input("Enter the name of the playthrough you would like to load: ")
-    playthrough_file_path = str(os.getcwd()) + f'/src/playthroughs/{playthrough_name}.txt'
+    playthrough_file_path = os.path.join(game_folder, f"{playthrough_name}.txt")
     while not os.path.exists(playthrough_file_path):
         playthrough_name = input(
             "That playthrough does not exist. Please enter a valid playthrough name, or enter nothing to exit: ")
         if playthrough_name == "":
             return
-        playthrough_file_path = str(os.getcwd()) + f'/src/playthroughs/{playthrough_name}.txt'
+        playthrough_file_path = os.path.join(game_folder, f"{playthrough_name}.txt")
     # read the playthrough file
     lines = None
     with open(playthrough_file_path, 'r') as file:
