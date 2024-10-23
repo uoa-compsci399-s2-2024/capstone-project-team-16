@@ -42,7 +42,7 @@ def trope_1():
 
 @pytest.fixture()
 def trope_2():
-    return Trope(1, "The Mentor", "An experienced person guides the protagonist", [0])
+    return Trope(1, "The False Prophet", "A person who falsely claims to be the chosen one", [0])
 
 @pytest.fixture
 def world(location_1, character_1, item_1):
@@ -259,18 +259,39 @@ def test_location_populate(location_1, world, client):
     assert len(location_1.characters) == 3
     assert len(location_1.items) == 3
 
-def test_world_init(world):
+def test_trope_init(trope_1, trope_2):
     # Initialisation testing, Getter testing
-    assert world.locations == {}
-    assert world.items == {}
-    assert world.characters == {}
-    assert world.tropes == {}
-    assert world.theme == []
-    assert world.choices == []
-    assert world.key_events == []
-    assert world.curr_story_beat == 0
-    assert world.json_locations == []
-    assert world.json_items == []
-    assert world.json_characters == []
+    assert trope_1.id_ == 0
+    assert trope_1.name == "The Chosen One"
+    assert trope_1.description == "A normal person discovers they are the chosen one"
+    assert trope_1.conflicts == [1]
 
+    assert trope_2.id_ == 1
+    assert trope_2.name == "The Mentor"
+    assert trope_2.description == "An experienced person guides the protagonist"
+    assert trope_2.conflicts == [0]
+
+def test_trope_equality(trope_1, trope_2):
+    assert trope_1 != trope_2
+    assert trope_1 == trope_1
+
+def test_trope_hash(trope_1):
+    assert hash(trope_1) == hash(trope_1.id_)
+
+def test_trope_comparisons(trope_1, trope_2):
+    assert trope_1 < trope_2
+    assert trope_1 <= trope_2
+    assert trope_2 > trope_1
+    assert trope_2 >= trope_1
+
+def test_trope_setters(trope_1):
+    # Changing via setters
+    trope_1.name = "The Anti-Hero"
+    trope_1.description = "A protagonist who lacks conventional heroic qualities"
+    trope_1.conflicts = [1]
+
+    # Testing setters
+    assert trope_1.name == "The Anti-Hero"
+    assert trope_1.description == "A protagonist who lacks conventional heroic qualities"
+    assert trope_1.conflicts == [1]
 
