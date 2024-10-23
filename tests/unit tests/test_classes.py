@@ -1,7 +1,16 @@
+import sys
 import pytest
+import os
+from openai import OpenAI
+from dotenv import load_dotenv
+
+sys.path.append(os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'src')))
+
 from src.item import Item
 from src.character import Character
 from src.location import Location
+from src.world import World
+from src.trope import Trope
 
 @pytest.fixture
 def item_1():
@@ -21,11 +30,31 @@ def character_2():
 
 @pytest.fixture
 def location_1():
-    return Location("Shire", "A peaceful place", [0,1], [0,1], [0, 1, 2])
+    return Location("Shire", "A peaceful place", 0, [0,1], [0, 1, 2])
 
 @pytest.fixture
-def location_2():
-    return Location("Mordor",  "A dangerous place", [2,3], [2,3], [4, 5, 6])
+def location_2(location_1):
+    return Location("Mordor",  "A dangerous place", 1, [2,3], [4, 5, 6], [location_1])
+
+@pytest.fixture()
+def trope_1():
+    return Trope(0, "The Chosen One", "A normal person discovers they are the chosen one", [1])
+
+@pytest.fixture()
+def trope_2():
+    return Trope(1, "The Mentor", "An experienced person guides the protagonist", [0])
+
+@pytest.fixture
+def world(location_1, character_1, item_1):
+    return World({0: location_1}, {0: item_1}, {0: character_1})
+
+@pytest.fixture()
+def client():
+    load_dotenv()
+    openai_api_key = os.getenv('OPENAI_API_KEY')
+
+    # initialise client
+    return OpenAI(api_key=openai_api_key)
 
 def test_item_init(item_1, item_2):
     # Initialisation testing, Getter testing
@@ -142,19 +171,31 @@ def test_character_move(character_1):
     # Testing move
     assert character_1.current_location == 2
 
+def test_character_conversation_history(character_1):
+    # Adding to conversation history
+    character_1.add_to_conversation_history(["Hello", "Goodbye"])
+    character_1.add_to_conversation_history(["Hi", "Bye"])
+
+    # Testing conversation history
+    assert character_1.conversation_history == [["Hello", "Goodbye"], ["Hi", "Bye"]]
+
+
 def test_location_init(location_1, location_2):
     # Initialisation testing, Getter testing
     assert location_1.name == "Shire"
     assert location_1.characters == [0, 1]
-    assert location_1.items == [0, 1]
+    assert location_1.items == [0, 1, 2]
     assert location_1.description == "A peaceful place"
-    assert location_1.neighbors == [0, 1, 2]
+    assert location_1.neighbors == []
+    assert location_1.coords is None
 
     assert location_2.name == "Mordor"
     assert location_2.characters == [2, 3]
-    assert location_2.items == [2, 3]
+    assert location_2.items == [4, 5, 6]
     assert location_2.description == "A dangerous place"
-    assert location_2.neighbors == [4, 5, 6]
+    assert location_2.neighbors == [location_1]
+    assert location_2.coords is None
+
 
 def test_location_equality(location_1, location_2):
     assert location_1 != location_2
@@ -176,6 +217,7 @@ def test_location_setters(location_1):
     location_1.items = [1, 2]
     location_1.description = "A peaceful place, home of the hobbits"
     location_1.connections = [1, 2, 3]
+    location_1.coords = (1, 2)
 
     # Testing setters
     assert location_1.name == "The Shire"
@@ -183,6 +225,7 @@ def test_location_setters(location_1):
     assert location_1.items == [1, 2]
     assert location_1.description == "A peaceful place, home of the hobbits"
     assert location_1.connections == [1, 2, 3]
+    assert location_1.coords == (1, 2)
 
 def test_location_items(location_1):
     # Adding and removing items
@@ -202,13 +245,32 @@ def test_location_characters(location_1):
     # Testing characters
     assert location_1.characters == [1, 2, 3]
 
-def test_location_neighbor(location_1):
+def test_location_neighbor(location_1, location_2):
     # Adding neighbour
-    location_1.add_neighbor(3)
+    location_1.add_neighbor(location_2)
 
     # Testing neighbour
-    assert location_1.neighbors == [0, 1, 2, 3]
+    assert location_1.neighbors == [location_2]
 
-def test_location_populate(location_1):
-    #placeholder for when this function is implemented
-    pass
+def test_location_populate(location_1, world, client):
+    location_1.populate(3,3,world,client)
+    assert len(world.items) == 3
+    assert len(world.characters) == 3
+    assert len(location_1.characters) == 3
+    assert len(location_1.items) == 3
+
+def test_world_init(world):
+    # Initialisation testing, Getter testing
+    assert world.locations == {}
+    assert world.items == {}
+    assert world.characters == {}
+    assert world.tropes == {}
+    assert world.theme == []
+    assert world.choices == []
+    assert world.key_events == []
+    assert world.curr_story_beat == 0
+    assert world.json_locations == []
+    assert world.json_items == []
+    assert world.json_characters == []
+
+

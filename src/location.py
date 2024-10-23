@@ -4,10 +4,10 @@ from typing import Self
 
 import openai
 
-from utils.prompt import chat_with_gpt
-from utils.templates import character_template, item_template, character_system_message, item_system_message
-from utils.mappers import character_mapper, item_mapper
-from utils.structures import ItemsStructure, CharactersStructure
+from src.utils.prompt import chat_with_gpt
+from src.utils.templates import character_template, item_template, character_system_message, item_system_message
+from src.utils.mappers import character_mapper, item_mapper
+from src.utils.structures import ItemsStructure, CharactersStructure
 
 
 
@@ -45,7 +45,7 @@ class Location:
         self._neighbors = neighbors or []
         self._coords = coords
 
-    def populate(self, num_characters: int, num_items: int, world: 'World', client: 'OpenAI') -> None:
+    def populate(self, num_characters: int, num_items: int, world, client) -> None:
         """Send prompt to LLM such as 'This is x location in x story with 
         num_characters of characters. Generate xyz stats for each character.'
         Once characters generated, add them (or their id numbers) to self.characters
