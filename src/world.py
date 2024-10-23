@@ -101,7 +101,7 @@ class World:
         if theme in self._theme:
             self._theme.remove(theme)
 
-    def remove_key_events(self, event: str) -> None:
+    def remove_key_event(self, event: str) -> None:
         """remove a key event from the world's key events"""
         if event in self._key_events:
             self._key_events.remove(event)

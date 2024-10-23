@@ -14,19 +14,19 @@ from src.trope import Trope
 
 @pytest.fixture
 def item_1():
-    return Item("Flaming Sword of Greatness", "Slashing", 5.0, 35.5)
+    return Item("Flaming Sword of Greatness", "Slashing", 5.0, 35.5, 0)
 
 @pytest.fixture
 def item_2():
-    return Item("Cube of Force", "Wondrous Item", 1.2, 23.3)
+    return Item("Cube of Force", "Wondrous Item", 1.2, 23.3, 1)
 
 @pytest.fixture
 def character_1():
-    return Character("Gandalf", ["Wizard"], True, 0, {0: 1, 1: 2})
+    return Character("Gandalf", ["Wizard"], True, 0, {0: 1, 1: 2}, 0)
 
 @pytest.fixture
 def character_2():
-    return Character("Frodo", ["Hobbit"], True, 1, {2: 1, 3: 1})
+    return Character("Frodo", ["Hobbit"], True, 1, {2: 1, 3: 1}, 1)
 
 @pytest.fixture
 def location_1():
@@ -45,8 +45,8 @@ def trope_2():
     return Trope(1, "The False Prophet", "A person who falsely claims to be the chosen one", [0])
 
 @pytest.fixture
-def world(location_1, character_1, item_1):
-    return World({0: location_1}, {0: item_1}, {0: character_1})
+def world(location_1, character_1, item_1, trope_1):
+    return World({0: location_1}, {0: item_1}, {0: character_1}, {0: trope_1}, ["Fantasy"], ["Choice1", "Choice2"], ["Event1", "Event2"], 0)
 
 @pytest.fixture()
 def client():
@@ -267,8 +267,8 @@ def test_trope_init(trope_1, trope_2):
     assert trope_1.conflicts == [1]
 
     assert trope_2.id_ == 1
-    assert trope_2.name == "The Mentor"
-    assert trope_2.description == "An experienced person guides the protagonist"
+    assert trope_2.name == "The False Prophet"
+    assert trope_2.description == "A person who falsely claims to be the chosen one"
     assert trope_2.conflicts == [0]
 
 def test_trope_equality(trope_1, trope_2):
@@ -295,3 +295,132 @@ def test_trope_setters(trope_1):
     assert trope_1.description == "A protagonist who lacks conventional heroic qualities"
     assert trope_1.conflicts == [1]
 
+def test_world_init(world, location_1, item_1, character_1, trope_1):
+    # Initialisation testing, Getter testing
+    assert world.locations == {0: location_1}
+    assert world.items == {0: item_1}
+    assert world.characters == {0: character_1}
+    assert world.tropes == {0: trope_1}
+    assert world.theme == ["Fantasy"]
+    assert world.choices == ["Choice1", "Choice2"]
+    assert world.key_events == ["Event1", "Event2"]
+    assert world.curr_story_beat == 0
+
+def test_world_locations(world, location_1, location_2):
+    # Adding location
+    world.add_location(location_2)
+
+    # Testing location
+    assert world.locations == {0: location_1, 1: location_2}
+
+    #Removing location
+    world.remove_location(1)
+
+    #Testing location
+    assert world.locations == {0: location_1}
+
+def test_world_items(world, item_1, item_2):
+    # Adding item
+    world.add_item(item_2)
+
+    # Testing item
+    assert world.items == {0: item_1, 1: item_2}
+
+    #Removing item
+    world.remove_item(1)
+
+    #Testing item
+    assert world.items == {0: item_1}
+
+def test_world_characters(world, character_1, character_2):
+    # Adding character
+    world.add_character(character_2)
+
+    # Testing character
+    assert world.characters == {0: character_1, 1: character_2}
+
+    #Removing character
+    world.remove_character(1)
+
+    #Testing character
+    assert world.characters == {0: character_1}
+
+def test_world_tropes(world, trope_1, trope_2):
+    # Adding trope
+    world.add_trope(trope_2)
+
+    # Testing trope
+    assert world.tropes == {0: trope_1, 1: trope_2}
+
+    #Removing trope
+    world.remove_trope(1)
+
+    #Testing trope
+    assert world.tropes == {0: trope_1}
+
+def test_world_theme(world):
+    # Adding theme
+    world.add_theme("Sci-Fi")
+
+    # Testing theme
+    assert world.theme == ["Fantasy", "Sci-Fi"]
+
+    #Removing theme
+    world.remove_theme("Sci-Fi")
+
+    #Testing theme
+    assert world.theme == ["Fantasy"]
+
+def test_world_key_event(world):
+    # Adding key event
+    world.add_key_event("Event3")
+
+    # Testing key event
+    assert world.key_events == ["Event1", "Event2", "Event3"]
+
+    #Removing key event
+    world.remove_key_event("Event3")
+
+    #Testing key event
+    assert world.key_events == ["Event1", "Event2"]
+
+def test_world_choices(world):
+    # Setting choices
+    world.set_choices(["Choice3", "Choice4"])
+
+    # Testing choices
+    assert world.choices == ["Choice3", "Choice4"]
+
+    #Remove all choices
+    world.delete_choices()
+
+    #Testing choices
+    assert world.choices == []
+
+def test_world_story_beat(world):
+    # Setting story beat
+    world.curr_story_beat = 1
+
+    # Testing story beat
+    assert world.curr_story_beat == 1
+
+def test_world_json_location(world):
+    # Adding json location
+    world.add_json_location("Location1")
+
+    # Testing json location
+    assert world.json_locations == ["Location1"]
+
+def test_world_json_item(world):
+    # Adding json item
+    world.add_json_item("Item1")
+
+    # Testing json item
+    assert world.json_items == ["Item1"]
+
+def test_world_json_character(world):
+    # Adding json character
+    world.add_json_character("Character1")
+
+    # Testing json character
+    assert world.json_characters == ["Character1"]
