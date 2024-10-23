@@ -4,7 +4,7 @@ import os
 import openai
 
 from utils import templates, prompt, structures
-from utils.mappers import character_mapper, location_mapper, item_mapper
+from utils.mappers import character_mapper, location_mapper, item_mapper, trope_mapper
 from world import World
 # from game import get_random_tropes, read_csv_file, create_tropes
 from utils.narrative_elements import select_narrative_elements
@@ -155,7 +155,7 @@ def load_game(client, current_world):
         if "tropes" in obj:
             json_tropes = obj["tropes"]
             for trope in json_tropes:
-                current_world.add_trope(trope)
+                current_world.add_trope(trope_mapper.create_trope_from_json(str(trope)))
         if "themes" in obj:
             json_themes = obj["themes"]
             current_world.add_theme(json_themes)
