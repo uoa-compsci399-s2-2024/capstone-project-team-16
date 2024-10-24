@@ -77,7 +77,7 @@ def print_description() -> None:
     print("will determine the outcome of your adventure.")
     print()
     print("If you should wish to view the data of this playthrough then enter info.")
-    print("If you should wish to view the map of this playthrough then enter info.")
+    print("If you should wish to view the map of this playthrough then enter map.")
     print("If you should wish to save this playthrough then enter save.")
     print("Thank you for playing and enjoy Adventure's Call!")
     print()
