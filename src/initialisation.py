@@ -1,5 +1,6 @@
 """Module for initialising the game"""
 import os
+import sys
 
 import openai
 from openai import OpenAI
@@ -82,6 +83,11 @@ def print_description() -> None:
     print("Thank you for playing and enjoy Adventure's Call!")
     print()
 
+def get_path(relative_path):
+    base_path = sys._MEIPASS
+
+    return os.path.join(base_path, relative_path)
+
 
 def start_game() -> bool:
     """
@@ -137,10 +143,11 @@ def initialise_game(client: OpenAI) -> None:
     :rtype: None
     """
     setup_save_folder()
-    plot_tropes_path = str(os.getcwd()) + '/src/story/plot_tropes.csv'
-    protagonist_tropes_path = str(os.getcwd()) + '/src/story/protagonist_tropes.csv'
-    antagonist_tropes_path = str(os.getcwd()) + '/src/story/antagonist_tropes.csv'
-    themes_path = str(os.getcwd()) + '/src/story/themes.txt'
+
+    plot_tropes_path = get_path('plot_tropes.csv')
+    protagonist_tropes_path = get_path('protagonist_tropes.csv')
+    antagonist_tropes_path = get_path('antagonist_tropes.csv')
+    themes_path = get_path('themes.txt')
 
     current_world = World()
     load_world = input("Would you like to load a previous game? (y/n): ").lower().strip() == 'y'
