@@ -52,6 +52,8 @@ def move_character(new_location_id: str, args: list) -> None:
             except openai.LengthFinishReasonError:
                 print("Token Count Error, Not provided enough tokens... increasing token count and retrying")
                 tokens += 100
+            except openai.APIConnectionError:
+                print("API CONNECTION ERROR ... Retrying")
 
         # Map the new Locations
         mapped_new_locations = location_mapper.create_location_from_json(previous_location_id=current_location.id_,
@@ -194,6 +196,8 @@ def talk_to_character(character_id: int, args: list) -> None:
             except openai.LengthFinishReasonError:
                 print("Token Count Error, Not provided enough tokens... increasing token count and retrying")
                 tokens += 100
+            except openai.APIConnectionError:
+                print("API CONNECTION ERROR ... Retrying")
 
         dialog_text = dialog_mapper.talkative_dialog_mapper(dialog_raw)
         # End Conversation Trigger
