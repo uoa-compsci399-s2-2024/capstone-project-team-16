@@ -38,15 +38,17 @@ def save_playthrough_as_file(world: World, choices: tuple[str]) -> None:
     """
     #get playthrough file path
     playthrough_name = str(input("Enter the name of your playthrough: "))
-    playthrough_file_path = str(os.getcwd()) + f'/src/playthroughs/{playthrough_name}.txt'
+    saved_games_folder = os.path.join(os.environ["USERPROFILE"], "Saved Games")
+    game_folder = os.path.join(saved_games_folder, "Adventure's Call")
+    playthrough_file_path = os.path.join(game_folder, f"{playthrough_name}.txt")
     while os.path.exists(playthrough_file_path):
         new_playthrough = str(input("That filename already exists. Would you like to overwrite it? y/n"))
         if new_playthrough.lower() == 'y':
             break
         else:
             playthrough_name = str(input("Enter a new name for your playthrough: "))
-            playthrough_file_path = str(os.getcwd()) + f'/src/playthroughs/{playthrough_name}.txt'
-    playthrough_file_path = str(os.getcwd()) + f'/src/playthroughs/{playthrough_name}.txt'
+            playthrough_file_path = os.path.join(game_folder, f"{playthrough_name}.txt")
+    playthrough_file_path = os.path.join(game_folder, f"{playthrough_name}.txt")
 
     #break down the world object into its components and write them to the file
     with open(playthrough_file_path, 'w') as file:

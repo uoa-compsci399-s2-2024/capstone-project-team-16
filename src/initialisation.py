@@ -76,6 +76,17 @@ def setup_save_folder() -> None:
         print("SAVE FOLDER ALREADY EXISTS")
 
 
+def init_itertools(new=True, ids=None):
+    if new:
+        Location.id_iter = itertools.count()
+        Character.id_iter = itertools.count()
+        Item.id_iter = itertools.count()
+    else:
+        Location.id_iter = itertools.count(start=ids["location"])
+        Character.id_iter = itertools.count(start=ids["character"])
+        Item.id_iter = itertools.count(start=ids["item"])
+
+
 def initialise_game(client):
     """Initialises the tropes, themes,
     characters, locations and items
@@ -105,14 +116,28 @@ def load_game(client, current_world):
         current_world (World): the current world object
     """
     # get playthrough file path
+
+    saved_games_folder = os.path.join(os.environ["USERPROFILE"], "Saved Games")
+    game_folder = os.path.join(saved_games_folder, "Adventure's Call")
+
+    saved_games = [f for f in os.listdir(game_folder) if os.path.isfile(os.path.join(game_folder, f))]
+
+    if not saved_games:
+        print("No save files exist.")
+        initialise_game(client)
+        return
+
+    for saved_game in saved_games:
+        print(saved_game.removesuffix(".txt"))
+
     playthrough_name = input("Enter the name of the playthrough you would like to load: ")
-    playthrough_file_path = str(os.getcwd()) + f'/src/playthroughs/{playthrough_name}.txt'
+    playthrough_file_path = os.path.join(game_folder, f"{playthrough_name}.txt")
     while not os.path.exists(playthrough_file_path):
         playthrough_name = input(
             "That playthrough does not exist. Please enter a valid playthrough name, or enter nothing to exit: ")
         if playthrough_name == "":
             return
-        playthrough_file_path = str(os.getcwd()) + f'/src/playthroughs/{playthrough_name}.txt'
+        playthrough_file_path = os.path.join(game_folder, f"{playthrough_name}.txt")
     # read the playthrough file
     lines = None
     with open(playthrough_file_path, 'r') as file:
@@ -145,6 +170,7 @@ def load_game(client, current_world):
         if "tropes" in obj:
             json_tropes = obj["tropes"]
             for trope in json_tropes:
+                current_world.add_trope(trope_mapper.create_trope_from_json_save(trope))
                 current_world.add_trope(trope_mapper.create_trope_from_json_save(trope))
         if "themes" in obj:
             json_themes = obj["themes"]
@@ -225,13 +251,3 @@ def create_new_game(themes_path, plot_tropes_path, protagonist_tropes_path, anta
     (current_world.locations[0]).add_character(player.id_)
 
     game_loop(player, current_world, client)
-
-def init_itertools(new=True, ids=None):
-    if new:
-        Location.id_iter = itertools.count()
-        Character.id_iter = itertools.count()
-        Item.id_iter = itertools.count()
-    else:
-        Location.id_iter = itertools.count(start=ids["location"])
-        Character.id_iter = itertools.count(start=ids["character"])
-        Item.id_iter = itertools.count(start=ids["item"])

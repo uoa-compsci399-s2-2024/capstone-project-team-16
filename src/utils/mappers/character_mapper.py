@@ -56,13 +56,15 @@ def create_character_from_json_save(character: dict) -> Character:
     Returns:
         Character: A new instance of the Character class.
     """
+    # JSON states that a key has to be a string we use an int as a key this fixes the inventory
+    inventory = {int(item_id): item_quantity for item_id, item_quantity in character['inventory'].items()}
+
     return Character(
         name=character['name'],
         traits=character['traits'],
         playable=character['playable'],
         current_location=character['location'],
-        inventory=character['inventory'],
-        id=character['id'],
+        inventory=inventory,
         conversation_history=character['conversation history']
     )
 

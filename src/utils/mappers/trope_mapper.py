@@ -40,20 +40,21 @@ def create_json_from_tropes(tropes: dict) -> str:
         "conflicts": trope.conflicts
     } for key, trope in tropes.items() if isinstance(trope, Trope)]})
 
+
 def create_trope_from_json_save(trope: dict) -> Trope:
     """
-    Takes a JSON string as input, deserializes it, and
-    converts it into a list of tropes.
+    Takes a dict as input, deserializes it, and
+    converts it into a new instance of the Trope class.
 
     Parameters:
-        trope (str): The JSON string representing a trope.
+        trope (dict): The dict to be deserialized into a Trope object.
 
     Returns:
-        Trope: A list of tropes.
+        Trope: A new instance of the Trope class.
     """
     return Trope(
-        id_=trope["id"],
-        name=trope["name"],
-        description=trope["description"],
-        conflicts=trope["conflicts"]
+        id_=trope['id'],
+        name=trope['name'],
+        description=trope['description'],
+        conflicts=trope['conflicts']
     )
