@@ -35,10 +35,16 @@ To start the program, simply execute:
 
 ## Technologies Used
 
-- Python
+- Python 3.11 or newer
 - OpenAI's GPT-4o-mini model
-- PyLint for linting
-- PyTest for unit testing
+- PyLint 
+- PyTest 8.3.2 
+- Python-Dotenv 1.0.1
+- OpenAI API 1.41.0
+- Pandas 2.2.2
+- NetworkX 3.3.0
+- Matplotlib 3.9.2
+- Pydantic 2.8.2
 
 ## Current Features
 
@@ -46,4 +52,10 @@ To start the program, simply execute:
 
 ## Future Plan
 
-The future plan for this project would be to implement a GUI, making the experience more interactive and enjoyable, which is one of the purposes of this project.
+- Construct story arcs more intelligently
+- Increase the variety of actions (e.g. add combat actions)
+- Have variable amounts of user choices
+- Support asynchronous calls to ChatGPT
+- Create a front-end that improves interaction with game features (e.g. saving, viewing a map, AI generated pictorial scene representations, etc.)
+- Implement autonomous agent interactions beyond the player’s view
+- Create technical documentation and tools for researchers
