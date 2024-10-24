@@ -1,5 +1,5 @@
 """
-This is a mapper for Locations, it maps locations from a JSON string into a Location Object and vice versa
+This is a JSON to object mapper for Locations  it turns a JSON string to a Character Object
 """
 import json
 import random
@@ -10,17 +10,22 @@ from utils.mappers import item_mapper, character_mapper
 
 def create_location_from_json(json_str: str, world: World, previous_location_id: int or None = None) -> list[Location]:
     """
-    Creates a list of Location objects from a JSON string
+    Takes a JSON string as input, deserializes it,
+    and converts it into a new instance of the Location class.
 
-    :param str json_str: A JSON string to be deserialized into a list of Location Objects
-    :param World world: The World object
-    :param previous_location_id: The id of the previous Location object, defaults to None
-    :type previous_location_id: integer or None
-    :return: A list of new instances of the Item class
-    :rtype: list[Location]
+    Parameters:
+        json_str (str): The JSON string to be deserialized into a Location object.
+        previous_location_id (Optional[int]|None): The previous Location object.
+        world (World): the World Object
+    Returns:
+        list[Location]: A list of new instances of the Location class.
     """
     json_str = json_str.strip('```json').strip('```').strip()
     data = json.loads(json_str)["locations"]
+
+
+    # There probably is a better way of doing this and im just stuck in my own head with how I want
+    # locations to work
 
     # Section list
     section = []
@@ -40,7 +45,10 @@ def create_location_from_json(json_str: str, world: World, previous_location_id:
         section.append(new_location)
 
     # Neighbour mapping
-    # Rules: connections are bidirectional, graph must be connected, no edges to self, multiple edges to the same node
+    # rules
+    #The connections are Bi Directional. The graph must also be connected. No edges to self,
+    # multiple edges to the same node
+
     none_edge_made = False
     for location in section:
         degree = random.randrange(1, 3)
@@ -48,14 +56,16 @@ def create_location_from_json(json_str: str, world: World, previous_location_id:
             if len(location.neighbors) <= degree:
                 neighbour = None
                 while not neighbour:
+
                     random_neighbour = random.choice(section)
                     if random_neighbour not in location.neighbors and random_neighbour != location:
                         neighbour = random_neighbour
+
                 # Found a suitable neighbour
                 location.add_neighbor(neighbour)
                 neighbour.add_neighbor(location)
         # Chance to have a loose edge 30% chance to have a null neighbour.
-        if random.randint(1, 10) <= 3:
+        if random.randrange(1, 11) <= 3:
             location.add_neighbor(None)
             none_edge_made = True
 
@@ -75,14 +85,16 @@ def create_location_from_json(json_str: str, world: World, previous_location_id:
 
     return section
 
-
 def create_json_from_locations(locations: dict) -> str:
     """
-    Creates a JSON string representing a list of Location objects
+    Takes a list of locations as input, serializes it,
+    and converts it into a JSON string.
 
-    :param dict locations: A list of Location objects to be serialized into a JSON string
-    :return: A JSON string representing the Location objects
-    :rtype: str
+    Parameters:
+        locations (list[Location]): The list of locations to be serialized into a JSON string.
+
+    Returns:
+        str: A JSON string representing the list of locations.
     """
     return json.dumps({
         "locations": [
@@ -98,14 +110,9 @@ def create_json_from_locations(locations: dict) -> str:
         ]
     })
 
-
 def create_location_from_json_save(location: dict) -> Location:
     """
-    Creates a Location object from a JSON string representing saved game data
-
-    :param dict location: A JSON string to be deserialized into a Character object
-    :return: A new instance of the Location class
-    :rtype: Location
+    Takes a JSON string as input, deserializes it, and converts it into a new instance of the Location class.
     """
     return Location(
         name=location['name'],

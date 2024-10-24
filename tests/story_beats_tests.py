@@ -1,9 +1,8 @@
 import unittest
 import sys
 import os
-import random
 sys.path.append(os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'src')))
-from utils.story_beats import change_beat
+from utils.story_beats import *
 
 
 class TestStoryBeats(unittest.TestCase):

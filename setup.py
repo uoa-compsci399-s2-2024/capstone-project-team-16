@@ -1,12 +1,13 @@
+import os
 import subprocess
 import sys
 
-'''Run this from cmd, will build an executable file. Note that filepaths 
+'''Run this from cmd, will build an excutable file. Note that filepaths 
     need to be changed for all data files. Will also need pyinstaller installed'''
-
 
 def build_executable():
     script_name = 'src/main.py'
+
 
     command = [
         sys.executable,
@@ -26,7 +27,6 @@ def build_executable():
         print("Build completed")
     except subprocess.CalledProcessError as e:
         print("Error", e)
-
 
 if __name__ == "__main__":
     build_executable()
