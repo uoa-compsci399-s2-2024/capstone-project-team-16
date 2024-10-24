@@ -33,7 +33,7 @@ def create_json_from_item(items: dict) -> str:
     :rtype: str
     """
     return json.dumps({'items': [{
-        "id": key,
+        "id_": key,
         "name": item.name,
         "price": item.price,
         "weight": item.weight,
@@ -54,7 +54,7 @@ def create_item_from_json_save(item: dict) -> Item:
         price=item['price'],
         weight=item['weight'],
         category=item['category'],
-        id=item['id']
+        id=item['id_']
     )
 
 

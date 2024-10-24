@@ -63,20 +63,10 @@ class ItemSingularStructure(BaseModel):
     category: str
 
 
-class ItemsStructure(BaseModel):
-    """Structure for multiple Item generation"""
-    items: list[ItemSingularStructure]
-
-
 class CharacterSingularStructure(BaseModel):
     """Structure for generating a single Character"""
     name: str
     traits: list[str]
-
-
-class CharactersStructure(BaseModel):
-    """Structure for multiple Character generation"""
-    characters: list[CharacterSingularStructure]
 
 
 # Location Structures

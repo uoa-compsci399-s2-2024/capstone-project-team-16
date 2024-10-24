@@ -216,13 +216,13 @@ def load_game(client: OpenAI, current_world: World) -> None:
             current_world.add_theme(json_themes)
         if "choices" in obj:
             json_choices = obj["choices"]
-            current_world.choices(json_choices)
+            current_world.choices = json_choices
         if "session_messages" in obj:
             prompt.add_session_messages(obj["session_messages"])
         if "key_events" in obj:
             [current_world.add_key_event(event) for event in obj['key_events']]
         if "choices" in obj:
-            current_world.choices(obj["choices"])
+            current_world.choices = obj["choices"]
 
     # get max ids
     max_ids = {"location": max([location.id_ for location in current_world.locations.values()]),

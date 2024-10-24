@@ -278,14 +278,6 @@ def test_location_neighbor(location_1, location_2):
     assert location_1.neighbors == [location_2]
 
 
-def test_location_populate(location_1, world, client):
-    location_1.populate(3, 3, world, client)
-    assert len(world.items) == 3
-    assert len(world.characters) == 3
-    assert len(location_1.characters) == 3
-    assert len(location_1.items) == 3
-
-
 def test_trope_init(trope_1, trope_2):
     # Initialisation testing, Getter testing
     assert trope_1.id_ == 0
@@ -425,7 +417,7 @@ def test_world_key_event(world):
 
 def test_world_choices(world):
     # Setting choices
-    world.choices(["Choice3", "Choice4"])
+    world.choices = ["Choice3", "Choice4"]
 
     # Testing choices
     assert world.choices == ["Choice3", "Choice4"]
