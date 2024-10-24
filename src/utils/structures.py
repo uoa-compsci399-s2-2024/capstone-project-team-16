@@ -1,7 +1,7 @@
 """This file keeps BaseModel objects to pass to an LLM to force a specific output"""
 
 from pydantic import BaseModel, model_validator
-from typing import Union, Optional, Literal
+from typing import Union, Optional, Literal, List
 
 
 # Scene Structure
@@ -34,7 +34,7 @@ class ActionStructure(BaseModel):
 class ChoiceSingularStructure(BaseModel):
     """Structure for Choice Singular Generation"""
     description: str
-    action_performed: str
+    actions_performed: List[Literal["move location", "interact with item", "pick up item", "put down item", "use up item in inventory", "talk to character"]]
     actions: ActionStructure
 
 
