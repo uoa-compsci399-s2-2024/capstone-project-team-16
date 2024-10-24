@@ -2,6 +2,7 @@
 import os
 
 import openai
+from openai import OpenAI
 
 from utils import templates, prompt, structures
 from utils.mappers import character_mapper, location_mapper, item_mapper, trope_mapper
@@ -21,6 +22,11 @@ NUM_ITEMS = 1
 
 
 def print_art() -> None:
+    """
+    Prints the art at the start of the game
+
+    :rtype: None
+    """
     print("      _,.")
     print("    ,` -.)")
     print("   ( _/-\\\\-._")
@@ -45,14 +51,27 @@ def print_art() -> None:
 
 
 def print_title() -> None:
+    """
+    Prints the title at the start of the game
+
+    :rtype: None
+    """
     print("   _____       .___                    __                     /\\         _________        .__  .__   ")
     print("  /  _  \\    __| _/__  __ ____   _____/  |_ __ _________   ___)/  ______ \\_   ___ \\_____  |  | |  |  ")
-    print(" /  /_\\  \\  / __ |\\  \\/ // __ \\ /    \\   __\\  |  \\_  __ \\_/ __ \\ /  ___/ /    \\  \\/\\__  \\ |  | |  |  ")
-    print("/    |    \\/ /_/ | \\   /\\  ___/|   |  \\  | |  |  /|  | \\/\\  ___/ \\___ \\  \\     \\____/ __ \\|  |_|  |__")
+    print("/  /_\\  \\  / __ |\\  \\/ // __ \\ /    \\   __\\  |  \\_  __ \\_/ __ \\ /  ___/ /    \\  \\/\\__  \\ |  "
+          "| |  |  ")
+    print("/    |    \\/ /_/ | \\   /\\  ___/|   |  \\  | |  |  /|  | \\/\\  ___/ \\___ \\  \\     \\____/ __ \\|  "
+          "|_|  |__")
     print("\\____|__  /\\____ |  \\_/  \\___  >___|  /__| |____/ |__|    \\___  >____  >  \\______  (____  /____/____/")
-    print("        \\/      \\/           \\/     \\/                        \\/     \\/          \\/     \\/           ")
+    print("\\/      \\/           \\/     \\/                        \\/     \\/          \\/     \\/           ")
+
 
 def print_description() -> None:
+    """
+    Prints the description at the start of the game
+
+    :rtype: None
+    """
     print("In this game, you will embark on a thrilling quest")
     print("filled with danger, mystery, and magic. Your choices")
     print("will determine the outcome of your adventure.")
@@ -61,11 +80,22 @@ def print_description() -> None:
 
 
 def start_game() -> bool:
+    """
+    Prompts the user to start the game
+
+    :return: True if the game is starts
+    :rtype: bool
+    """
     user_input = input("> Press enter to start game... ")
     return True
 
+
 def setup_save_folder() -> None:
-    '''Checks if save folder exists, if not creates it'''
+    """
+    Checks if save folder exists, if not creates it
+
+    :rtype: None
+    """
     saved_games_folder = os.path.join(os.environ["USERPROFILE"], "Saved Games")
     game_folder = os.path.join(saved_games_folder, "Adventure's Call")
 
@@ -77,6 +107,14 @@ def setup_save_folder() -> None:
 
 
 def init_itertools(new=True, ids=None):
+    """
+    Initialises the iterators for object IDs
+
+    :param bool new: Whether it is a new game, default value is True
+    :param dict ids: List of the highest ID for each object, default value is None
+
+    :rtype: None
+    """
     if new:
         Location.id_iter = itertools.count()
         Character.id_iter = itertools.count()
@@ -87,11 +125,13 @@ def init_itertools(new=True, ids=None):
         Item.id_iter = itertools.count(start=ids["item"])
 
 
-def initialise_game(client):
-    """Initialises the tropes, themes,
-    characters, locations and items
-    for the game."""
+def initialise_game(client: OpenAI) -> None:
+    """
+    Initialises the tropes, themes, characters, locations and items for the game
 
+    :param client: OpenAI Client
+    :rtype: None
+    """
     setup_save_folder()
     plot_tropes_path = str(os.getcwd()) + '/src/story/plot_tropes.csv'
     protagonist_tropes_path = str(os.getcwd()) + '/src/story/protagonist_tropes.csv'
@@ -107,16 +147,15 @@ def initialise_game(client):
                         1, 1, current_world, client)
 
 
-def load_game(client, current_world):
+def load_game(client: OpenAI, current_world: World) -> None:
     """
     Load a game from a previous playthrough
 
-    Parameters:
-        client (OpenAI): the OpenAI client
-        current_world (World): the current world object
+    :param client: OpenAI Client
+    :param World current_world:
+    :rtype: None
     """
     # get playthrough file path
-
     saved_games_folder = os.path.join(os.environ["USERPROFILE"], "Saved Games")
     game_folder = os.path.join(saved_games_folder, "Adventure's Call")
 
@@ -153,7 +192,7 @@ def load_game(client, current_world):
     json_tropes = None
     json_themes = None
     json_session_messages = None
-    #for each object, add it to the world
+    # for each object, add it to the world
     for obj in objects:
         if "characters" in obj:
             json_characters = obj["characters"]
@@ -177,21 +216,21 @@ def load_game(client, current_world):
             current_world.add_theme(json_themes)
         if "choices" in obj:
             json_choices = obj["choices"]
-            current_world.set_choices(json_choices)
+            current_world.choices(json_choices)
         if "session_messages" in obj:
             prompt.add_session_messages(obj["session_messages"])
         if "key_events" in obj:
             [current_world.add_key_event(event) for event in obj['key_events']]
         if "choices" in obj:
-            current_world.set_choices(obj["choices"])
+            current_world.choices(obj["choices"])
 
-    #get max ids
+    # get max ids
     max_ids = {"location": max([location.id_ for location in current_world.locations.values()]),
                "character": max([character.id_ for character in current_world.characters.values()]),
                "item": max([item.id_ for item in current_world.items.values()])}
-    #initialize the ID iterators
+    # initialize the ID iterators
     init_itertools(False, max_ids)
-    #join locations together
+    # join locations together
     for location in current_world.locations.values():
         for other_location in json_locations:
             if other_location["id"] == location.id_:
@@ -204,8 +243,23 @@ def load_game(client, current_world):
     game_loop(player, current_world, client)
 
 
-def create_new_game(themes_path, plot_tropes_path, protagonist_tropes_path, antagonist_tropes_path, num_plot_tropes,
-                    num_prot_tropes, num_ant_tropes, current_world, client):
+def create_new_game(themes_path: str, plot_tropes_path: str, protagonist_tropes_path: str, antagonist_tropes_path,
+                    num_plot_tropes: int, num_prot_tropes: int, num_ant_tropes: int, current_world: World,
+                    client: OpenAI) -> None:
+    """
+    Creates a new game
+
+    :param str themes_path: The path of the themes file
+    :param str plot_tropes_path: The path of the plot tropes file
+    :param str protagonist_tropes_path: The path of the protagonist tropes file
+    :param str antagonist_tropes_path: The path of the antagonist tropes file
+    :param int num_plot_tropes: The number of plot tropes to be used
+    :param int num_prot_tropes: The number of protagonist tropes to be used
+    :param int num_ant_tropes: The number of antagonist tropes to be used
+    :param World current_world: The current World object
+    :param client: OpenAI Client
+    :rtype: None
+    """
     # Choose the theme and tropes
     theme, tropes = select_narrative_elements(themes_path, plot_tropes_path, protagonist_tropes_path,
                                               antagonist_tropes_path, num_plot_tropes, num_prot_tropes, num_ant_tropes)

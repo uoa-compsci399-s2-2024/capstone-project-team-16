@@ -8,9 +8,10 @@ from dotenv import load_dotenv
 from initialisation import initialise_game, print_title, print_description, start_game, print_art
 
 
-
 def main() -> None:
-    """ Main function to run game """
+    """
+    Main function to run game
+    """
     # load environment variables and fetch api key
     load_dotenv()
     openai_api_key = os.getenv('OPENAI_API_KEY')
@@ -26,6 +27,7 @@ def main() -> None:
 
         # initialise the game
         initialise_game(client)
+
 
 if __name__ == "__main__":
     main()

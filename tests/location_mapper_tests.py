@@ -4,8 +4,8 @@ import pytest
 import random
 import sys
 import os
-sys.path.append(os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'src')))
 
+sys.path.append(os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'src')))
 
 from character import Character
 from item import Item
@@ -21,6 +21,7 @@ def jsonstr_1():
     json_file.close()
     return location_response
 
+
 @pytest.fixture
 def jsonstr_2():
     with open("tests/test_json_files/location_JSON_2.json", 'r') as json_file:
@@ -28,10 +29,12 @@ def jsonstr_2():
     json_file.close()
     return location_response
 
+
 @pytest.fixture
 def world():
     world = World()
     return world
+
 
 @pytest.fixture
 def existing_world(jsonstr_1):
@@ -49,7 +52,6 @@ def existing_world(jsonstr_1):
 
     for location in locations:
         existing_world.add_location(location)
-
 
     return existing_world
 
@@ -85,7 +87,6 @@ def test_json_to_object_mapper(jsonstr_1, jsonstr_2, world):
     assert world.locations[0].neighbors[1].name == "The Abandoned Asylum"
     assert world.locations[0].neighbors[2].name == "The Shattered Cathedral"
 
-
     # Test Location ID 1 entries are correct
     assert world.locations[1].name == "The Abandoned Asylum"
     # Checking characters
@@ -102,7 +103,6 @@ def test_json_to_object_mapper(jsonstr_1, jsonstr_2, world):
     # Checking the names of the neighbours are correct
     assert world.locations[1].neighbors[0].name == "The Flesh Garden"
     assert world.locations[1].neighbors[1].name == "The Veil of Flesh"
-
 
     # Test Location ID 2 entries are correct
     assert world.locations[2].name == "The Wailing Marsh"
@@ -121,7 +121,6 @@ def test_json_to_object_mapper(jsonstr_1, jsonstr_2, world):
     assert world.locations[2].neighbors[0].name == "The Flesh Garden"
     assert world.locations[2].neighbors[1].name == "The Veil of Flesh"
 
-
     # Test Location ID 3 entries are correct
     assert world.locations[3].name == "The Shattered Cathedral"
     # Checking characters
@@ -138,7 +137,6 @@ def test_json_to_object_mapper(jsonstr_1, jsonstr_2, world):
     # Checking the names of the neighbours are correct
     assert world.locations[3].neighbors[0].name == "The Flesh Garden"
     assert world.locations[3].neighbors[1] is None
-
 
     # Test Location ID 4 entries are correct
     assert world.locations[4].name == "The Veil of Flesh"
@@ -191,7 +189,6 @@ def test_mapping_from_none_edge(jsonstr_2, existing_world):
     assert existing_world.locations[3].neighbors[0].name == "The Flesh Garden"
     assert existing_world.locations[3].neighbors[1].name == "The Ruins of Eldoria"
 
-
     # Check that the new locations are mapped correctly
     # Location start from 5 and continue upwards
     assert existing_world.locations[5].name == "The Gilded Slums"
@@ -211,7 +208,6 @@ def test_mapping_from_none_edge(jsonstr_2, existing_world):
     assert existing_world.locations[5].neighbors[1].name == "The Opulent Bazaar"
     assert existing_world.locations[5].neighbors[2].name == "The Starry Outpost"
 
-
     # Location id 6 tests
     assert existing_world.locations[6].name == "The Opulent Bazaar"
     # Checking characters
@@ -229,7 +225,6 @@ def test_mapping_from_none_edge(jsonstr_2, existing_world):
     assert existing_world.locations[6].neighbors[0].name == "The Gilded Slums"
     assert existing_world.locations[6].neighbors[1].name == "The Ruins of Eldoria"
 
-
     # Location id 7 tests
     assert existing_world.locations[7].name == "The Forgotten Manor"
     # Checking characters
@@ -246,7 +241,6 @@ def test_mapping_from_none_edge(jsonstr_2, existing_world):
     # Checking the names of the neighbours are correct
     assert existing_world.locations[7].neighbors[0].name == "The Gilded Slums"
     assert existing_world.locations[7].neighbors[1].name == "The Ruins of Eldoria"
-
 
     # Location id 8 tests
     assert existing_world.locations[8].name == "The Starry Outpost"

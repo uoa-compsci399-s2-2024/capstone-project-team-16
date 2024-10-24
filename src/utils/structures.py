@@ -1,4 +1,6 @@
-"""This file keeps BaseModel objects to pass to an LLM to force a specific output"""
+"""
+This file keeps BaseModel objects to pass to an LLM to force a specific output
+"""
 
 from pydantic import BaseModel, model_validator
 from typing import Union, Optional, Literal, List
@@ -6,13 +8,17 @@ from typing import Union, Optional, Literal, List
 
 # Scene Structure
 class SceneStructure(BaseModel):
-    """Structure for Scene Generation"""
+    """
+    Structure for Scene Generation
+    """
     scene: str
 
 
 # Choice Structure
 class ActionStructure(BaseModel):
-    """Structure for Action Generation"""
+    """
+    Structure for Action Generation
+    """
     new_location: Union[int, Literal["Unknown"], None]
     item_to_interact: Optional[int]
     item_to_pick_up_id: Optional[int]
@@ -21,10 +27,15 @@ class ActionStructure(BaseModel):
     character_to_talk_to_id: Optional[int]
 
     @model_validator(mode='before')
-    def one_valid_id(cls, values):
-        """Validator Function to check at least one of the parameters has a value"""
-        # Values is a dictionary of all the values present in the structures this is default
-        # passed in Pydantic
+    def one_valid_id(cls, values: dict) -> dict:
+        """
+        Validator Function to check at least one of the parameters has a value
+
+        :param values: A dictionary of all the values present in the structure, this is default
+        :raise ValueError: If all the values in the structure are None
+        :return: A dictionary of all the values present in the structure, this is default
+        """
+        # Passed in Pydantic
         # This check checks at least one value in the structure is not None
         if not any(value is not None for value in values.values()):
             raise ValueError(f"There is no valid id present in the response")
@@ -32,59 +43,68 @@ class ActionStructure(BaseModel):
 
 
 class ChoiceSingularStructure(BaseModel):
-    """Structure for Choice Singular Generation"""
+    """Structure for generating a single choice"""
     description: str
-    actions_performed: List[Literal["move location", "interact with item", "pick up item", "put down item", "use up item in inventory", "talk to character"]]
+    actions_performed: List[Literal["move location", "interact with item", "pick up item", "put down item",
+                                    "use up item in inventory", "talk to character"]]
     actions: ActionStructure
 
 
 class ChoicesStructure(BaseModel):
-    """Structure for Choice Generation"""
+    """Structure for multiple choice generation"""
     choices: list[ChoiceSingularStructure]
 
+
 class ItemSingularStructure(BaseModel):
-    """Structure for generating a single item"""
+    """Structure for generating a single Item"""
     name: str
     price: float
     weight: float
     category: str
 
+
 class ItemsStructure(BaseModel):
-    """Structure for multiple item generation"""
+    """Structure for multiple Item generation"""
     items: list[ItemSingularStructure]
 
+
 class CharacterSingularStructure(BaseModel):
+    """Structure for generating a single Character"""
     name: str
     traits: list[str]
 
+
 class CharactersStructure(BaseModel):
+    """Structure for multiple Character generation"""
     characters: list[CharacterSingularStructure]
+
 
 # Location Structures
 class LocationStructure(BaseModel):
-    """Structure for Location Generation"""
+    """Structure for Location generation"""
     name: str
     description: str
     items: list[ItemSingularStructure]
     characters: list[CharacterSingularStructure]
 
+
 class SectionStructure(BaseModel):
-    """Structure for Section Location Generation"""
+    """Structure for section Location generation"""
     locations: list[LocationStructure]
 
 
 class DismissiveDialogStructure(BaseModel):
-    """Structure for Dismissive Dialog from an NPC"""
+    """Structure for dismissive dialog from an NPC"""
     dialog: str
 
 
 class DialogResponseStructure(BaseModel):
-    """Structure for Dialog Responses for a talkative NPC"""
+    """Structure for dialog responses for a talkative NPC"""
     player_response: str
     npc_comment: str
 
 
 class TalkativeDialogStructure(BaseModel):
-    """Structure for Talkative Dialog from an NPC"""
+    """Structure for talkative dialog from an NPC"""
     dialog: str
     responses: list[DialogResponseStructure]
