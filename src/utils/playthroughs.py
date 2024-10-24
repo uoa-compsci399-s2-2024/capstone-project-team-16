@@ -1,13 +1,13 @@
 import os
 import shutil
 import json
-from src.world import World
-from src.utils.mappers.character_mapper import create_json_from_characters
-from src.utils.mappers.choice_mapper import create_json_from_choices
-from src.utils.mappers.item_mapper import create_json_from_item
-from src.utils.mappers.location_mapper import create_json_from_locations
-from src.utils.mappers.trope_mapper import create_json_from_tropes
-from src.utils.prompt import get_session_messages
+from world import World
+from utils.mappers.character_mapper import create_json_from_characters
+from utils.mappers.choice_mapper import create_json_from_choices
+from utils.mappers.item_mapper import create_json_from_item
+from utils.mappers.location_mapper import create_json_from_locations
+from utils.mappers.trope_mapper import create_json_from_tropes
+from utils.prompt import get_session_messages
 
 
 temp_file_path = str(os.getcwd()) + '/src/story/temp_story_store.txt'
