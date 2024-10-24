@@ -1,8 +1,8 @@
 """World class"""
-from location import Location
-from character import Character
-from item import Item
-from trope import Trope
+from src.location import Location
+from src.character import Character
+from src.item import Item
+from src.trope import Trope
 
 
 class World:
