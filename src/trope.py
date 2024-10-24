@@ -2,7 +2,9 @@
 
 
 class Trope:
-    """A class defining a trope object in an interactive story."""
+    """
+    A class defining a trope object in an interactive story.
+    """
     def __init__(
             self,
             id_: int,
@@ -13,11 +15,11 @@ class Trope:
         """
         Initialises a Character instance.
 
-            Parameters:
-                id_ (int): unique object ID
-                name (str): trope's name
-                description (str): description of the trope
-                conflicts (list): ID's of conflicting tropes
+        :param int id_: The ID of a Trope
+        :param str name: The name of a Trope
+        :param str description: The description of a Trope
+        :param list[int] conflicts: A list of tropes which conflict with a Trope
+        :rtype: None
         """
         self._id_ = id_
         self._name = name
@@ -54,35 +56,70 @@ class Trope:
     # getters and setters
     @property
     def id_(self) -> int:
-        """Getter for ID attribute"""
+        """
+        Getter for ID attribute
+
+        :return: The ID of a Trope
+        :rtype: int
+        """
         return self._id_
 
     @property
     def name(self) -> str:
-        """Getter for name attribute"""
+        """
+        Getter for name attribute
+
+        :return: The name of a Trope
+        :rtype: str
+        """
         return self._name
 
     @name.setter
     def name(self, name: str) -> None:
-        """Setter for name attribute"""
+        """
+        Setter for name attribute
+
+        :param str name: The name of a Trope
+        :rtype: None
+        """
         self._name = name
 
     @property
     def description(self) -> str:
-        """Getter for playable attribute"""
+        """
+        Getter for description attribute
+
+        :return: The description of a Trope
+        :rtype: str
+        """
         return self._description
 
     @description.setter
     def description(self, description: str) -> None:
-        """Setter for playable attribute"""
+        """
+         Setter for description attribute
+
+         :param str description: The description of a Trope
+         :rtype: None
+         """
         self._description = description
 
     @property
     def conflicts(self) -> list[int]:
-        """Getter for traits attribute"""
+        """
+        Getter for conflicts attribute
+
+        :return: A list of IDs of tropes which conflict with a Trope
+        :rtype: list[int]
+        """
         return self._conflicts
 
     @conflicts.setter
     def conflicts(self, conflicts: list[int]) -> None:
-        """Setter for traits attribute"""
+        """
+         Setter for conflicts attribute
+
+         :param list[int] conflicts: A list of IDs of tropes which conflict with a Trope
+         :rtype: None
+         """
         self._conflicts = conflicts
