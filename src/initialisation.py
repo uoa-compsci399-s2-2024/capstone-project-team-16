@@ -155,7 +155,8 @@ def load_game(client, current_world):
         if "tropes" in obj:
             json_tropes = obj["tropes"]
             for trope in json_tropes:
-                current_world.add_trope(trope)
+                #current_world.add_trope(trope)
+                current_world.add_trope(trope_mapper.create_trope_from_json_save(trope))
         if "themes" in obj:
             json_themes = obj["themes"]
             current_world.add_theme(json_themes)
