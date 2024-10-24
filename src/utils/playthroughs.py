@@ -7,6 +7,8 @@ from utils.mappers.choice_mapper import create_json_from_choices
 from utils.mappers.item_mapper import create_json_from_item
 from utils.mappers.location_mapper import create_json_from_locations
 from utils.mappers.trope_mapper import create_json_from_tropes
+from utils.prompt import get_session_messages
+
 
 temp_file_path = str(os.getcwd()) + '/src/story/temp_story_store.txt'
 
@@ -59,6 +61,12 @@ def save_playthrough_as_file(world: World, choices: tuple[str]) -> None:
         file.write(create_json_from_tropes(world.tropes))
         file.write('\n')
         file.write(json.dumps({"themes": world.theme}))
+        file.write('\n')
+        file.write(json.dumps({"session_messages": get_session_messages()}))
+        file.write('\n')
+        file.write(json.dumps({"key_events": world.key_events}))
+        file.write('\n')
+        file.write(json.dumps({"choices": world.choices}))
 
 
 def wipe_temp_file() -> None:

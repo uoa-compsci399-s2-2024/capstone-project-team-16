@@ -4,13 +4,16 @@ import os
 import openai
 
 from utils import templates, prompt, structures
-from utils.mappers import character_mapper, location_mapper, item_mapper
+from utils.mappers import character_mapper, location_mapper, item_mapper, trope_mapper
 from world import World
 # from game import get_random_tropes, read_csv_file, create_tropes
 from utils.narrative_elements import select_narrative_elements
 from game import game_loop
 import json
+import itertools
+from location import Location
 from character import Character
+from item import Item
 
 # number of characters and items to populate each location with
 NUM_CHARACTERS = 1
@@ -124,7 +127,8 @@ def load_game(client, current_world):
     json_choices = None
     json_tropes = None
     json_themes = None
-    # for each object, add it to the world
+    json_session_messages = None
+    #for each object, add it to the world
     for obj in objects:
         if "characters" in obj:
             json_characters = obj["characters"]
@@ -141,15 +145,27 @@ def load_game(client, current_world):
         if "tropes" in obj:
             json_tropes = obj["tropes"]
             for trope in json_tropes:
-                current_world.add_trope(trope)
+                current_world.add_trope(trope_mapper.create_trope_from_json_save(trope))
         if "themes" in obj:
             json_themes = obj["themes"]
             current_world.add_theme(json_themes)
         if "choices" in obj:
             json_choices = obj["choices"]
             current_world.set_choices(json_choices)
+        if "session_messages" in obj:
+            prompt.add_session_messages(obj["session_messages"])
+        if "key_events" in obj:
+            [current_world.add_key_event(event) for event in obj['key_events']]
+        if "choices" in obj:
+            current_world.set_choices(obj["choices"])
 
-    # join locations together
+    #get max ids
+    max_ids = {"location": max([location.id_ for location in current_world.locations.values()]),
+               "character": max([character.id_ for character in current_world.characters.values()]),
+               "item": max([item.id_ for item in current_world.items.values()])}
+    #initialize the ID iterators
+    init_itertools(False, max_ids)
+    #join locations together
     for location in current_world.locations.values():
         for other_location in json_locations:
             if other_location["id"] == location.id_:
@@ -171,6 +187,8 @@ def create_new_game(themes_path, plot_tropes_path, protagonist_tropes_path, anta
         current_world.add_trope(trope)
 
     current_world.add_theme(theme)
+    # Initialize the ID iterators
+    init_itertools()
 
     # Construct prompt and generate the locations using the tropes and theme
     locations = None
@@ -207,3 +225,13 @@ def create_new_game(themes_path, plot_tropes_path, protagonist_tropes_path, anta
     (current_world.locations[0]).add_character(player.id_)
 
     game_loop(player, current_world, client)
+
+def init_itertools(new=True, ids=None):
+    if new:
+        Location.id_iter = itertools.count()
+        Character.id_iter = itertools.count()
+        Item.id_iter = itertools.count()
+    else:
+        Location.id_iter = itertools.count(start=ids["location"])
+        Character.id_iter = itertools.count(start=ids["character"])
+        Item.id_iter = itertools.count(start=ids["item"])

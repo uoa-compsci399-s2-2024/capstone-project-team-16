@@ -14,7 +14,8 @@ class Character:
         playable: bool = False,
         current_location: int = None,
         inventory: dict = None,
-        id: int = None
+        id: int = None,
+        conversation_history: list = None
     ) -> None:
         """
         Initialises a Character instance.
@@ -25,6 +26,8 @@ class Character:
                 current_location (int): ID of the current node
                 inventory (dict): dictionary of format item:quantity
                 playable (boolean): whether the character is playable
+                id (int): unique identifier for the character
+                conversation_history (list): list of conversations the character has had
         """
 
         self._id_ = next(Character.id_iter) if id is None else id
@@ -36,7 +39,7 @@ class Character:
         else:
             self._inventory = inventory
         self._playable = playable
-        self._conversation_history = []
+        self._conversation_history = [] if conversation_history is None else conversation_history
 
     def add_to_inventory(
         self,

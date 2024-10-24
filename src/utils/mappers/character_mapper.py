@@ -41,7 +41,8 @@ def create_json_from_characters(characters: dict) -> str:
         "name": character.name,
         "traits": character.traits,
         "inventory": character.inventory,
-        "location": character.current_location #stores current location as ID
+        "location": character.current_location, #stores current location as ID
+        "conversation history": character.conversation_history
     } for key, character in characters.items() if isinstance(character, Character)]})
 
 def create_character_from_json_save(character: dict) -> Character:
@@ -61,7 +62,8 @@ def create_character_from_json_save(character: dict) -> Character:
         playable=character['playable'],
         current_location=character['location'],
         inventory=character['inventory'],
-        id=character['id']
+        id=character['id'],
+        conversation_history=character['conversation history']
     )
 
 def create_character_from_list(characters: list[dict]) -> list[Character]:
