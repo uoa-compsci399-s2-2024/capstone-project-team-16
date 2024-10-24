@@ -48,7 +48,16 @@ To start the program, simply execute:
 
 ## Current Features
 
-- A dynamic, ever-changing storyteller program is rapidly taking shape!
+- A playable choose your own adventure style game
+- A game engine that keeps track of all game elements (locations, items, characters, tropes, world-state, etc.)
+- LLM generated story scenes that forma cohesive and sensible plot
+- LLM generated sensible options for the user to choose from
+- LLM generated new game elements which are added to the engine
+- Multiple possible action types (move location, interact with item, pick up item, put down item, use item, talk to character)
+- Novel storytelling through the incorporation of randomised tropes (plot, protagonist and antagonist) and themes
+- Incorporation of a clear story arc in each playthrough through the incorporation of story beats and an algorithm to randomise beat intervals with an increasing probability of moving beat
+- Graphical representation of locations with edges between connected locations
+- Game playthrough saving
 
 ## Future Plan
 
