@@ -54,7 +54,7 @@ def create_item_from_json_save(item: dict) -> Item:
         price=item['price'],
         weight=item['weight'],
         category=item['category'],
-        id=item['id_']
+        id_=item['id_']
     )
 
 
