@@ -4,13 +4,13 @@ import os
 from openai import OpenAI
 from dotenv import load_dotenv
 
-sys.path.append(os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'src')))
+sys.path.append(os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', 'src')))
 
-from src.item import Item
-from src.character import Character
-from src.location import Location
-from src.world import World
-from src.trope import Trope
+from item import Item
+from character import Character
+from location import Location
+from world import World
+from trope import Trope
 
 @pytest.fixture
 def item_1():
