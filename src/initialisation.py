@@ -114,7 +114,7 @@ def load_game(client, current_world):
         return
     
     for saved_game in saved_games:
-        print(saved_game)
+        print(saved_game.removesuffix(".txt"))
 
     playthrough_name = input("Enter the name of the playthrough you would like to load: ")
     playthrough_file_path = os.path.join(game_folder, f"{playthrough_name}.txt")
