@@ -8,8 +8,9 @@ import sys
 sys.path.append(os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'src')))
 
 from utils import prompt, templates, structures
+from utils.mappers import location_mapper
+from location import Location
 from world import World
-
 
 @pytest.fixture
 def client():
@@ -19,7 +20,6 @@ def client():
     # initialise client
     client = OpenAI(api_key=openai_api_key)
     return client
-
 
 @pytest.fixture
 def world():
