@@ -48,3 +48,9 @@ def chat_with_gpt(client: OpenAI, system_message: str, user_message: str,
         )
 
     return completion.choices[0].message.content
+
+def get_session_messages():
+    return SESSION_MESSAGES
+
+def add_session_messages(session_messages):
+    SESSION_MESSAGES.extend(session_messages)

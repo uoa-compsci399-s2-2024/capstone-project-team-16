@@ -10,7 +10,10 @@ from world import World
 from utils.narrative_elements import select_narrative_elements
 from game import game_loop
 import json
+import itertools
+from location import Location
 from character import Character
+from item import Item
 
 # number of characters and items to populate each location with
 NUM_CHARACTERS = 1
@@ -68,9 +71,20 @@ def setup_save_folder() -> None:
 
     if not os.path.exists(game_folder):
         os.makedirs(game_folder)
-        print("DEBUG: SAVE FOLDER CREATED")
+        print("SAVE FOLDER CREATED")
     else:
-        print("DEBUG: SAVE FOLDER ALREADY EXISTS")
+        print("SAVE FOLDER ALREADY EXISTS")
+
+
+def init_itertools(new=True, ids=None):
+    if new:
+        Location.id_iter = itertools.count()
+        Character.id_iter = itertools.count()
+        Item.id_iter = itertools.count()
+    else:
+        Location.id_iter = itertools.count(start=ids["location"])
+        Character.id_iter = itertools.count(start=ids["character"])
+        Item.id_iter = itertools.count(start=ids["item"])
 
 
 def initialise_game(client):
@@ -112,7 +126,7 @@ def load_game(client, current_world):
         print("No save files exist.")
         initialise_game(client)
         return
-    
+
     for saved_game in saved_games:
         print(saved_game.removesuffix(".txt"))
 
@@ -138,7 +152,8 @@ def load_game(client, current_world):
     json_choices = None
     json_tropes = None
     json_themes = None
-    # for each object, add it to the world
+    json_session_messages = None
+    #for each object, add it to the world
     for obj in objects:
         if "characters" in obj:
             json_characters = obj["characters"]
@@ -155,7 +170,7 @@ def load_game(client, current_world):
         if "tropes" in obj:
             json_tropes = obj["tropes"]
             for trope in json_tropes:
-                #current_world.add_trope(trope)
+                current_world.add_trope(trope_mapper.create_trope_from_json_save(trope))
                 current_world.add_trope(trope_mapper.create_trope_from_json_save(trope))
         if "themes" in obj:
             json_themes = obj["themes"]
@@ -163,8 +178,20 @@ def load_game(client, current_world):
         if "choices" in obj:
             json_choices = obj["choices"]
             current_world.set_choices(json_choices)
+        if "session_messages" in obj:
+            prompt.add_session_messages(obj["session_messages"])
+        if "key_events" in obj:
+            [current_world.add_key_event(event) for event in obj['key_events']]
+        if "choices" in obj:
+            current_world.set_choices(obj["choices"])
 
-    # join locations together
+    #get max ids
+    max_ids = {"location": max([location.id_ for location in current_world.locations.values()]),
+               "character": max([character.id_ for character in current_world.characters.values()]),
+               "item": max([item.id_ for item in current_world.items.values()])}
+    #initialize the ID iterators
+    init_itertools(False, max_ids)
+    #join locations together
     for location in current_world.locations.values():
         for other_location in json_locations:
             if other_location["id"] == location.id_:
@@ -186,6 +213,8 @@ def create_new_game(themes_path, plot_tropes_path, protagonist_tropes_path, anta
         current_world.add_trope(trope)
 
     current_world.add_theme(theme)
+    # Initialize the ID iterators
+    init_itertools()
 
     # Construct prompt and generate the locations using the tropes and theme
     locations = None

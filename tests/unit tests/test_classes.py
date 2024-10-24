@@ -1,31 +1,60 @@
+import sys
 import pytest
-from src.item import Item
-from src.character import Character
-from src.location import Location
+import os
+from openai import OpenAI
+from dotenv import load_dotenv
+
+sys.path.append(os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', 'src')))
+
+from item import Item
+from character import Character
+from location import Location
+from world import World
+from trope import Trope
 
 @pytest.fixture
 def item_1():
-    return Item("Flaming Sword of Greatness", "Slashing", 5.0, 35.5)
+    return Item("Flaming Sword of Greatness", "Slashing", 5.0, 35.5, 0)
 
 @pytest.fixture
 def item_2():
-    return Item("Cube of Force", "Wondrous Item", 1.2, 23.3)
+    return Item("Cube of Force", "Wondrous Item", 1.2, 23.3, 1)
 
 @pytest.fixture
 def character_1():
-    return Character("Gandalf", ["Wizard"], True, 0, {0: 1, 1: 2})
+    return Character("Gandalf", ["Wizard"], True, 0, {0: 1, 1: 2}, 0)
 
 @pytest.fixture
 def character_2():
-    return Character("Frodo", ["Hobbit"], True, 1, {2: 1, 3: 1})
+    return Character("Frodo", ["Hobbit"], True, 1, {2: 1, 3: 1}, 1)
 
 @pytest.fixture
 def location_1():
-    return Location("Shire", "A peaceful place", [0,1], [0,1], [0, 1, 2])
+    return Location("Shire", "A peaceful place", 0, [0,1], [0, 1, 2])
 
 @pytest.fixture
-def location_2():
-    return Location("Mordor",  "A dangerous place", [2,3], [2,3], [4, 5, 6])
+def location_2(location_1):
+    return Location("Mordor",  "A dangerous place", 1, [2,3], [4, 5, 6], [location_1])
+
+@pytest.fixture()
+def trope_1():
+    return Trope(0, "The Chosen One", "A normal person discovers they are the chosen one", [1])
+
+@pytest.fixture()
+def trope_2():
+    return Trope(1, "The False Prophet", "A person who falsely claims to be the chosen one", [0])
+
+@pytest.fixture
+def world(location_1, character_1, item_1, trope_1):
+    return World({0: location_1}, {0: item_1}, {0: character_1}, {0: trope_1}, ["Fantasy"], ["Choice1", "Choice2"], ["Event1", "Event2"], 0)
+
+@pytest.fixture()
+def client():
+    load_dotenv()
+    openai_api_key = os.getenv('OPENAI_API_KEY')
+
+    # initialise client
+    return OpenAI(api_key=openai_api_key)
 
 def test_item_init(item_1, item_2):
     # Initialisation testing, Getter testing
@@ -142,19 +171,31 @@ def test_character_move(character_1):
     # Testing move
     assert character_1.current_location == 2
 
+def test_character_conversation_history(character_1):
+    # Adding to conversation history
+    character_1.add_to_conversation_history(["Hello", "Goodbye"])
+    character_1.add_to_conversation_history(["Hi", "Bye"])
+
+    # Testing conversation history
+    assert character_1.conversation_history == [["Hello", "Goodbye"], ["Hi", "Bye"]]
+
+
 def test_location_init(location_1, location_2):
     # Initialisation testing, Getter testing
     assert location_1.name == "Shire"
     assert location_1.characters == [0, 1]
-    assert location_1.items == [0, 1]
+    assert location_1.items == [0, 1, 2]
     assert location_1.description == "A peaceful place"
-    assert location_1.neighbors == [0, 1, 2]
+    assert location_1.neighbors == []
+    assert location_1.coords is None
 
     assert location_2.name == "Mordor"
     assert location_2.characters == [2, 3]
-    assert location_2.items == [2, 3]
+    assert location_2.items == [4, 5, 6]
     assert location_2.description == "A dangerous place"
-    assert location_2.neighbors == [4, 5, 6]
+    assert location_2.neighbors == [location_1]
+    assert location_2.coords is None
+
 
 def test_location_equality(location_1, location_2):
     assert location_1 != location_2
@@ -176,6 +217,7 @@ def test_location_setters(location_1):
     location_1.items = [1, 2]
     location_1.description = "A peaceful place, home of the hobbits"
     location_1.connections = [1, 2, 3]
+    location_1.coords = (1, 2)
 
     # Testing setters
     assert location_1.name == "The Shire"
@@ -183,6 +225,7 @@ def test_location_setters(location_1):
     assert location_1.items == [1, 2]
     assert location_1.description == "A peaceful place, home of the hobbits"
     assert location_1.connections == [1, 2, 3]
+    assert location_1.coords == (1, 2)
 
 def test_location_items(location_1):
     # Adding and removing items
@@ -202,13 +245,182 @@ def test_location_characters(location_1):
     # Testing characters
     assert location_1.characters == [1, 2, 3]
 
-def test_location_neighbor(location_1):
+def test_location_neighbor(location_1, location_2):
     # Adding neighbour
-    location_1.add_neighbor(3)
+    location_1.add_neighbor(location_2)
 
     # Testing neighbour
-    assert location_1.neighbors == [0, 1, 2, 3]
+    assert location_1.neighbors == [location_2]
 
-def test_location_populate(location_1):
-    #placeholder for when this function is implemented
-    pass
+def test_location_populate(location_1, world, client):
+    location_1.populate(3,3,world,client)
+    assert len(world.items) == 3
+    assert len(world.characters) == 3
+    assert len(location_1.characters) == 3
+    assert len(location_1.items) == 3
+
+def test_trope_init(trope_1, trope_2):
+    # Initialisation testing, Getter testing
+    assert trope_1.id_ == 0
+    assert trope_1.name == "The Chosen One"
+    assert trope_1.description == "A normal person discovers they are the chosen one"
+    assert trope_1.conflicts == [1]
+
+    assert trope_2.id_ == 1
+    assert trope_2.name == "The False Prophet"
+    assert trope_2.description == "A person who falsely claims to be the chosen one"
+    assert trope_2.conflicts == [0]
+
+def test_trope_equality(trope_1, trope_2):
+    assert trope_1 != trope_2
+    assert trope_1 == trope_1
+
+def test_trope_hash(trope_1):
+    assert hash(trope_1) == hash(trope_1.id_)
+
+def test_trope_comparisons(trope_1, trope_2):
+    assert trope_1 < trope_2
+    assert trope_1 <= trope_2
+    assert trope_2 > trope_1
+    assert trope_2 >= trope_1
+
+def test_trope_setters(trope_1):
+    # Changing via setters
+    trope_1.name = "The Anti-Hero"
+    trope_1.description = "A protagonist who lacks conventional heroic qualities"
+    trope_1.conflicts = [1]
+
+    # Testing setters
+    assert trope_1.name == "The Anti-Hero"
+    assert trope_1.description == "A protagonist who lacks conventional heroic qualities"
+    assert trope_1.conflicts == [1]
+
+def test_world_init(world, location_1, item_1, character_1, trope_1):
+    # Initialisation testing, Getter testing
+    assert world.locations == {0: location_1}
+    assert world.items == {0: item_1}
+    assert world.characters == {0: character_1}
+    assert world.tropes == {0: trope_1}
+    assert world.theme == ["Fantasy"]
+    assert world.choices == ["Choice1", "Choice2"]
+    assert world.key_events == ["Event1", "Event2"]
+    assert world.curr_story_beat == 0
+
+def test_world_locations(world, location_1, location_2):
+    # Adding location
+    world.add_location(location_2)
+
+    # Testing location
+    assert world.locations == {0: location_1, 1: location_2}
+
+    #Removing location
+    world.remove_location(1)
+
+    #Testing location
+    assert world.locations == {0: location_1}
+
+def test_world_items(world, item_1, item_2):
+    # Adding item
+    world.add_item(item_2)
+
+    # Testing item
+    assert world.items == {0: item_1, 1: item_2}
+
+    #Removing item
+    world.remove_item(1)
+
+    #Testing item
+    assert world.items == {0: item_1}
+
+def test_world_characters(world, character_1, character_2):
+    # Adding character
+    world.add_character(character_2)
+
+    # Testing character
+    assert world.characters == {0: character_1, 1: character_2}
+
+    #Removing character
+    world.remove_character(1)
+
+    #Testing character
+    assert world.characters == {0: character_1}
+
+def test_world_tropes(world, trope_1, trope_2):
+    # Adding trope
+    world.add_trope(trope_2)
+
+    # Testing trope
+    assert world.tropes == {0: trope_1, 1: trope_2}
+
+    #Removing trope
+    world.remove_trope(1)
+
+    #Testing trope
+    assert world.tropes == {0: trope_1}
+
+def test_world_theme(world):
+    # Adding theme
+    world.add_theme("Sci-Fi")
+
+    # Testing theme
+    assert world.theme == ["Fantasy", "Sci-Fi"]
+
+    #Removing theme
+    world.remove_theme("Sci-Fi")
+
+    #Testing theme
+    assert world.theme == ["Fantasy"]
+
+def test_world_key_event(world):
+    # Adding key event
+    world.add_key_event("Event3")
+
+    # Testing key event
+    assert world.key_events == ["Event1", "Event2", "Event3"]
+
+    #Removing key event
+    world.remove_key_event("Event3")
+
+    #Testing key event
+    assert world.key_events == ["Event1", "Event2"]
+
+def test_world_choices(world):
+    # Setting choices
+    world.set_choices(["Choice3", "Choice4"])
+
+    # Testing choices
+    assert world.choices == ["Choice3", "Choice4"]
+
+    #Remove all choices
+    world.delete_choices()
+
+    #Testing choices
+    assert world.choices == []
+
+def test_world_story_beat(world):
+    # Setting story beat
+    world.curr_story_beat = 1
+
+    # Testing story beat
+    assert world.curr_story_beat == 1
+
+def test_world_json_location(world):
+    # Adding json location
+    world.add_json_location("Location1")
+
+    # Testing json location
+    assert world.json_locations == ["Location1"]
+
+def test_world_json_item(world):
+    # Adding json item
+    world.add_json_item("Item1")
+
+    # Testing json item
+    assert world.json_items == ["Item1"]
+
+def test_world_json_character(world):
+    # Adding json character
+    world.add_json_character("Character1")
+
+    # Testing json character
+    assert world.json_characters == ["Character1"]

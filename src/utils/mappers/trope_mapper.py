@@ -40,6 +40,7 @@ def create_json_from_tropes(tropes: dict) -> str:
         "conflicts": trope.conflicts
     } for key, trope in tropes.items() if isinstance(trope, Trope)]})
 
+
 def create_trope_from_json_save(trope: dict) -> Trope:
     """
     Takes a dict as input, deserializes it, and

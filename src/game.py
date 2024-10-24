@@ -42,6 +42,11 @@ def choice_selection(choices: list[tuple], world: World) -> str:
             print("Playthrough saved")
             print("Make a selection")
             continue
+        if user_input.lower().strip() == "map":
+            #show the location map
+            visualise_locations([world.locations[location_id] for location_id in world.locations], style="graphic")
+            print("Make a selection")
+            continue
         if not user_input.isdigit():
             print("Please enter a number")
             continue
@@ -158,7 +163,7 @@ def visualise_locations(locations: list[Location], style="graphic") -> None:
         # Create a graph from the locations
         edge_list = pd.concat(
             [pd.DataFrame([[location.name, neighbor.name]], columns=["Loc1", "Loc2"]) for location in locations for
-             neighbor in location.neighbors], ignore_index=True)
+             neighbor in location.neighbors if neighbor is not None], ignore_index=True)
         graph = nx.from_pandas_edgelist(edge_list, "Loc1", "Loc2")
         # get the old positions of the nodes
         old_pos = {location.name: (location.coords[0], location.coords[1]) for location in locations if
@@ -227,18 +232,11 @@ def game_loop(player: Character, world: World, client: OpenAI) -> None:
             except openai.LengthFinishReasonError:
                 print("Token Count Error, Not provided enough tokens... increasing token count and retrying")
                 tokens += 100
-            except ValueError as e:
-                print("Response violated condition of at least one parameter...retrying")
-                print(e)
+            except ValueError:
+                pass
 
 
         mapped_choices = choice_mapper.create_choices_from_json(choices)
-              # BIG DEBUG INFO BLOCk
-        for choice in mapped_choices:
-            # THE way a choice is laid out is a tuple in the form of (description, dict, action_performed)
-            print(f"DEBUG CHOICE INFO: {choice}")
-        # ------ END DEBUG
-
 
         # Returns the tuple choice of (desc, id)
         player_choice = choice_selection(mapped_choices, world)

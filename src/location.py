@@ -45,7 +45,7 @@ class Location:
         self._neighbors = neighbors or []
         self._coords = coords
 
-    def populate(self, num_characters: int, num_items: int, world: 'World', client: 'OpenAI') -> None:
+    def populate(self, num_characters: int, num_items: int, world, client) -> None:
         """Send prompt to LLM such as 'This is x location in x story with 
         num_characters of characters. Generate xyz stats for each character.'
         Once characters generated, add them (or their id numbers) to self.characters
