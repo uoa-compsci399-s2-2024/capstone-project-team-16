@@ -163,7 +163,7 @@ def visualise_locations(locations: list[Location], style="graphic") -> None:
         # Create a graph from the locations
         edge_list = pd.concat(
             [pd.DataFrame([[location.name, neighbor.name]], columns=["Loc1", "Loc2"]) for location in locations for
-             neighbor in location.neighbors], ignore_index=True)
+             neighbor in location.neighbors if neighbor is not None], ignore_index=True)
         graph = nx.from_pandas_edgelist(edge_list, "Loc1", "Loc2")
         # get the old positions of the nodes
         old_pos = {location.name: (location.coords[0], location.coords[1]) for location in locations if
