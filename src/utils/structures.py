@@ -27,7 +27,7 @@ class ActionStructure(BaseModel):
         # passed in Pydantic
         # This check checks at least one value in the structure is not None
         if not any(value is not None for value in values.values()):
-            raise ValueError(f"There is no valid id present in the response. Dict of Stucture: {values}")
+            raise ValueError(f"There is no valid id present in the response")
         return values
 
 
