@@ -1,5 +1,7 @@
+"""
+Functions for saving playthroughs and displaying background data
+"""
 import os
-import shutil
 import json
 from world import World
 from utils.mappers.character_mapper import create_json_from_characters
@@ -10,33 +12,15 @@ from utils.mappers.trope_mapper import create_json_from_tropes
 from utils.prompt import get_session_messages
 
 
-temp_file_path = str(os.getcwd()) + '/src/story/temp_story_store.txt'
-
-
-def create_temp_story_file():
-    if not os.path.exists(temp_file_path):
-        with open(temp_file_path, 'x') as file:
-            file.close()
-
-
-def write_scene_and_choice(scene_str: str, choice_str: str) -> None:
-    with open(temp_file_path, 'a') as file:
-        file.write(scene_str)
-        file.write("\n\n")
-        file.write("> " + choice_str[0])
-        file.write("\n\n")
-        file.close()
-
-
-def save_playthrough_as_file(world: World, choices: tuple[str]) -> None:
+def save_playthrough_as_file(world: World, choices: list[tuple]) -> None:
     """
-    Save the playthrough as a file
+    Save the playthrough in a file
 
-    Parameters:
-        world (World): the world object
-        choices (tuple): the choices available to the player (won't be loaded, but useful for later maybe)
+    :param World world: The World object
+    :param list[tuple] choices: A list of all the choices a player has made
+    :rtype: None
     """
-    #get playthrough file path
+    # get playthrough file path
     playthrough_name = str(input("Enter the name of your playthrough: "))
     saved_games_folder = os.path.join(os.environ["USERPROFILE"], "Saved Games")
     game_folder = os.path.join(saved_games_folder, "Adventure's Call")
@@ -50,7 +34,7 @@ def save_playthrough_as_file(world: World, choices: tuple[str]) -> None:
             playthrough_file_path = os.path.join(game_folder, f"{playthrough_name}.txt")
     playthrough_file_path = os.path.join(game_folder, f"{playthrough_name}.txt")
 
-    #break down the world object into its components and write them to the file
+    # break down the world object into its components and write them to the file
     with open(playthrough_file_path, 'w') as file:
         file.write(create_json_from_characters(world.characters))
         file.write('\n')
@@ -71,12 +55,13 @@ def save_playthrough_as_file(world: World, choices: tuple[str]) -> None:
         file.write(json.dumps({"choices": world.choices}))
 
 
-def wipe_temp_file() -> None:
-    with open(temp_file_path, 'w') as file:
-        file.close()
+def show_background_data(curr_world: World) -> None:
+    """
+    Prints the background data of the current World object
 
-
-def show_background_data(curr_world: World):
+    :param World curr_world: The current World object
+    :rtype: None
+    """
     print("----------")
     print("Locations:")
     print(curr_world.locations)
