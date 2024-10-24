@@ -1,6 +1,9 @@
-"""Function for moving to the next beat of the story"""
+"""
+Function for moving to the next beat of the story
+"""
 import random
 
+# The story beats
 BEATS = {
     "Set-up": "the beginning of the story, establishes the backstory of the protagonists, introduces all "
               "important characters, the setting and the tone of the story",
@@ -24,8 +27,13 @@ CHANCE_INC = 0.1  # Increment by 10% per choice
 
 
 def change_beat(current_index: int) -> tuple:
-    """Returns the next story beat index and whether it is the last beat if a randomly generated number is less that the
-    chance the next beat will occur. Increments the chance the next beat if the next beat has not occurred."""
+    """Returns a tuple of the next story beat index and a boolean value indicating whether it is the last beat if a
+    randomly generated number is less than the change of changing beat, otherwise it increments the chance changing beat
+
+    :param current_index: The index of the current story beat
+    :return: A tuple of the next story beat index and a boolean value indicating whether it is the last beat
+    :rtype: tuple
+    """
     global BEATS, BEAT_CHANCE, CHANCE_INC
     if random.random() < BEAT_CHANCE:
         BEAT_CHANCE = 0.1
