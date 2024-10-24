@@ -71,9 +71,9 @@ def setup_save_folder() -> None:
 
     if not os.path.exists(game_folder):
         os.makedirs(game_folder)
-        print("DEBUG: SAVE FOLDER CREATED")
+        print("SAVE FOLDER CREATED")
     else:
-        print("DEBUG: SAVE FOLDER ALREADY EXISTS")
+        print("SAVE FOLDER ALREADY EXISTS")
 
 
 def initialise_game(client):

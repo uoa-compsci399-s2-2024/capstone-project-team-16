@@ -241,7 +241,7 @@ ACTIONS_DICT = {
 "character_to_talk_to_id":talk_to_character
 }
 
-def process_user_choice(actions: dict, args: list, action_performed: str) -> None:
+def process_user_choice(actions: dict, args: list, actions_performed: list) -> None:
     """Function to process the choices the user makes using our in-built action functions.
     It goes through the actions dictionary and, for each action present, calls its relevant function.
 
@@ -256,6 +256,7 @@ def process_user_choice(actions: dict, args: list, action_performed: str) -> Non
             which function we're using each time, so this way each function uses 
             only the indices of args that it needs and our code remains simple.
             Example:
+        actions_performed: a list of all the actions performed within the choice
 
             move(args: list)
                 new_location_id = args[0]
@@ -267,13 +268,13 @@ def process_user_choice(actions: dict, args: list, action_performed: str) -> Non
                 ...
 
             ACTIONS_DICT[action]([new_location_id, world, character])"""
-
-    if action_performed in AVAILABLE_ACTIONS:
-        value_to_use = ACTION_TO_VALUE_DICT[action_performed]
-        ACTIONS_DICT[value_to_use](actions[value_to_use], args)
-    else:
-        print("ACTION NOT FOUND")
-        print(action_performed)
+    for action_performed in actions_performed:
+        if action_performed in AVAILABLE_ACTIONS:
+            value_to_use = ACTION_TO_VALUE_DICT[action_performed]
+            ACTIONS_DICT[value_to_use](actions[value_to_use], args)
+        else:
+            print("ACTION NOT FOUND")
+            print(action_performed)
 
     # As far as I can tell our actions don;t actually say which action is being performed as it
     # lists all of them so this change gives back what type of action it is and removes the
