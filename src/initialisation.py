@@ -291,8 +291,6 @@ def create_new_game(themes_path: str, plot_tropes_path: str, protagonist_tropes_
         except openai.LengthFinishReasonError:
             print("Token Count Error, Not provided enough tokens... increasing token count and retrying")
             tokens += 100
-        except openai.APIConnectionError:
-            print("API CONNECTION ERROR ... Retrying")
 
     # add the initial JSON objects to their world.py lists
     current_world.add_json_location(locations)
