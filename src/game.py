@@ -42,7 +42,7 @@ def choice_selection(choices: list[tuple], world: World) -> tuple:
 
     while not selection:
         user_input = input("> ")
-        if user_input.strip() == "INFO":
+        if user_input.strip().lower() == "info":
             show_background_data(world)
             continue
         if user_input.lower().strip() == "save":
@@ -99,6 +99,8 @@ def display_initial_scene(client: OpenAI, location: Location, world: World) -> N
         except openai.LengthFinishReasonError:
             print("Token Count Error, Not provided enough tokens... increasing token count and retrying")
             tokens += 500
+        except openai.APIConnectionError:
+            print("API CONNECTION ERROR ... Retrying")
 
     mapped_scene = scene_mapper.create_scene_from_json(scene)
     mapped_scene = mapped_scene.split(". ")
@@ -142,6 +144,8 @@ def display_scene(client: OpenAI, location: Location, world: World, most_recent_
         except openai.LengthFinishReasonError:
             print("Token Count Error, Not provided enough tokens... increasing token count and retrying")
             tokens += 100
+        except openai.APIConnectionError:
+            print("API CONNECTION ERROR ... Retrying")
 
     mapped_scene = scene_mapper.create_scene_from_json(scene)
     mapped_scene = mapped_scene.split(". ")
@@ -161,23 +165,32 @@ def display_scene_new_beat(client: OpenAI, location: Location, world: World, mos
     :param str most_recent_choice: The most recent choice the user has made
     :rtype: None
     """
-    scene = chat_with_gpt(
-        client=client,
-        system_message=scene_system_message(),
-        user_message=flow_scene_template_new_beat(location.name,
-                                                  location.description,
-                                                  [world.items[item_id] for item_id in location.items],
-                                                  [world.characters[character_id] for character_id in
-                                                   location.characters if
-                                                   (world.characters[character_id]).playable is not True],
-                                                  most_recent_choice,
-                                                  world.key_events,
-                                                  list(BEATS.keys())[world.curr_story_beat],
-                                                  list(BEATS.values())[world.curr_story_beat]),
-        context=True,
-        tokens=500,
-        structure=SceneStructure
-    )
+    scene = None
+    tokens = 500
+    while not scene:
+        try:
+            scene = chat_with_gpt(
+                client=client,
+                system_message=scene_system_message(),
+                user_message=flow_scene_template_new_beat(location.name,
+                                                          location.description,
+                                                          [world.items[item_id] for item_id in location.items],
+                                                          [world.characters[character_id] for character_id in
+                                                           location.characters if
+                                                           (world.characters[character_id]).playable is not True],
+                                                          most_recent_choice,
+                                                          world.key_events,
+                                                          list(BEATS.keys())[world.curr_story_beat],
+                                                          list(BEATS.values())[world.curr_story_beat]),
+                context=True,
+                tokens=tokens,
+                structure=SceneStructure
+            )
+        except openai.LengthFinishReasonError:
+            print("Token Count Error, Not provided enough tokens... increasing token count and retrying")
+            tokens += 100
+        except openai.APIConnectionError:
+            print("API CONNECTION ERROR ... Retrying")
 
     mapped_scene = scene_mapper.create_scene_from_json(scene)
     mapped_scene = mapped_scene.split(". ")
@@ -274,6 +287,8 @@ def game_loop(player: Character, world: World, client: OpenAI) -> None:
                 tokens += 100
             except ValueError:
                 pass
+            except openai.APIConnectionError:
+                print("API CONNECTION ERROR ... Retrying")
 
         mapped_choices = choice_mapper.create_choices_from_json(choices)
 
