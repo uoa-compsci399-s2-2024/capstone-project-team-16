@@ -35,13 +35,13 @@ drove us to pick this project.
 
 ## Installation
 
-To install the project requirements, run:
+Note: The current working directory to run the program from should be 1 level above the src folder 
+in the capstone-project-team-16 folder. 
 
-```pip install -r requirements.txt```
-
-To start the program, simply execute:
-
-```python main.py```
+ ### Windows:
+- $ cd < project directory >
+- $ pip install -r requirements.txt
+- $ python src/main.py
 
 ## Technologies Used
 
