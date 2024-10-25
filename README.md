@@ -40,7 +40,7 @@ in the capstone-project-team-16 folder.
 
  ### Windows:
  ```
-- $ cd \<project directory\>
+- $ cd <project directory>
 - $ pip install -r requirements.txt
 - $ python src/main.py
 ```
