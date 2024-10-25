@@ -36,7 +36,7 @@ drove us to pick this project.
 ## Installation
 
 Note: The current working directory to run the program from should be 1 level above the src folder 
-in the capstone-project-team-16 folder. 
+in the capstone-project-team-16 folder. The API key should also be set as an environment variable. 
 
  ### Windows:
  ```
