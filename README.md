@@ -1,6 +1,6 @@
 # Chatbots as Interactive Storytellers
 
-## Project management tool
+## Project Management Tool
 
 https://aistoryteller-399.atlassian.net/jira/software/projects/SOUR/boards/2/timeline
 
@@ -15,23 +15,33 @@ https://aistoryteller-399.atlassian.net/jira/software/projects/SOUR/boards/2/tim
 
 ## Project Description
 
-This capstone project for COMPSCI 399 at the University of Auckland leverages OpenAI's creative capabilities to craft interactive stories. The project prompts large language models (LLMs) to generate scenes, choices, storylines, and characters while keeping track of crucial story details. The result is a consistent, endlessly evolving interactive narrative where no two playthroughs are the same.
+This capstone project for COMPSCI 399 at the University of Auckland leverages OpenAI's creative capabilities to craft interactive stories. 
+The project prompts large language models (LLMs) to generate scenes, choices, storylines, and characters while keeping track of crucial 
+story details. The result is a consistent, endlessly evolving interactive narrative where no two playthroughs are the same. It's been developed
+in the likeness of a pick-your-path adventure game where each turn you're given a range of choices to chose that progress the story. Our team built
+a custom engine from the ground up to interact with OpenAI's GPT-4o-mini model to store and manipulate every aspect of our game thus giving us full access
+on how we wanted our stories to be crafted and displayed.
 
-## Motivation
+## Project Motivation
 
-The advent of LLMs has opened up new avenues for creating unique and engaging stories. By using these models, we can generate content that surpasses the limits of traditional human storytelling. However, while popular LLMs excel at generating ideas, they often lack the consistency required to be effective storytellers on their own. Our project addresses this by delegating the task of maintaining narrative coherence to our software, ensuring a seamless and cohesive story experience.
-
-We aim to deliver an authentic storytelling experience, emphasizing consistency and narrative cohesion. Additionally, our project explores innovative approaches to integrating LLMs with our software at a granular level. Currently, we prompt OpenAI to return much of its story data in JSON format, allowing for greater control and flexibility in story creation.
+Large language models (LLMs), such as ChatGPT, have been rising in popularity globally. With this rise in popularity comes a need to determine the most 
+effective way to use these models for various tasks. One such task is storytelling - generative AI seems, at a glance, to be incredibly well-suited for 
+generating fictional narratives in ways humans can’t. It can be used to generate a constantly changing, truly interactive pick-a-path story, whereas 
+pick-a-paths written by humans only seem as though the reader influences the narrative. However, LLMs stumble into issues when storytelling, chief among 
+them their limited memory and ability to keep track of the context and details required to create a coherent narrative. That's where we come in. We wanted
+to create a product that would address these shortcomings and demonstrate the power of generative storytelling that when done right could craft truly immersive
+immersive narratives consistently. Our team is incredibly passionate about showcasing its potential and bringing further attention to this area which is what 
+drove us to pick this project.
 
 ## Installation
 
-To install the project requirements, run:
+Note: The current working directory to run the program from should be 1 level above the src folder 
+in the capstone-project-team-16 folder. 
 
-```pip install -r requirements.txt```
-
-To start the program, simply execute:
-
-```python main.py```
+ ### Windows:
+- $ cd \<project directory\>
+- $ pip install -r requirements.txt
+- $ python src/main.py
 
 ## Technologies Used
 
