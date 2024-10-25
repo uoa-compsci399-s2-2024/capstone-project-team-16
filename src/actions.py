@@ -200,6 +200,7 @@ def talk_to_character(character_id: int, args: list) -> None:
                 print("API CONNECTION ERROR ... Retrying")
 
         dialog_text = dialog_mapper.talkative_dialog_mapper(dialog_raw)
+        world_object.characters[character_id].add_to_conversation_history(dialog_text)
         # End Conversation Trigger
         end_conversation = False
         count = 1
